@@ -1,6 +1,5 @@
 #include "Application.h"
-
-#include <stdio.h>
+#include "Log.h"
 
 namespace Botanica
 {
@@ -11,7 +10,7 @@ namespace Botanica
 
     void Application::Run()
     {
-        printf("Hello, Botanica!\n");
+        BT_INFO("Hello, Botanica!");
     }
 
 }
