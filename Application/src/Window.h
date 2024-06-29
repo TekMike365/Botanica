@@ -28,8 +28,6 @@ namespace Botanica
         virtual bool IsVSync() const = 0;
 
         static Window* CreateWindow(const WindowParams& params=WindowParams());
-    protected:
-        WindowParams m_Params;
     };
 
 }
