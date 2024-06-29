@@ -27,8 +27,8 @@ namespace Botanica
 
         if (!s_isGLFWInitialized)
         {
-            int status = glfwInit();
-            BT_ASSERT(status, "GLFW failed to initialize.");
+            int success = glfwInit();
+            BT_ASSERT(success, "GLFW failed to initialize.");
             glfwSetErrorCallback(GLFWErrorCallback);
             s_isGLFWInitialized = true;
         }
