@@ -1,7 +1,5 @@
-#include <stdio.h>
-
+#include "btpch.h"
 #include "Application.h"
-#include "Log.h"
 
 int main()
 {

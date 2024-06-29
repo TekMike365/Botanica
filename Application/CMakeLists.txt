@@ -18,3 +18,5 @@ target_link_libraries(
     Application PRIVATE
     spdlog_header_only
 )
+
+target_precompile_headers(Application PRIVATE src/btpch.h)

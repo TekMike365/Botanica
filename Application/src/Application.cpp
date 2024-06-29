@@ -1,5 +1,5 @@
+#include "btpch.h"
 #include "Application.h"
-#include "Log.h"
 
 namespace Botanica
 {
