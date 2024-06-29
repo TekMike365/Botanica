@@ -37,4 +37,22 @@ namespace Botanica
         unsigned int m_Height;
     };
 
+    class WindowFocusEvent : public Event
+    {
+    public:
+        WindowFocusEvent() {}
+
+        EVENT_CLASS_TYPE(WindowFocus)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+    };
+
+    class WindowLostFocusEvent : public Event
+    {
+    public:
+        WindowLostFocusEvent() {}
+
+        EVENT_CLASS_TYPE(WindowLostFocus)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+    };
+
 }

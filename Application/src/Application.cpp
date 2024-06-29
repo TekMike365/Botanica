@@ -25,6 +25,8 @@ namespace Botanica
 
     void Application::OnEvent(Event &e)
     {
+        BT_TRACE("{}", e.ToString());
+
         EventDispatcher dispatcher(e);
 
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
