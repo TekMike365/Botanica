@@ -1,6 +1,7 @@
 #pragma once
 
 #include "btpch.h"
+#include "Events/Event.h"
 
 namespace Botanica
 {
@@ -17,6 +18,8 @@ namespace Botanica
     class Window
     {
     public:
+        using EventCallbackFn = std::function<void(Event&)>;
+
         virtual ~Window() {}
 
         virtual void OnUpdate() = 0;
@@ -24,6 +27,7 @@ namespace Botanica
         virtual unsigned int GetWidth() const = 0;
         virtual unsigned int GetHeight() const = 0;
 
+        virtual void SetEventCallbackFunction(const EventCallbackFn& fn) = 0;
         virtual void SetVSync(bool enabled) = 0;
         virtual bool IsVSync() const = 0;
 

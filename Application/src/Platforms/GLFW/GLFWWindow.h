@@ -18,6 +18,7 @@ namespace Botanica
         inline unsigned int GetWidth() const override { return m_Data.Width; }
         inline unsigned int GetHeight() const override { return m_Data.Height; }
 
+        inline void SetEventCallbackFunction(const EventCallbackFn& fn) override { m_Data.EventCallback = fn; }
         void SetVSync(bool enabled) override;
         inline bool IsVSync() const override { return m_Data.VSync; }
     private:
@@ -28,6 +29,8 @@ namespace Botanica
             std::string Title;
             unsigned int Width, Height;
             bool VSync;
+
+            EventCallbackFn EventCallback;
         };
 
         WindowData m_Data;

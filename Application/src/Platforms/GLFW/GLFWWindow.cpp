@@ -2,9 +2,16 @@
 #include "GLFWWindow.h"
 #include "Core.h"
 
+#include "Events/ApplicationEvent.h"
+
 namespace Botanica
 {
     static bool s_isGLFWInitialized;
+
+    static void GLFWErrorCallback(int error, const char* description)
+    {
+        BT_ERROR("GLFW error ({}): {}", error, description);
+    }
 
     Window* Window::CreateWindow(const WindowParams& params)
     {
@@ -16,12 +23,13 @@ namespace Botanica
         m_Data.Title = params.Title;
         m_Data.Width = params.Width;
         m_Data.Height = params.Height;
+        BT_INFO("Creating window: {} ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
 
         if (!s_isGLFWInitialized)
         {
             int status = glfwInit();
             BT_ASSERT(status, "GLFW failed to initialize.");
-
+            glfwSetErrorCallback(GLFWErrorCallback);
             s_isGLFWInitialized = true;
         }
 
@@ -29,7 +37,25 @@ namespace Botanica
         BT_ASSERT(m_Window, "GLFW failed to create window.");
 
         glfwMakeContextCurrent(m_Window);
+        glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
+
+        glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+        {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            WindowCloseEvent event;
+            data.EventCallback(event);
+        });
+
+        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+        {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            data.Width = width;
+            data.Height = height;
+
+            WindowResizeEvent event(width, height);
+            data.EventCallback(event);
+        });
     }
 
     GLFWWindow::~GLFWWindow()
