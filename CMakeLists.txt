@@ -7,6 +7,7 @@ set(CXX_STANDARD_REQUIRED 17)
 # Libs
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/GLFW)
+add_subdirectory(vendor/glm)
 add_subdirectory(vendor/spdlog)
 
 # Application
@@ -45,6 +46,7 @@ target_link_libraries(
     spdlog_header_only
     glfw
     glad
+    glm
 )
 
 target_precompile_headers(Application PRIVATE src/btpch.h)

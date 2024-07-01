@@ -1,8 +1,10 @@
-#version 330 core
+#version 430 core
 
-out vec4 fragColor;
+layout(location = 0) in vec3 iColor;
+
+layout(location = 0) out vec4 color;
 
 void main()
 {
-    fragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    color = vec4(iColor, 1.0);
 }

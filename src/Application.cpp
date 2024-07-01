@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 #include "Application.h"
 
@@ -31,10 +32,16 @@ namespace Botanica
     {
         BT_INFO("Running application.");
 
-        float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-             0.0f,  0.5f, 0.0f
+        struct Vertex
+        {
+            glm::vec3 Position;
+            glm::vec3 Color;
+        };
+
+        Vertex vertices[] = {
+            { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) },
+            { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) },
+            { glm::vec3( 0.0f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }
         };
 
         uint32_t indices[] = {
@@ -51,7 +58,8 @@ namespace Botanica
         VertexArray va;
         VertexBuffer vb(vertices, sizeof(vertices));
         VertexBufferLayout vbl;
-        vbl.PushElement({ GL_FLOAT, 3, GL_FALSE, 3 * sizeof(float) });
+        vbl.PushElement({ GL_FLOAT, 3, GL_FALSE, sizeof(glm::vec3) });
+        vbl.PushElement({ GL_FLOAT, 3, GL_TRUE, sizeof(glm::vec3) });
         va.AddVertexBuffer(vb, vbl);
 
         IndexBuffer ia(indices, 3);
