@@ -17,6 +17,12 @@ set(
     src/Application.cpp
     src/Log.cpp
     src/Window.cpp
+
+    src/Renderer/VertexArray.cpp
+    src/Renderer/VertexBuffer.cpp
+    src/Renderer/IndexBuffer.cpp
+    src/Renderer/Shader.cpp
+    src/Renderer/Program.cpp
 )
 
 add_executable(Application ${APPLICATION_SOURCES})

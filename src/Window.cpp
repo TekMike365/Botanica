@@ -1,4 +1,7 @@
 #include "btpch.h"
+
+#include <glad/glad.h>
+
 #include "Window.h"
 #include "Core.h"
 
@@ -13,6 +16,26 @@ namespace Botanica
     static void GLFWErrorCallback(int error, const char* description)
     {
         BT_ERROR("GLFW error ({}): {}", error, description);
+    }
+
+    static void APIENTRY GLErrorCallback(GLenum source, GLenum type, GLenum id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    {
+        std::string msg(message, length);
+        switch (severity)
+        {
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+            BT_TRACE("OpenGL ({}): {}", id, msg);
+            break;
+        case GL_DEBUG_SEVERITY_LOW:
+            BT_INFO("OpenGL ({}): {}", id, msg);
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            BT_WARN("OpenGL ({}): {}", id, msg);
+            break;
+        case GL_DEBUG_SEVERITY_HIGH:
+            BT_ERROR("OpenGL ({}): {}", id, msg);
+            break;
+        }
     }
 
     Window::Window(const WindowParams &params)
@@ -30,10 +53,18 @@ namespace Botanica
             s_isGLFWInitialized = true;
         }
 
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+
         m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), 0, 0);
         BT_ASSERT(m_Window, "GLFW failed to create window.");
 
         glfwMakeContextCurrent(m_Window);
+
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        BT_ASSERT(status, "Glad it fucked up!");
+
+        glDebugMessageCallback(GLErrorCallback, nullptr);
+
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
 
