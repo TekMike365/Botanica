@@ -4,7 +4,7 @@ namespace Botanica
 {
 
     VertexArray::VertexArray()
-        :m_ID(0), m_Stride(0)
+        :m_ID(0)
     {
         glGenVertexArrays(1, &m_ID);
         Bind();
@@ -29,12 +29,13 @@ namespace Botanica
     {
         vb.Bind();
         const std::vector<VertexBufferElement>& vbes = layout.GetVBEs();
+        uint32_t offset = 0;
         for (GLuint i = 0; i <  vbes.size(); i++)
         {
             const VertexBufferElement& vbe = vbes[i];
-            m_Stride += vbe.Size;
-            glVertexAttribPointer(i, vbe.Count, vbe.Type, vbe.Normalized, m_Stride, (void *)0);
+            glVertexAttribPointer(i, vbe.Count, vbe.Type, vbe.Normalized, layout.GetStride(), (void*)offset);
             glEnableVertexAttribArray(i);
+            offset += vbe.Size;
         }
     }
 
