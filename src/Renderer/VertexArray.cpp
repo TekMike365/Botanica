@@ -25,14 +25,14 @@ namespace Botanica
         glBindVertexArray(0);
     }
 
-    void VertexArray::AddVertexBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout)
+    void VertexArray::AddVertexBuffer(const VertexBuffer &vb, const VertexLayout &layout)
     {
         vb.Bind();
-        const std::vector<VertexBufferElement>& vbes = layout.GetVBEs();
+        const std::vector<VertexElement>& vbes = layout.GetVBEs();
         uint32_t offset = 0;
         for (GLuint i = 0; i <  vbes.size(); i++)
         {
-            const VertexBufferElement& vbe = vbes[i];
+            const VertexElement& vbe = vbes[i];
             glVertexAttribPointer(i, vbe.Count, vbe.Type, vbe.Normalized, layout.GetStride(), (void*)offset);
             glEnableVertexAttribArray(i);
             offset += vbe.Size;
