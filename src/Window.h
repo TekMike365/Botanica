@@ -3,6 +3,8 @@
 #include "btpch.h"
 #include "Events/Event.h"
 
+#include <GLFW/glfw3.h>
+
 namespace Botanica
 {
 
@@ -15,23 +17,36 @@ namespace Botanica
             :Title(title), Width(widht), Height(height) {}
     };
 
+
     class Window
     {
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 
-        virtual ~Window() {}
+        Window(const WindowParams& params = WindowParams());
+        virtual ~Window();
 
-        virtual void OnUpdate() = 0;
+        void OnUpdate();
 
-        virtual unsigned int GetWidth() const = 0;
-        virtual unsigned int GetHeight() const = 0;
+        unsigned int GetWidth() const { return m_Data.Width; }
+        unsigned int GetHeight() const { return m_Data.Height; }
 
-        virtual void SetEventCallbackFunction(const EventCallbackFn& fn) = 0;
-        virtual void SetVSync(bool enabled) = 0;
-        virtual bool IsVSync() const = 0;
+        inline void SetEventCallbackFunction(const EventCallbackFn& fn) { m_Data.EventCallback = fn; }
+        void SetVSync(bool enabled);
+        inline bool IsVSync() const { return m_Data.VSync; }
+    private:
+        GLFWwindow* m_Window;
 
-        static Window* CreateWindow(const WindowParams& params=WindowParams());
+        struct WindowData
+        {
+            std::string Title;
+            unsigned int Width, Height;
+            bool VSync;
+
+            EventCallbackFn EventCallback;
+        };
+
+        WindowData m_Data;
     };
 
 }

@@ -15,7 +15,7 @@ namespace Botanica
         BT_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
-        m_Window = std::unique_ptr<Window>(Window::CreateWindow());
+        m_Window = std::make_unique<Window>();
         m_Window->SetEventCallbackFunction(BIND_EVENT_FN(OnEvent));
     }
 

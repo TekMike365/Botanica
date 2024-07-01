@@ -16,7 +16,7 @@ set(
     src/EntryPoint.cpp
     src/Application.cpp
     src/Log.cpp
-    src/Platform/GLFW/GLFWWindow.cpp
+    src/Window.cpp
 )
 
 add_executable(Application ${APPLICATION_SOURCES})

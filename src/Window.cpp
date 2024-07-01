@@ -1,5 +1,5 @@
 #include "btpch.h"
-#include "GLFWWindow.h"
+#include "Window.h"
 #include "Core.h"
 
 #include "Events/ApplicationEvent.h"
@@ -15,12 +15,7 @@ namespace Botanica
         BT_ERROR("GLFW error ({}): {}", error, description);
     }
 
-    Window* Window::CreateWindow(const WindowParams& params)
-    {
-        return new GLFWWindow(params);
-    }
-
-    GLFWWindow::GLFWWindow(const WindowParams &params)
+    Window::Window(const WindowParams &params)
     {
         m_Data.Title = params.Title;
         m_Data.Width = params.Width;
@@ -140,18 +135,18 @@ namespace Botanica
         });
     }
 
-    GLFWWindow::~GLFWWindow()
+    Window::~Window()
     {
         glfwDestroyWindow(m_Window);
     }
 
-    void GLFWWindow::OnUpdate()
+    void Window::OnUpdate()
     {
         glfwPollEvents();
         glfwSwapBuffers(m_Window);
     }
 
-    void GLFWWindow::SetVSync(bool enabled)
+    void Window::SetVSync(bool enabled)
     {
         if (enabled)
             glfwSwapInterval(1);
