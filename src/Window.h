@@ -28,8 +28,9 @@ namespace Botanica
 
         void OnUpdate();
 
-        unsigned int GetWidth() const { return m_Data.Width; }
-        unsigned int GetHeight() const { return m_Data.Height; }
+        inline unsigned int GetWidth() const { return m_Data.Width; }
+        inline unsigned int GetHeight() const { return m_Data.Height; }
+        inline float GetAspect() const { return (float)m_Data.Width / (float)m_Data.Height; }
 
         inline void SetEventCallbackFunction(const EventCallbackFn& fn) { m_Data.EventCallback = fn; }
         void SetVSync(bool enabled);

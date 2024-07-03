@@ -1,6 +1,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Application.h"
 
@@ -38,9 +39,9 @@ namespace Botanica
         };
 
         Vertex vertices[] = {
-            { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) },
-            { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) },
-            { glm::vec3( 0.0f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }
+            { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f) },
+            { glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f) },
+            { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f) }
         };
 
         uint32_t indices[] = {
@@ -58,12 +59,27 @@ namespace Botanica
 
         IndexBuffer ia(indices, 3);
 
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+        glm::mat4 projection;
+        float fov = glm::radians(45.0f);
+        float aspect = m_Window->GetAspect();
+        float nearPlane = 0.4f;
+        float farPlane = 100.0f;
+        projection = glm::perspective(fov, aspect, nearPlane, farPlane);
+
         while (m_Running)
         {
             glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             shader.Bind();
+            shader.SetMat4("model", model);
+            shader.SetMat4("view", view);
+            shader.SetMat4("projection", projection);
+
             va.Bind();
             glDrawElements(GL_TRIANGLES, ia.GetCount(), GL_UNSIGNED_INT, 0);
 

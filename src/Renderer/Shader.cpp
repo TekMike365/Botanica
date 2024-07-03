@@ -1,6 +1,7 @@
 #include "Shader.h"
 
 #include "Core.h"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Botanica
 {
@@ -70,6 +71,12 @@ namespace Botanica
     void Shader::Unbind() const
     {
         glUseProgram(m_ID);
+    }
+
+    void Shader::SetMat4(const std::string &name, glm::mat4 mat)
+    {
+        GLint loc = GetUniformLocation(name.c_str());
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
     }
 
     std::string* Shader::LoadFile(const std::string &filepath)
