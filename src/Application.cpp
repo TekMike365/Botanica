@@ -78,8 +78,8 @@ namespace Botanica
         VertexArray va;
         VertexBuffer vb(vertices, sizeof(vertices));
         VertexLayout vbl;
-        vbl.PushElement({ GL_FLOAT, 3, GL_FALSE, sizeof(glm::vec3) });
-        vbl.PushElement({ GL_FLOAT, 3, GL_TRUE, sizeof(glm::vec3) });
+        vbl.PushElement(GL_FLOAT, 3, false);
+        vbl.PushElement(GL_FLOAT, 3, true);
         va.AddVertexBuffer(vb, vbl);
 
         IndexBuffer ia(indices, 36);

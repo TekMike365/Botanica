@@ -19,6 +19,7 @@ set(
     src/Log.cpp
     src/Window.cpp
 
+    src/Renderer/VertexLayout.cpp
     src/Renderer/VertexArray.cpp
     src/Renderer/VertexBuffer.cpp
     src/Renderer/IndexBuffer.cpp
