@@ -8,7 +8,6 @@
 #include "Renderer/VertexBuffer.h"
 #include "Renderer/IndexBuffer.h"
 #include "Renderer/Shader.h"
-#include "Renderer/Program.h"
 
 namespace Botanica
 {
@@ -48,12 +47,7 @@ namespace Botanica
             0, 1, 2
         };
 
-        Shader vs("shaders/Test.vert", GL_VERTEX_SHADER);
-        Shader fs("shaders/Test.frag", GL_FRAGMENT_SHADER);
-
-        Program program;
-        program.AttachShader(vs);
-        program.AttachShader(fs);
+        Shader shader("shaders/Test.vert", "shaders/Test.frag");
 
         VertexArray va;
         VertexBuffer vb(vertices, sizeof(vertices));
@@ -69,7 +63,7 @@ namespace Botanica
             glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            program.Bind();
+            shader.Bind();
             va.Bind();
             glDrawElements(GL_TRIANGLES, ia.GetCount(), GL_UNSIGNED_INT, 0);
 

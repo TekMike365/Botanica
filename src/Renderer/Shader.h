@@ -9,12 +9,14 @@ namespace Botanica
     class Shader
     {
     public:
-        Shader(const std::string& filepath, GLuint type);
+        Shader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
         ~Shader();
 
-        inline GLuint GetID() const { return m_ID; }
+        void Bind() const;
+        void Unbind() const;
     private:
-        std::string m_Source;
+        std::string* LoadFile(const std::string& filepath);
+    private:
         GLuint m_ID;
     };
 

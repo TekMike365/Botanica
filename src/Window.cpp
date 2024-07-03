@@ -11,7 +11,8 @@
 
 namespace Botanica
 {
-    static bool s_isGLFWInitialized;
+    static bool s_GLFWInitialized;
+    static bool s_GlInvalidOperationCalled = false;
 
     static void GLFWErrorCallback(int error, const char* description)
     {
@@ -20,6 +21,11 @@ namespace Botanica
 
     static void APIENTRY GLErrorCallback(GLenum source, GLenum type, GLenum id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
     {
+        if (id == GL_INVALID_OPERATION && !s_GlInvalidOperationCalled)
+            s_GlInvalidOperationCalled = true;
+        else if (id == GL_INVALID_OPERATION)
+            return;
+
         std::string msg(message, length);
         switch (severity)
         {
@@ -45,12 +51,12 @@ namespace Botanica
         m_Data.Height = params.Height;
         BT_INFO("Creating window: {} ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
 
-        if (!s_isGLFWInitialized)
+        if (!s_GLFWInitialized)
         {
             int success = glfwInit();
             BT_ASSERT(success, "GLFW failed to initialize.");
             glfwSetErrorCallback(GLFWErrorCallback);
-            s_isGLFWInitialized = true;
+            s_GLFWInitialized = true;
         }
 
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
