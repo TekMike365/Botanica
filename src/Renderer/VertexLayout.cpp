@@ -5,14 +5,12 @@ namespace Botanica
 
     void VertexLayout::PushElement(GLenum type, int count, bool normalized)
     {
-        VertexElement element;
+        VertexElement& element = m_Elements.emplace_back();
         element.Count = count;
         element.Type = type;
         element.Normalized = normalized;
         element.Size = GetSizeOfType(type) * count;
-
         m_Stride += element.Size;
-        m_Elements.push_back(element);
     }
 
     size_t VertexLayout::GetSizeOfType(GLenum type)
