@@ -39,13 +39,38 @@ namespace Botanica
         };
 
         Vertex vertices[] = {
-            { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f) },
-            { glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f) },
-            { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f) }
+            // bottom
+            { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 0.0f, 0.0f) },
+            { glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f) },
+            { glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(1.0f, 0.0f, 1.0f) },
+            { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f) },
+
+            // top
+            { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f) },
+            { glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f) },
+            { glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3(1.0f, 1.0f, 1.0f) },
+            { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 1.0f, 1.0f) }
         };
 
         uint32_t indices[] = {
-            0, 1, 2
+            // top
+            4, 7, 6,
+            6, 5, 4,
+            // bottom
+            3, 0, 1,
+            1, 2, 3,
+            // left
+            3, 7, 4,
+            4, 0, 3,
+            // right
+            1, 5, 6,
+            6, 2, 1,
+            // front
+            0, 4, 5,
+            5, 1, 0,
+            // back
+            2, 6, 7,
+            7, 3, 2
         };
 
         Shader shader("shaders/Test.vert", "shaders/Test.frag");
@@ -57,7 +82,7 @@ namespace Botanica
         vbl.PushElement({ GL_FLOAT, 3, GL_TRUE, sizeof(glm::vec3) });
         va.AddVertexBuffer(vb, vbl);
 
-        IndexBuffer ia(indices, 3);
+        IndexBuffer ia(indices, 36);
 
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::mat4(1.0f);
