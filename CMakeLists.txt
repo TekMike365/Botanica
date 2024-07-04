@@ -18,6 +18,7 @@ set(
     src/Application.cpp
     src/Log.cpp
     src/Window.cpp
+    src/LayerStack.cpp
 
     src/Renderer/VertexLayout.cpp
     src/Renderer/VertexArray.cpp
