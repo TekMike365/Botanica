@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     IndexBuffer::IndexBuffer(const uint32_t* data, uint32_t count)

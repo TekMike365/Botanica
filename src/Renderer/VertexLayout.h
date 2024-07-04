@@ -3,7 +3,7 @@
 #include "btpch.h"
 #include <glad/glad.h>
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     struct VertexElement

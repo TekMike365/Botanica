@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     class VertexBuffer

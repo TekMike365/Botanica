@@ -6,7 +6,7 @@
 #include "VertexLayout.h"
 #include "VertexBuffer.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     class VertexArray

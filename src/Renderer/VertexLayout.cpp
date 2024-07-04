@@ -1,6 +1,6 @@
 #include "VertexLayout.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     void VertexLayout::PushElement(GLenum type, int count, bool normalized)

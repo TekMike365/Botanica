@@ -1,6 +1,6 @@
 #include "VertexBuffer.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     VertexBuffer::VertexBuffer(const void* data, uint32_t size)

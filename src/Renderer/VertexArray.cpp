@@ -1,6 +1,6 @@
 #include "VertexArray.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     VertexArray::VertexArray()

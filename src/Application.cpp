@@ -73,16 +73,16 @@ namespace Botanica
             7, 3, 2
         };
 
-        Shader shader("shaders/Test.vert", "shaders/Test.frag");
+        Renderer::Shader shader("shaders/Test.vert", "shaders/Test.frag");
 
-        VertexArray va;
-        VertexBuffer vb(vertices, sizeof(vertices));
-        VertexLayout vbl;
+        Renderer::VertexArray va;
+        Renderer::VertexBuffer vb(vertices, sizeof(vertices));
+        Renderer::VertexLayout vbl;
         vbl.PushElement(GL_FLOAT, 3, false);
         vbl.PushElement(GL_FLOAT, 3, true);
         va.AddVertexBuffer(vb, vbl);
 
-        IndexBuffer ia(indices, 36);
+        Renderer::IndexBuffer ia(indices, 36);
 
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::mat4(1.0f);

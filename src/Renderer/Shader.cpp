@@ -3,7 +3,7 @@
 #include "Core.h"
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Botanica
+namespace Botanica::Renderer
 {
 
     void LogShaderCompileError(GLuint id)
