@@ -4,7 +4,6 @@
 #include "Window.h"
 
 #include "Events/ApplicationEvent.h"
-#include "LayerStack.h"
 
 namespace Botanica {
 
@@ -17,8 +16,6 @@ namespace Botanica {
         void Run();
         void OnEvent(Event& e);
 
-        void PushLayer(Layer* layer);
-
         inline Application& Get() const { return *s_Instance; }
 
     private:
@@ -26,7 +23,6 @@ namespace Botanica {
 
         std::unique_ptr<Window> m_Window;
         bool m_Running = true;
-        LayerStack m_LayerStack;
         static Application* s_Instance;
     };
 

@@ -108,9 +108,6 @@ namespace Botanica
             va.Bind();
             glDrawElements(GL_TRIANGLES, ia.GetCount(), GL_UNSIGNED_INT, 0);
 
-            for (Layer* layer : m_LayerStack)
-                layer->OnUpdate();
-
             m_Window->OnUpdate();
         }
     }
@@ -122,19 +119,6 @@ namespace Botanica
         EventDispatcher dispatcher(e);
 
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-
-        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
-        {
-            (*--it)->OnEvent(e);
-            if (e.Handled)
-                break;
-        }
-    }
-
-    void Application::PushLayer(Layer *layer)
-    {
-        m_LayerStack.PushLayer(layer);
-        layer->OnAttach();
     }
 
     bool Application::OnWindowClose(WindowCloseEvent &e)
