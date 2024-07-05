@@ -10,6 +10,8 @@
 #include "Renderer/IndexBuffer.h"
 #include "Renderer/Shader.h"
 
+#include "Camera.h"
+
 namespace Botanica
 {
 
@@ -84,16 +86,11 @@ namespace Botanica
 
         Renderer::IndexBuffer ia(indices, 36);
 
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        glm::mat4 model(1.0f);
 
-        glm::mat4 projection;
-        float fov = glm::radians(45.0f);
-        float aspect = m_Window->GetAspect();
-        float nearPlane = 0.4f;
-        float farPlane = 100.0f;
-        projection = glm::perspective(fov, aspect, nearPlane, farPlane);
+        Camera cam;
+        cam.Move(glm::vec3(1.0f, 0.0f, -3.0f));
+        cam.Rotate(0.0f, -10.0f);
 
         while (m_Running)
         {
@@ -102,8 +99,8 @@ namespace Botanica
 
             shader.Bind();
             shader.SetMat4("model", model);
-            shader.SetMat4("view", view);
-            shader.SetMat4("projection", projection);
+            shader.SetMat4("view", cam.GetView());
+            shader.SetMat4("projection", cam.GetProjection());
 
             va.Bind();
             glDrawElements(GL_TRIANGLES, ia.GetCount(), GL_UNSIGNED_INT, 0);

@@ -13,7 +13,7 @@ namespace Botanica
         std::string Title;
         unsigned int Width, Height;
 
-        WindowParams(const std::string& title = "Botanica", unsigned int widht = 1280, unsigned int height = 720)
+        WindowParams(const std::string& title = "Botanica", unsigned int widht = 1080, unsigned int height = 720)
             :Title(title), Width(widht), Height(height) {}
     };
 
