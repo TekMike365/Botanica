@@ -8,11 +8,13 @@ namespace Botanica
     class MouseMovedEvent : public Event
     {
     public:
-        MouseMovedEvent(float xpos, float ypos)
-            :m_XPos(xpos), m_YPos(ypos) {}
+        MouseMovedEvent(float xpos, float ypos, float xposNormalized, float yposNormalized)
+            :m_XPos(xpos), m_YPos(ypos), m_XPosNormalized(xposNormalized), m_YPosNormalized(yposNormalized) {}
 
         inline float GetXPos() const { return m_XPos; }
         inline float GetYPos() const { return m_YPos; }
+        inline float GetXPosNormalized() const { return m_XPosNormalized; }
+        inline float GetYPosNormalized() const { return m_YPosNormalized; }
 
         EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
         EVENT_CLASS_TYPE(MouseMoved)
@@ -20,11 +22,11 @@ namespace Botanica
         std::string ToString() const override
         {
             std::stringstream ss;
-            ss << GetName() << ": " << m_XPos << ", " << m_YPos;
+            ss << GetName() << ": [" << m_XPos << ", " << m_YPos << "], n:[" << m_XPosNormalized << ", " << m_YPosNormalized << "]";
             return ss.str();
         }
     private:
-        float m_XPos, m_YPos;
+        float m_XPos, m_YPos, m_XPosNormalized, m_YPosNormalized;
     };
 
     class MouseScrolledEvent : public Event

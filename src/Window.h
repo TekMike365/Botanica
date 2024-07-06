@@ -35,6 +35,9 @@ namespace Botanica
         inline void SetEventCallbackFunction(const EventCallbackFn& fn) { m_Data.EventCallback = fn; }
         void SetVSync(bool enabled);
         inline bool IsVSync() const { return m_Data.VSync; }
+
+        inline void HideCursor() { glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN | GLFW_CURSOR_DISABLED); }
+        inline void ShowCursor() { glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); }
     private:
         GLFWwindow* m_Window;
 

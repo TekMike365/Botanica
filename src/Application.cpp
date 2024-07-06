@@ -15,17 +15,19 @@
 namespace Botanica
 {
 
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
-
     Application *Application::s_Instance = nullptr;
 
     Application::Application()
+        :m_Player(4.0f/3.0f)
     {
         BT_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
         m_Window = std::make_unique<Window>();
-        m_Window->SetEventCallbackFunction(BIND_EVENT_FN(OnEvent));
+        m_Window->SetEventCallbackFunction(BIND_EVENT_FN(Application::OnEvent));
+
+
+        m_Player = Player(m_Window->GetAspect());
     }
 
     Application::~Application() {}
@@ -87,11 +89,12 @@ namespace Botanica
         Renderer::IndexBuffer ia(indices, 36);
 
         glm::mat4 model(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
 
-        Camera cam;
-        cam.Move(glm::vec3(1.0f, 0.0f, -3.0f));
-        cam.Rotate(0.0f, -10.0f);
+        const Camera& cam = m_Player.GetCamera();
 
+        double oldTime = glfwGetTime();
+        float deltaTime = 0;
         while (m_Running)
         {
             glClearColor(0.6f, 0.7f, 0.9f, 1.0f);
@@ -106,6 +109,12 @@ namespace Botanica
             glDrawElements(GL_TRIANGLES, ia.GetCount(), GL_UNSIGNED_INT, 0);
 
             m_Window->OnUpdate();
+            if (m_EnablePlayer)
+                m_Player.OnUpdate(deltaTime);
+
+            double newTime = glfwGetTime();
+            deltaTime = (float)(newTime - oldTime);
+            oldTime = newTime;
         }
     }
 
@@ -114,14 +123,42 @@ namespace Botanica
         // BT_TRACE("{}", e.ToString());
 
         EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(Application::OnKeyPressed));
+        dispatcher.Dispatch<MouseButtonReleasedEvent>(BIND_EVENT_FN(Application::OnMouseButtonReleased));
 
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+        if (m_EnablePlayer)
+            m_Player.OnEvent(e);
     }
 
     bool Application::OnWindowClose(WindowCloseEvent &e)
     {
         m_Running = false;
         return true;
+    }
+
+    bool Application::OnKeyPressed(KeyPressedEvent &e)
+    {
+        if (e.GetKey() == GLFW_KEY_ESCAPE && m_EnablePlayer)
+        {
+            m_EnablePlayer = false;
+            m_Window->ShowCursor();
+            return true;
+        }
+
+        return false;
+    }
+
+    bool Application::OnMouseButtonReleased(MouseButtonReleasedEvent &e)
+    {
+        if (e.GetButton() == GLFW_MOUSE_BUTTON_1 && !m_EnablePlayer)
+        {
+            m_EnablePlayer = true;
+            m_Window->HideCursor();
+            return true;
+        }
+
+        return false;
     }
 
 }

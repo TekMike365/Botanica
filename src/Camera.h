@@ -2,6 +2,7 @@
 
 #include "btpch.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Botanica
 {
@@ -23,35 +24,39 @@ namespace Botanica
     {
     public:
         Camera(const CameraParams& params = CameraParams())
-            :m_Params(params), Position(0.0f), Forward(glm::vec3(0.0f, 0.0f, -1.0f)), Up(glm::vec3(0.0f, 1.0f, 0.0f)), Right(glm::vec3(1.0f, 0.0f, 0.0f)) { UpdateProjection(); }
+            :m_Params(params), Position(0.0f), m_Forward(0.0f, 0.0f, -1.0f)
+        {
+            UpdateProjection();
+        }
 
         inline void UpdateParams(const CameraParams& params) { m_Params = params; UpdateProjection(); }
         inline const CameraParams& GetParams() const { return m_Params; };
 
-        inline void Move(glm::vec3 step) { Position += step * Forward + step * Up + step * Right; }
-        inline void Rotate(float pitchDeg, float yawDeg, float rollDeg = 0) {
-            Forward = RotateVec(Forward, pitchDeg, yawDeg, rollDeg);
-            Up = RotateVec(Up, pitchDeg, yawDeg, rollDeg);
-            Right = RotateVec(Right, pitchDeg, yawDeg, rollDeg);
+        inline void Translate(glm::vec3 step)
+        {
+            glm::vec3 right = glm::cross(m_Forward, m_Up);
+            Position += step.x * glm::normalize(right - m_Up * right)
+                      + step.y * glm::normalize(m_Up)
+                      + step.z * glm::normalize(m_Forward - m_Up * m_Forward);
+        }
+        inline void Rotate(float pitchDeg, float yawDeg)
+        {
+            yawDeg -= 90.0f;
+            m_Forward.x = cos(glm::radians(yawDeg)) * cos(glm::radians(pitchDeg));
+            m_Forward.y = sin(glm::radians(pitchDeg));
+            m_Forward.z = sin(glm::radians(yawDeg)) * cos(glm::radians(pitchDeg));
         }
 
-        inline glm::mat4 GetView() const { return glm::lookAt(Position, Position + Forward, Up); }
+        inline glm::vec3 GetForward() const { return m_Forward; }
+        inline glm::mat4 GetView() const { return glm::lookAt(Position, Position + m_Forward, m_Up); }
         inline glm::mat4 GetProjection() const { return m_Projection; }
     public:
         glm::vec3 Position;
-        glm::vec3 Forward;
-        glm::vec3 Up;
-        glm::vec3 Right;
     private:
-        glm::vec3 RotateVec(glm::vec3 vec, float pitchDeg, float yawDeg, float rollDeg) {
-            glm::mat4 rotation(1.0f);
-            rotation = glm::rotate(rotation, glm::radians(pitchDeg), Right);
-            rotation = glm::rotate(rotation, glm::radians(yawDeg), Up);
-            rotation = glm::rotate(rotation, glm::radians(rollDeg), Forward);
-            return glm::vec3(glm::vec4(vec, 1.0f) * rotation);
-        }
         inline void UpdateProjection() { m_Projection = glm::perspective(m_Params.FOV, m_Params.Aspect, m_Params.NearPlane, m_Params.FarPlane); }
     private:
+        glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 m_Forward;
         CameraParams m_Params;
         glm::mat4 m_Projection;
     };

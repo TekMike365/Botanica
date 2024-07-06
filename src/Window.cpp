@@ -87,6 +87,8 @@ namespace Botanica
             data.Width = width;
             data.Height = height;
 
+            glViewport(0, 0, width, height);
+
             WindowResizeEvent event(width, height);
             data.EventCallback(event);
         });
@@ -138,7 +140,7 @@ namespace Botanica
         {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-            MouseMovedEvent event((float)xpos, (float)ypos);
+            MouseMovedEvent event((float)xpos, (float)ypos, (float)xpos / data.Width, (float)ypos / data.Height);
             data.EventCallback(event);
         });
 
