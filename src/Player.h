@@ -21,6 +21,7 @@ namespace Botanica
 
         void OnEvent(Event& e);
         void OnUpdate(float deltaTime);
+        void OnEnable(float mouseXNormalized, float mouseYNormalized);
 
         inline const Camera& GetCamera() const { return m_Camera; }
     private:
@@ -30,8 +31,8 @@ namespace Botanica
         bool OnWindowResized(WindowResizeEvent& e);
     private:
         glm::vec3 m_MoveDir;
-        glm::vec2 m_LastMousePos;
-        glm::vec2 m_MousePosNormalized;
+        glm::vec2 m_LastMousePosNormalized;
+        glm::vec2 m_Rotate;
 
         bool m_Operate = false;
 

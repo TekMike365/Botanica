@@ -155,6 +155,10 @@ namespace Botanica
         {
             m_EnablePlayer = true;
             m_Window->HideCursor();
+            
+            double mouseX, mouseY;
+            m_Window->GetMousePos(&mouseX, &mouseY);
+            m_Player.OnEnable((float)mouseX / (float)m_Window->GetWidth(), (float)mouseY / (float)m_Window->GetHeight());
             return true;
         }
 

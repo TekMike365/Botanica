@@ -31,6 +31,7 @@ namespace Botanica
         inline unsigned int GetWidth() const { return m_Data.Width; }
         inline unsigned int GetHeight() const { return m_Data.Height; }
         inline float GetAspect() const { return (float)m_Data.Width / (float)m_Data.Height; }
+        inline void GetMousePos(double* xpos, double* ypos) { glfwGetCursorPos(m_Window, xpos, ypos); }
 
         inline void SetEventCallbackFunction(const EventCallbackFn& fn) { m_Data.EventCallback = fn; }
         void SetVSync(bool enabled);

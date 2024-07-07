@@ -6,7 +6,7 @@ namespace Botanica
 {
 
     Player::Player(float aspect)
-        :m_CameraParams(45.0f, aspect, 0.4f, 100.0f), m_Camera(m_CameraParams), m_MoveDir(0.0f), m_MousePosNormalized(0.5f)
+        :m_CameraParams(45.0f, aspect, 0.0f, 100.0f), m_Camera(m_CameraParams), m_MoveDir(0.0f), m_Rotate(0.0f)
     {
     }
 
@@ -28,10 +28,12 @@ namespace Botanica
         float moveSpeed = 4.0f;
         m_Camera.Translate(m_MoveDir * moveSpeed * deltaTime);
 
-        if (m_MousePosNormalized.y > 1.0f || m_MousePosNormalized.y < 0.0f)
-            return;
-        glm::vec2 rot = glm::vec2(m_MousePosNormalized.x, m_MousePosNormalized.y) * 180.0f - 90.0f;
-        m_Camera.Rotate(-rot.y, rot.x);
+        m_Camera.Rotate(-m_Rotate.y, m_Rotate.x);
+    }
+
+    void Player::OnEnable(float mouseXNormalized, float mouseYNormalized)
+    {
+        m_LastMousePosNormalized = glm::vec2(mouseXNormalized, mouseYNormalized);
     }
 
     bool Player::OnKeyPressed(KeyPressedEvent &e)
@@ -98,14 +100,23 @@ namespace Botanica
 
     bool Player::OnMouseMoved(MouseMovedEvent &e)
     {
-        m_MousePosNormalized.x = e.GetXPosNormalized();
-        m_MousePosNormalized.y = e.GetYPosNormalized();
+        glm::vec2 mousePosNormalized(e.GetXPosNormalized(), e.GetYPosNormalized());
+        glm::vec2 diff((mousePosNormalized - m_LastMousePosNormalized) * 180.0f);
+        m_LastMousePosNormalized = mousePosNormalized;
+
+        m_Rotate.x += diff.x;
+
+        if (m_Rotate.y + diff.y < -90.0f || m_Rotate.y + diff.y > 90.0f)
+            return true;
+
+        m_Rotate.y += diff.y;
+
         return true;
     }
 
     bool Player::OnWindowResized(WindowResizeEvent &e)
     {
-        m_CameraParams.Aspect = e.GetWidth() / e.GetHeight();
+        m_CameraParams.Aspect = (float)e.GetWidth() / (float)e.GetHeight();
         m_Camera.UpdateParams(m_CameraParams);
         return true;
     }
