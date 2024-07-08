@@ -26,7 +26,8 @@ namespace Botanica
     void Player::OnUpdate(float deltaTime)
     {
         float moveSpeed = 4.0f;
-        m_Camera.Translate(m_MoveDir * moveSpeed * deltaTime);
+        if (glm::length(m_MoveDir) != 0)
+            m_Camera.Translate(glm::normalize(m_MoveDir) * moveSpeed * deltaTime);
 
         m_Camera.Rotate(-m_Rotate.y, m_Rotate.x);
     }
