@@ -93,12 +93,14 @@ namespace Botanica
 
         const Camera& cam = m_Player.GetCamera();
 
+        glEnable(GL_DEPTH_TEST);
+
         double oldTime = glfwGetTime();
         float deltaTime = 0;
         while (m_Running)
         {
             glClearColor(0.6f, 0.7f, 0.9f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             shader.Bind();
             shader.SetMat4("model", model);

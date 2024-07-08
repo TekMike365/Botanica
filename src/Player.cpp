@@ -6,7 +6,7 @@ namespace Botanica
 {
 
     Player::Player(float aspect)
-        :m_CameraParams(45.0f, aspect, 0.0f, 100.0f), m_Camera(m_CameraParams), m_MoveDir(0.0f), m_Rotate(0.0f)
+        :m_CameraParams(45.0f, aspect, 0.1f, 100.0f), m_Camera(m_CameraParams), m_MoveDir(0.0f), m_Rotate(0.0f)
     {
     }
 
