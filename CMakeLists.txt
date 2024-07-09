@@ -25,6 +25,7 @@ set(
     src/Renderer/VertexBuffer.cpp
     src/Renderer/IndexBuffer.cpp
     src/Renderer/Shader.cpp
+    src/Renderer/Mesh.cpp
 )
 
 add_executable(Application ${APPLICATION_SOURCES})

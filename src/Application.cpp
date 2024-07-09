@@ -10,6 +10,8 @@
 #include "Renderer/IndexBuffer.h"
 #include "Renderer/Shader.h"
 
+#include "Renderer/Mesh.h"
+
 #include "Camera.h"
 
 namespace Botanica
@@ -79,14 +81,11 @@ namespace Botanica
 
         Renderer::Shader shader("shaders/Test.vert", "shaders/Test.frag");
 
-        Renderer::VertexArray va;
-        Renderer::VertexBuffer vb(vertices, sizeof(vertices));
-        Renderer::VertexLayout vbl;
-        vbl.PushElement(GL_FLOAT, 3, false);
-        vbl.PushElement(GL_FLOAT, 3, true);
-        va.AddVertexBuffer(vb, vbl);
+        Renderer::VertexLayout vertexLayout;
+        vertexLayout.PushElement(GL_FLOAT, 3, false);
+        vertexLayout.PushElement(GL_FLOAT, 3, true);
 
-        Renderer::IndexBuffer ia(indices, 36);
+        Renderer::Mesh mesh(vertices, 8 * sizeof(Vertex), vertexLayout, indices, 36);
 
         glm::mat4 model(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
@@ -102,13 +101,10 @@ namespace Botanica
             glClearColor(0.6f, 0.7f, 0.9f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            shader.Bind();
             shader.SetMat4("model", model);
             shader.SetMat4("view", cam.GetView());
             shader.SetMat4("projection", cam.GetProjection());
-
-            va.Bind();
-            glDrawElements(GL_TRIANGLES, ia.GetCount(), GL_UNSIGNED_INT, 0);
+            mesh.Render(shader);
 
             m_Window->OnUpdate();
             if (m_EnablePlayer)
