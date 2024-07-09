@@ -15,37 +15,19 @@ namespace Botanica
         float FarPlane;
 
         CameraParams(float fov = 45.0f, float aspect = 1080.0f / 720.0f, float nearPlane = 0.4f, float farPlane = 100.0f)
-            :FOV(fov), Aspect(aspect), NearPlane(nearPlane), FarPlane(farPlane)
-        {
-        }
+            :FOV(fov), Aspect(aspect), NearPlane(nearPlane), FarPlane(farPlane) {}
     };
 
     class Camera
     {
     public:
-        Camera(const CameraParams& params = CameraParams())
-            :m_Params(params), Position(0.0f), m_Forward(0.0f, 0.0f, -1.0f)
-        {
-            UpdateProjection();
-        }
+        Camera(const CameraParams& params = CameraParams());
 
-        inline void UpdateParams(const CameraParams& params) { m_Params = params; UpdateProjection(); }
+        void UpdateParams(const CameraParams& params);
         inline const CameraParams& GetParams() const { return m_Params; };
 
-        inline void Translate(glm::vec3 step)
-        {
-            glm::vec3 right = glm::cross(m_Forward, m_Up);
-            Position += step.x * glm::normalize(right - m_Up * right)
-                      + step.y * glm::normalize(m_Up)
-                      + step.z * glm::normalize(m_Forward - m_Up * m_Forward);
-        }
-        inline void Rotate(float pitchDeg, float yawDeg)
-        {
-            yawDeg -= 90.0f;
-            m_Forward.x = cos(glm::radians(yawDeg)) * cos(glm::radians(pitchDeg));
-            m_Forward.y = sin(glm::radians(pitchDeg));
-            m_Forward.z = sin(glm::radians(yawDeg)) * cos(glm::radians(pitchDeg));
-        }
+        void Translate(glm::vec3 step);
+        void Rotate(float pitchDeg, float yawDeg);
 
         inline glm::vec3 GetForward() const { return m_Forward; }
         inline glm::mat4 GetView() const { return glm::lookAt(Position, Position + m_Forward, m_Up); }

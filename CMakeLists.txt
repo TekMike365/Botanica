@@ -14,11 +14,13 @@ add_subdirectory(vendor/spdlog)
 set(
     APPLICATION_SOURCES
 
-    src/EntryPoint.cpp
-    src/Application.cpp
-    src/Log.cpp
-    src/Window.cpp
+    src/Core/EntryPoint.cpp
+    src/Core/Application.cpp
+    src/Core/Window.cpp
+
+    src/Camera.cpp
     src/Player.cpp
+    src/Log.cpp
 
     src/Renderer/VertexLayout.cpp
     src/Renderer/VertexArray.cpp
