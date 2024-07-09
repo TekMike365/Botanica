@@ -4,13 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Application.h"
-
-#include "Renderer/VertexArray.h"
-#include "Renderer/VertexBuffer.h"
-#include "Renderer/IndexBuffer.h"
-#include "Renderer/Shader.h"
-
-#include "Renderer/Mesh.h"
+#include "Renderer/Renderer.h"
 
 #include "Camera.h"
 
@@ -28,6 +22,7 @@ namespace Botanica
         m_Window = std::make_unique<Window>();
         m_Window->SetEventCallbackFunction(BIND_EVENT_FN(Application::OnEvent));
 
+        Renderer::Init();
 
         m_Player = Player(m_Window->GetAspect());
     }
@@ -91,8 +86,6 @@ namespace Botanica
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
 
         const Camera& cam = m_Player.GetCamera();
-
-        glEnable(GL_DEPTH_TEST);
 
         double oldTime = glfwGetTime();
         float deltaTime = 0;
