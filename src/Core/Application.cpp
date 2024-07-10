@@ -74,7 +74,7 @@ namespace Botanica
             7, 3, 2
         };
 
-        Renderer::Shader shader("shaders/Test.vert", "shaders/Test.frag");
+        Renderer::Shader shader(PROJECT_SOURCE_DIR"shaders/Test.vert", PROJECT_SOURCE_DIR"shaders/Test.frag");
 
         Renderer::VertexLayout vertexLayout;
         vertexLayout.PushElement(GL_FLOAT, 3, false);
