@@ -37,6 +37,11 @@ namespace Botanica
         m_LastMousePosNormalized = glm::vec2(mouseXNormalized, mouseYNormalized);
     }
 
+    void Player::OnDisable()
+    {
+        m_MoveDir = glm::vec3(0.0f);
+    }
+
     bool Player::OnKeyPressed(KeyPressedEvent &e)
     {
         if (e.GetRepeatCount())

@@ -133,6 +133,7 @@ namespace Botanica
         if (e.GetKey() == GLFW_KEY_ESCAPE && m_EnablePlayer)
         {
             m_EnablePlayer = false;
+            m_Player.OnDisable();
             m_Window->ShowCursor();
             return true;
         }

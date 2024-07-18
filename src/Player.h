@@ -22,6 +22,7 @@ namespace Botanica
         void OnEvent(Event& e);
         void OnUpdate(float deltaTime);
         void OnEnable(float mouseXNormalized, float mouseYNormalized);
+        void OnDisable();
 
         inline const Camera& GetCamera() const { return m_Camera; }
     private:
