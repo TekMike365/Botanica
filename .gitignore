@@ -1,3 +1,4 @@
 # dirs
 build/
 .vscode/
+.cache/
