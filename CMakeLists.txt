@@ -16,6 +16,7 @@ set(
 
     src/Core/EntryPoint.cpp
     src/Core/Application.cpp
+    src/Core/Log.cpp
 )
 
 set(
