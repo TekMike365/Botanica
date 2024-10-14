@@ -19,12 +19,14 @@ set(
 
 set(
     INCLUDE_DIRS
-    src/
+    src/Core/
 )
 
 add_executable(Application ${APPLICATION_SOURCES})
 
 target_compile_definitions(Application PUBLIC PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
+
+target_precompile_headers(Application PRIVATE src/Core/cpch.h)
 
 add_compile_definitions(
     GLFW_INCLUDE_NONE
