@@ -15,20 +15,11 @@ set(
     APPLICATION_SOURCES
 
     src/Core/EntryPoint.cpp
-    src/Core/Application.cpp
-    src/Core/Window.cpp
+)
 
-    src/Camera.cpp
-    src/Player.cpp
-    src/Log.cpp
-
-    src/Renderer/VertexLayout.cpp
-    src/Renderer/VertexArray.cpp
-    src/Renderer/VertexBuffer.cpp
-    src/Renderer/IndexBuffer.cpp
-    src/Renderer/Shader.cpp
-    src/Renderer/Mesh.cpp
-    src/Renderer/Renderer.cpp
+set(
+    INCLUDE_DIRS
+    src/
 )
 
 add_executable(Application ${APPLICATION_SOURCES})
@@ -41,7 +32,7 @@ add_compile_definitions(
 
 target_include_directories(
     Application PRIVATE
-    src/
+    &{INCLUDE_DIRS}
 )
 
 find_package(OpenGL REQUIRED)
@@ -55,5 +46,3 @@ target_link_libraries(
     glad
     glm
 )
-
-target_precompile_headers(Application PRIVATE src/btpch.h)
