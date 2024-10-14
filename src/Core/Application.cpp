@@ -32,6 +32,7 @@ namespace Botanica
     void Application::Run()
     {
         BT_INFO("Running application.");
+        BT_INFO("GL version: {}", (const char*)glGetString(GL_VERSION));
 
         struct Vertex
         {

@@ -70,7 +70,7 @@ namespace Botanica::Renderer
 
     void Shader::Unbind() const
     {
-        glUseProgram(m_ID);
+        glUseProgram(0);
     }
 
     void Shader::SetMat4(const std::string &name, glm::mat4 mat)
