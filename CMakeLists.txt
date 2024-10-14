@@ -15,6 +15,7 @@ set(
     APPLICATION_SOURCES
 
     src/Core/EntryPoint.cpp
+    src/Core/Application.cpp
 )
 
 set(
