@@ -14,6 +14,6 @@ namespace Botanica::Core
     
     void Application::Run()
     {
-        std::cout << "Runnig application." << std::endl;
+        BT_CORE_INFO("Running application.");
     }
 }
