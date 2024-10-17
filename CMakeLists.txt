@@ -10,6 +10,10 @@ add_subdirectory(vendor/GLFW)
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/spdlog)
 
+add_compile_definitions(
+    GLFW_INCLUDE_NONE
+)
+
 # Application
 set(
     APPLICATION_SOURCES
@@ -29,10 +33,6 @@ add_executable(Application ${APPLICATION_SOURCES})
 target_compile_definitions(Application PUBLIC PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
 
 target_precompile_headers(Application PRIVATE src/Core/cpch.h)
-
-add_compile_definitions(
-    GLFW_INCLUDE_NONE
-)
 
 target_include_directories(
     Application PRIVATE
