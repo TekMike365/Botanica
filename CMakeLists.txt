@@ -4,7 +4,6 @@ project(Botanica VERSION 0.1)
 set(CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED 17)
 
-# Libs
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/GLFW)
 add_subdirectory(vendor/glm)
@@ -12,31 +11,57 @@ add_subdirectory(vendor/spdlog)
 
 add_compile_definitions(
     GLFW_INCLUDE_NONE
+    BT_ENABLE_ASSERTS
 )
 
-# Application
 set(
-    APPLICATION_SOURCES
-
-    src/Core/EntryPoint.cpp
-    src/Core/Application.cpp
-    src/Core/Log.cpp
+    PRECOMPILED_HEADERS_FILE
+    src/btpch.h
 )
 
 set(
     INCLUDE_DIRS
-    src/Core/
+    src/
 )
+
+set(
+    APPLICATION_SOURCES
+
+    src/EntryPoint.cpp
+    src/Log.cpp
+    
+    src/Core/Application.cpp
+
+    src/Core/Platform/Linux/LinuxWindow.cpp
+)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    message(STATUS "Building for Linux")
+    add_compile_definitions(BT_PLATFORM_LINUX)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    message(STATUS "Building for Windows")
+    add_compile_definitions(BT_PLATFORM_WINDOWS)
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    message(STATUS "Building in Debug mode")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+    add_compile_definitions(BT_BUILD_DEBUG)
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    message(STATUS "Building in Release mode")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG")
+    add_compile_definitions(BT_BUILD_RELEASE)
+endif()
 
 add_executable(Application ${APPLICATION_SOURCES})
 
 target_compile_definitions(Application PUBLIC PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
 
-target_precompile_headers(Application PRIVATE src/Core/cpch.h)
+target_precompile_headers(Application PRIVATE ${PRECOMPILED_HEADERS_FILE})
 
 target_include_directories(
     Application PRIVATE
-    &{INCLUDE_DIRS}
+    ${INCLUDE_DIRS}
 )
 
 find_package(OpenGL REQUIRED)
