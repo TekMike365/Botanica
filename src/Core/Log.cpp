@@ -2,7 +2,7 @@
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-namespace Botanica::Core
+namespace Botanica
 {
     std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 

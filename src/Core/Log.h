@@ -2,7 +2,7 @@
 
 #include <spdlog/spdlog.h>
 
-namespace Botanica::Core
+namespace Botanica
 {
     class Log
     {
@@ -17,7 +17,7 @@ namespace Botanica::Core
 
 }
 
-#define BT_CORE_TRACE(...) Botanica::Core::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define BT_CORE_INFO(...) Botanica::Core::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define BT_CORE_WARN(...) Botanica::Core::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define BT_CORE_ERROR(...) Botanica::Core::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define BT_CORE_TRACE(...) Botanica::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define BT_CORE_INFO(...) Botanica::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define BT_CORE_WARN(...) Botanica::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define BT_CORE_ERROR(...) Botanica::Log::GetCoreLogger()->error(__VA_ARGS__)

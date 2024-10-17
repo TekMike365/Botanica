@@ -3,9 +3,9 @@
 
 int main()
 {
-    Botanica::Core::Log::Init();
+    Botanica::Log::Init();
 
-    auto* app = new Botanica::Core::Application();
+    auto* app = new Botanica::Application();
     app->Run();
     delete app;
 }

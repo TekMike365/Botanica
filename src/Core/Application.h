@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Botanica::Core
+namespace Botanica
 {
     class Application
     {

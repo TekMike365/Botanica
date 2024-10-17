@@ -2,7 +2,7 @@
 
 #include "Application.h"
 
-namespace Botanica::Core
+namespace Botanica
 {
     Application::Application()
     {
