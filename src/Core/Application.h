@@ -6,7 +6,7 @@ namespace Botanica::Core
     {
     public:
         Application();
-        ~Application();
+        virtual ~Application();
 
         void Run();
     };
