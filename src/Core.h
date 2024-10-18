@@ -1,17 +1,7 @@
 #pragma once
 
-#ifdef BT_PLATFORM_UNKNOWN
-#error Unknown platform!
-#endif // BT_PLATFORM_UNKNOWN
-
-#ifdef BT_PLATFORM_WINDOWS
-#error Botanica only knows linux for now.
-#endif // BT_PLATFORM_WINDOWS
-
-#ifdef BT_PLATFORM_LINUX
-#endif // BT_PLATFORM_LINUX
-
 #ifdef BT_ENABLE_ASSERTS
+#include "Log.h"
 
 #ifdef BT_PLATFORM_LINUX
 #include <cstdlib>
@@ -23,8 +13,10 @@
             abort();                                            \
         }                                                       \
     }
+#else
+BT_CORE_WARN("Asserts are not supported on this platform.");
 #endif // BT_PLATFORM_LINUX
 
-#else  // BT_ENABLE_ASSERTS
+#else // BT_ENABLE_ASSERTS
 #define BT_CORE_ASSERT(x, ...)
 #endif // BT_ENABLE_ASSERTS

@@ -32,7 +32,7 @@ set(
     
     src/Core/Application.cpp
 
-    src/Core/Platform/Linux/LinuxWindow.cpp
+    src/Core/Platform/CrossPlatform/CrossPlatformWindow.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -41,6 +41,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
     message(STATUS "Building for Windows")
     add_compile_definitions(BT_PLATFORM_WINDOWS)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    message(STATUS "Building for MacOS")
+    add_compile_definitions(BT_PLATFORM_MACOS)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)

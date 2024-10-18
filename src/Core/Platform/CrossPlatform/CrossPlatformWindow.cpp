@@ -1,4 +1,4 @@
-#include "LinuxWindow.h"
+#include "CrossPlatformWindow.h"
 
 #include "Core.h"
 #include "Log.h"
