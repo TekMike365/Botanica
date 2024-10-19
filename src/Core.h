@@ -20,3 +20,5 @@ BT_CORE_WARN("Asserts are not supported on this platform.");
 #else // BT_ENABLE_ASSERTS
 #define BT_CORE_ASSERT(x, ...)
 #endif // BT_ENABLE_ASSERTS
+
+#define BIT(x) (1 << x)

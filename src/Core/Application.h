@@ -3,6 +3,9 @@
 
 #include "Window.h"
 
+#include "Event/Event.h"
+#include "Event/WindowEvent.h"
+
 namespace Botanica
 {
     class Application
@@ -12,6 +15,11 @@ namespace Botanica
         virtual ~Application();
 
         void Run();
+
+    private:
+        void OnEvent(Event &e);
+
+        bool OnWindowClose(WindowCloseEvent &e);
 
     private:
         bool m_Running;
