@@ -1,5 +1,7 @@
 #include "CrossPlatformWindow.h"
 
+#include <glad/glad.h>
+
 #include "Core.h"
 #include "Log.h"
 
@@ -15,6 +17,29 @@ namespace Botanica
     static void GLFWErrorCallback(int error, const char *description)
     {
         BT_CORE_ERROR("GLFW error ({}): {}", error, description);
+    }
+
+    static void APIENTRY GLErrorCallback(GLenum source, GLenum type, GLenum id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    {
+        if (id == GL_INVALID_OPERATION)
+            return;
+
+        std::string msg(message, length);
+        switch (severity)
+        {
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+            BT_CORE_TRACE("OpenGL ({}): {}", id, msg);
+            break;
+        case GL_DEBUG_SEVERITY_LOW:
+            BT_CORE_INFO("OpenGL ({}): {}", id, msg);
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            BT_CORE_WARN("OpenGL ({}): {}", id, msg);
+            break;
+        case GL_DEBUG_SEVERITY_HIGH:
+            BT_CORE_ERROR("OpenGL ({}): {}", id, msg);
+            break;
+        }
     }
 
     Window *Window::Create(const WindowProps &props)
@@ -38,10 +63,19 @@ namespace Botanica
             s_GLFWInitialized = true;
         }
 
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+
         m_Window = glfwCreateWindow(m_WindowData.Width, m_WindowData.Height, m_WindowData.Title.c_str(), 0, 0);
         BT_CORE_ASSERT(m_Window, "GLFW failed to create window.");
 
         glfwMakeContextCurrent(m_Window);
+
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        BT_CORE_ASSERT(status, "Glad it fucked up!");
+        glDebugMessageCallback(GLErrorCallback, nullptr);
+
+        BT_CORE_INFO("OpenGL version: {}", (const char*)glGetString(GL_VERSION));
+        glEnable(GL_DEPTH_TEST);
 
         glfwSetWindowUserPointer(m_Window, &m_WindowData);
         SetVSync(true);
