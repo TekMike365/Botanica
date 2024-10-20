@@ -29,56 +29,10 @@ namespace Botanica
     {
         BT_CORE_INFO("Running application.");
 
-        float vertices[] = {
-             0.0f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-        };
-
-        unsigned int indices[] = {0, 1, 2};
-        
-        OpenGL::Buffer vertexBuffer(OpenGL::BufferType::Vertex, sizeof(vertices), vertices);
-        OpenGL::Buffer indexBuffer(OpenGL::BufferType::Index, sizeof(indices), indices);
-        
-        OpenGL::VertexArray vertexArray;
-        vertexArray.BindBuffer(vertexBuffer);
-        vertexArray.BindBuffer(indexBuffer);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-        
-        const char *vertexShaderSource = R"(
-            #version 330 core
-            layout (location = 0) in vec3 pos;
-
-            void main()
-            {
-                gl_Position = vec4(pos, 1.0);
-            }
-        )";
-
-        const char *fragmentShaderSource = R"(
-            #version 330 core
-            out vec4 FragColor;
-
-            void main()
-            {
-                FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-            }
-        )";
-
-        OpenGL::Shader shader;
-        shader.PushSource(OpenGL::ShaderSourceType::Vertex, vertexShaderSource);
-        shader.PushSource(OpenGL::ShaderSourceType::Fragment, fragmentShaderSource);
-
         while (m_Running)
         {
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
-            vertexArray.Bind();
-            shader.Bind();
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
             m_Window->OnUpdate();
 
