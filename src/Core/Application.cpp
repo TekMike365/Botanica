@@ -1,12 +1,8 @@
 #include "btpch.h"
 #include "Application.h"
 
-#include <glad/glad.h>
-
 #include "Log.h"
-
-#include "Platform/OpenGL/Shader.h"
-#include "Platform/OpenGL/Buffer.h"
+#include "RenderLayer.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -19,6 +15,8 @@ namespace Botanica
 
         WindowResizeEvent event(m_Window->GetWidth(), m_Window->GetHeight());
         m_Window->GetEventCallbackFunction()(event);
+
+        m_LayerStack.PushLayer(new RenderLayer);
     }
 
     Application::~Application()
@@ -31,9 +29,6 @@ namespace Botanica
 
         while (m_Running)
         {
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
             m_Window->OnUpdate();
 
             for (Layer *layer : m_LayerStack)

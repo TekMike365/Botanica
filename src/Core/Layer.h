@@ -18,6 +18,8 @@ namespace Botanica
         virtual void OnUpdate() {}
         virtual void OnEvent(Event &e) {}
 
+        const std::string &GetName() const { return m_DebugName; }
+
     private:
         std::string m_DebugName;
     };
