@@ -5,6 +5,8 @@
 #include "Log.h"
 #include "Application.h"
 
+#include "Platform/OpenGL/Shader.h"
+
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 namespace Botanica
@@ -71,37 +73,9 @@ namespace Botanica
             }
         )";
 
-        unsigned int vertexShader;
-        vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-        glCompileShader(vertexShader);
-
-        int  success;
-        char infoLog[512];
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        if(!success)
-        {
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-            BT_CORE_ERROR("Vertex shader compilation failed: {}", infoLog);
-        }
-
-        unsigned int fragmentShader;
-        fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-        glCompileShader(fragmentShader);
-
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        if(!success)
-        {
-            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            BT_CORE_ERROR("Fragment shader compilation failed: {}", infoLog);
-        }
-
-        unsigned int shaderProgram;
-        shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragmentShader);
-        glLinkProgram(shaderProgram);
+        OpenGL::Shader shader;
+        shader.PushSource(OpenGL::ShaderSourceType::Vertex, vertexShaderSource);
+        shader.PushSource(OpenGL::ShaderSourceType::Fragment, fragmentShaderSource);
 
         while (m_Running)
         {
@@ -109,7 +83,7 @@ namespace Botanica
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             glBindVertexArray(vao);
-            glUseProgram(shaderProgram);
+            shader.Bind();
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
 
