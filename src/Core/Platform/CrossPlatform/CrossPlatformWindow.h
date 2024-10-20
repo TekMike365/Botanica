@@ -1,9 +1,11 @@
 #pragma once
 #include "btpch.h"
 
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 #include "Core/Window.h"
+#include "Core/Renderer/GraphicsContext.h"
+
 
 namespace Botanica
 {
@@ -35,7 +37,11 @@ namespace Botanica
         };
 
     private:
+        void Init();
+
+    private:
         WindowData m_WindowData;
         GLFWwindow *m_Window;
+        GraphicsContext *m_Context;
     };
 }

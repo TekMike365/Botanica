@@ -34,6 +34,7 @@ set(
     src/Core/Layer.cpp
     src/Core/LayerStack.cpp
 
+    src/Core/Platform/OpenGL/Context.cpp
     src/Core/Platform/CrossPlatform/CrossPlatformWindow.cpp
 )
 
