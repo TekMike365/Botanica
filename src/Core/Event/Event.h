@@ -1,5 +1,7 @@
 #pragma once
-#include "btpch.h"
+
+#include <string>
+#include <functional>
 
 #include "Core.h"
 

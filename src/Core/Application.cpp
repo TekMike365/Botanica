@@ -1,9 +1,9 @@
 #include "btpch.h"
+#include "Application.h"
 
 #include <glad/glad.h>
 
 #include "Log.h"
-#include "Application.h"
 
 #include "Platform/OpenGL/Shader.h"
 #include "Platform/OpenGL/Buffer.h"

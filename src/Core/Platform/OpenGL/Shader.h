@@ -1,5 +1,7 @@
 #pragma once
-#include "btpch.h"
+
+#include <vector>
+#include <string>
 
 namespace Botanica::OpenGL
 {

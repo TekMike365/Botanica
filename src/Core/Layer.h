@@ -1,6 +1,8 @@
 #pragma once
 #include "btpch.h"
 
+#include <string>
+
 #include "Event/Event.h"
 
 namespace Botanica

@@ -1,5 +1,4 @@
 #pragma once
-#include "btpch.h"
 
 #include "Event/Event.h"
 

@@ -1,5 +1,4 @@
 #pragma once
-#include "btpch.h"
 
 #include "Core/Renderer/GraphicsContext.h"
 

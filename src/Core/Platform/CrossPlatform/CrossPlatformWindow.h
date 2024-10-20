@@ -1,5 +1,6 @@
 #pragma once
-#include "btpch.h"
+
+#include <string>
 
 #include <GLFW/glfw3.h>
 

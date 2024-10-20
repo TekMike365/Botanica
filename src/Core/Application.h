@@ -1,5 +1,6 @@
 #pragma once
-#include "btpch.h"
+
+#include <memory>
 
 #include "Window.h"
 #include "LayerStack.h"
