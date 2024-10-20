@@ -6,6 +6,7 @@
 #include "Application.h"
 
 #include "Platform/OpenGL/Shader.h"
+#include "Platform/OpenGL/Buffer.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -35,24 +36,20 @@ namespace Botanica
         };
 
         unsigned int indices[] = {0, 1, 2};
-
+        
+        OpenGL::Buffer vertexBuffer(OpenGL::BufferType::Vertex, sizeof(vertices), vertices);
+        OpenGL::Buffer indexBuffer(OpenGL::BufferType::Index, sizeof(indices), indices);
+        
         unsigned int vao;
-        glGenVertexArrays(1, &vao);
+        glCreateVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
-        unsigned int vbo;
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-        
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        vertexBuffer.Bind();
+        indexBuffer.Bind();
+
         glEnableVertexAttribArray(0);
-
-        unsigned int ebo;
-        glGenBuffers(1, &ebo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        
         const char *vertexShaderSource = R"(
             #version 330 core
             layout (location = 0) in vec3 pos;

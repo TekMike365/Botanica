@@ -36,6 +36,7 @@ set(
 
     src/Core/Platform/OpenGL/Context.cpp
     src/Core/Platform/OpenGL/Shader.cpp
+    src/Core/Platform/OpenGL/Buffer.cpp
     src/Core/Platform/CrossPlatform/CrossPlatformWindow.cpp
 )
 
