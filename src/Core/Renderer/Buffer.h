@@ -10,7 +10,7 @@ namespace Botanica
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        static VertexBuffer *Create(uint32_t size, void* data);
+        static VertexBuffer *Create(uint32_t size, const void* data);
     };
 
     class IndexBuffer
@@ -19,6 +19,6 @@ namespace Botanica
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        static IndexBuffer *Create(uint32_t size, uint32_t data);
+        static IndexBuffer *Create(uint32_t size, const uint32_t *data);
     };
 }

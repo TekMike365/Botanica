@@ -8,8 +8,8 @@ namespace Botanica
     class Renderer
     {
     public:
-        void BeginScene();
-        void Submit(const Shader &shader, const VertexArray &mesh);
-        void EndScene();
+        static void BeginScene();
+        static void Submit(const Shader &shader, const VertexArray &mesh);
+        static void EndScene();
     };
 }
