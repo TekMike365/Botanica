@@ -1,9 +1,6 @@
 #include "btpch.h"
 #include "CrossPlatformWindow.h"
 
-#include "Core.h"
-#include "Log.h"
-
 #include "Core/Event/Event.h"
 #include "Core/Event/WindowEvent.h"
 #include "Core/Event/KeyboardEvent.h"

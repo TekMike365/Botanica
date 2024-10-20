@@ -1,7 +1,6 @@
 #include "btpch.h"
 #include "Application.h"
 
-#include "Log.h"
 #include "RenderLayer.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)

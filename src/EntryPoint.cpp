@@ -1,6 +1,5 @@
 #include "btpch.h"
 
-#include "Log.h"
 #include "Core/Application.h"
 
 int main()
