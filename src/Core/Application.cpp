@@ -40,12 +40,9 @@ namespace Botanica
         OpenGL::Buffer vertexBuffer(OpenGL::BufferType::Vertex, sizeof(vertices), vertices);
         OpenGL::Buffer indexBuffer(OpenGL::BufferType::Index, sizeof(indices), indices);
         
-        unsigned int vao;
-        glCreateVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-
-        vertexBuffer.Bind();
-        indexBuffer.Bind();
+        OpenGL::VertexArray vertexArray;
+        vertexArray.BindBuffer(vertexBuffer);
+        vertexArray.BindBuffer(indexBuffer);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -79,10 +76,9 @@ namespace Botanica
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
-            glBindVertexArray(vao);
+            vertexArray.Bind();
             shader.Bind();
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
 
             m_Window->OnUpdate();
 

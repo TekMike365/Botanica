@@ -28,7 +28,23 @@ namespace Botanica::OpenGL
 
     private:
         BufferType m_Type;
-        u_int32_t m_GLBufferType;
+        uint32_t m_GLBufferType;
+        uint32_t m_ID;
+    };
+
+    class VertexArray
+    {
+    public:
+        VertexArray();
+        ~VertexArray();
+
+        void Bind() const;
+        void Unbind() const;
+
+        void BindBuffer(const Buffer &buffer);
+
+    private:
+        uint32_t m_BindIndex;
         uint32_t m_ID;
     };
 }

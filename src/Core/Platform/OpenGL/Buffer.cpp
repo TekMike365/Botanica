@@ -40,4 +40,31 @@ namespace Botanica::OpenGL
         }
         return 0;
     }
+
+    VertexArray::VertexArray()
+        : m_BindIndex(0)
+    {
+        glCreateVertexArrays(1, &m_ID);
+    }
+
+    VertexArray::~VertexArray()
+    {
+        glDeleteVertexArrays(1, &m_ID);
+    }
+
+    void VertexArray::Bind() const
+    {
+        glBindVertexArray(m_ID);
+    }
+
+    void VertexArray::Unbind() const
+    {
+        glBindVertexArray(0);
+    }
+    
+    void VertexArray::BindBuffer(const Buffer &buffer)
+    {
+        Bind();
+        buffer.Bind();
+    }
 }
