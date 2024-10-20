@@ -31,6 +31,8 @@ set(
     src/Log.cpp
     
     src/Core/Application.cpp
+    src/Core/Layer.cpp
+    src/Core/LayerStack.cpp
 
     src/Core/Platform/CrossPlatform/CrossPlatformWindow.cpp
 )
