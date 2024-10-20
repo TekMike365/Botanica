@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 
+#include "Core.h"
 #include "Log.h"
 
 namespace Botanica::OpenGL
@@ -92,6 +93,9 @@ namespace Botanica::OpenGL
             break;
         case ShaderSourceType::Compute:
             sourceID = glCreateShader(GL_COMPUTE_SHADER);
+            break;
+        default:
+            BT_CORE_ASSERT(false, "Unknown shader source type!")
             break;
         }
         const char *src = source.c_str();

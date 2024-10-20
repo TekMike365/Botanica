@@ -5,6 +5,7 @@ namespace Botanica::OpenGL
 {
     enum class ShaderSourceType
     {
+        None = 0,
         Vertex,
         Geometry,
         Fragment,
@@ -21,7 +22,7 @@ namespace Botanica::OpenGL
         void Unbind() const;
 
         void PushSource(ShaderSourceType type, const std::string &source);
-        
+
     private:
         std::vector<uint32_t> m_SourceIDs;
         uint32_t m_ID;
