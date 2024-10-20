@@ -4,7 +4,7 @@
 
 namespace Botanica
 {
-    enum class ShaderType
+    enum class ShaderSourceType
     {
         None = 0,
         Vertex,
@@ -18,7 +18,7 @@ namespace Botanica
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        virtual void AddSource(ShaderType type, const std::string &source) = 0;
+        virtual void AddSource(ShaderSourceType type, const std::string &source) = 0;
 
         static Shader *Create();
     };

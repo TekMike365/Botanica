@@ -36,9 +36,13 @@ set(
     src/Core/RenderLayer.cpp
 
     src/Core/Renderer/RenderCommand.cpp
+    src/Core/Renderer/Renderer.cpp
 
     src/Core/Platform/OpenGL/Context.cpp
     src/Core/Platform/OpenGL/RendererAPI.cpp
+    src/Core/Platform/OpenGL/Buffer.cpp
+    src/Core/Platform/OpenGL/VertexArray.cpp
+    src/Core/Platform/OpenGL/Shader.cpp
     src/Core/Platform/CrossPlatform/CrossPlatformWindow.cpp
 )
 
