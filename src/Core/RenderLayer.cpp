@@ -1,8 +1,6 @@
 #include "btpch.h"
 #include "RenderLayer.h"
 
-#include <glad/glad.h>
-
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 
@@ -15,7 +13,7 @@ const float VERTICES[] = {
     0.0f, 1.0f, 0.0f, 1.0f,
     // 2
     0.5f, -0.5f, 0.0f,
-    0.0f, 0.0f, 1.0f, 1.0f,};
+    0.0f, 0.0f, 1.0f, 1.0f};
 
 const uint32_t INDICES[] = {0, 1, 2};
 
@@ -26,7 +24,7 @@ const char *VERTEX_SHADER_SOURCE = R"(
 
     out vec4 v_Color;
 
-    int main()
+    void main()
     {
         gl_Position = vec4(a_Position, 1.0);
         v_Color = a_Color;
@@ -39,7 +37,7 @@ const char *FRAGMENT_SHADER_SOURCE = R"(
 
     in vec4 v_Color;
 
-    int main()
+    void main()
     {
         color = v_Color;
     }
@@ -50,14 +48,15 @@ namespace Botanica
     RenderLayer::RenderLayer()
         : Layer("RenderLayer")
     {
-        BufferLayout layout({{ShaderDataType::Float3, "a_Position", false},
-                             {ShaderDataType::Float4, "a_Color", false}});
+        BufferLayout layout;
+        layout.PushElement({ShaderDataType::Float3, "a_Position", false});
+        layout.PushElement({ShaderDataType::Float4, "a_Color", false});
 
-        m_VertexBuffer.reset(VertexBuffer::Create(sizeof(VERTICES), VERTICES));
-        m_VertexBuffer->SetLayout(layout);
-        m_IndexBuffer.reset(IndexBuffer::Create(sizeof(INDICES), INDICES));
+        VertexBuffer *vertexBuffer = VertexBuffer::Create(sizeof(VERTICES), VERTICES);
+        vertexBuffer->SetLayout(layout);
+        IndexBuffer *indexBuffer = IndexBuffer::Create(sizeof(INDICES) / sizeof(uint32_t), INDICES);
 
-        m_VertexArray.reset(VertexArray::Create(*m_VertexBuffer, *m_IndexBuffer));
+        m_VertexArray.reset(VertexArray::Create(vertexBuffer, indexBuffer));
 
         m_Shader.reset(Shader::Create());
         m_Shader->AddSource(ShaderSourceType::Vertex, VERTEX_SHADER_SOURCE);
@@ -74,7 +73,9 @@ namespace Botanica
         RenderCommand::ClearScreen();
 
         Renderer::BeginScene();
-        Renderer::Submit(*m_Shader, *m_VertexArray);
+
+        Renderer::Submit(m_Shader, m_VertexArray);
+
         Renderer::EndScene();
     }
 }

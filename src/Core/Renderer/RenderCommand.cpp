@@ -6,9 +6,9 @@ namespace Botanica
 {
     RendererAPI *RenderCommand::s_Renderer = RendererAPI::Create();
 
-    void RenderCommand::DrawIndexed()
+    void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray> vertexArray)
     {
-        s_Renderer->DrawIndexed();
+        s_Renderer->DrawIndexed(vertexArray);
     }
     
     void RenderCommand::SetClearColor(glm::vec4 color)

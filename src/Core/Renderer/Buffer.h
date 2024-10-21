@@ -20,7 +20,7 @@ namespace Botanica
         Bool
     };
 
-    uint32_t ShaderDataTypeSize(ShaderDataType type)
+    inline uint32_t ShaderDataTypeSize(ShaderDataType type)
     {
         switch (type)
         {
@@ -88,10 +88,11 @@ namespace Botanica
     class BufferLayout
     {
     public:
-        BufferLayout(const std::initializer_list<BufferElement> &elements)
-            : m_Elements(elements), m_Stride(0)
+        void PushElement(const BufferElement &element)
         {
-            CalculateOffsetsAndStride();
+            m_Elements.push_back(element);
+            m_Elements.back().Offset = m_Stride;
+            m_Stride += element.Size;
         }
 
         inline uint32_t GetStride() const { return m_Stride; }
@@ -99,20 +100,12 @@ namespace Botanica
 
         std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
         std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
-
-    private:
-        void CalculateOffsetsAndStride()
-        {
-            for (auto &element : m_Elements)
-            {
-                element.Offset = m_Stride;
-                m_Stride += element.Size;
-            }
-        }
+        std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
+        std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
 
     private:
         std::vector<BufferElement> m_Elements;
-        uint32_t m_Stride;
+        uint32_t m_Stride = 0;
     };
 
     class VertexBuffer
@@ -133,6 +126,8 @@ namespace Botanica
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        static IndexBuffer *Create(uint32_t size, const uint32_t *data);
+        virtual uint32_t GetCount() const = 0;
+
+        static IndexBuffer *Create(uint32_t count, const uint32_t *data);
     };
 }

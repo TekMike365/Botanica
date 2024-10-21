@@ -5,7 +5,7 @@
 
 namespace Botanica
 {
-    VertexArray *VertexArray::Create(const VertexBuffer &vb, const IndexBuffer &ib)
+    VertexArray *VertexArray::Create(VertexBuffer *vb, IndexBuffer *ib)
     {
         return new OpenGL::VertexArray(vb, ib);
     }
@@ -30,22 +30,25 @@ namespace Botanica::OpenGL
         case ShaderDataType::Bool:
             return GL_BOOL;
         }
+
+        BT_CORE_ASSERT(false, "Unknown SaderDataType.");
         return GL_FALSE;
     }
 
-    VertexArray::VertexArray(const VertexBuffer &vb, const IndexBuffer &ib)
+    VertexArray::VertexArray(VertexBuffer *vb, IndexBuffer *ib)
+        : m_VertexBuffer(vb), m_IndexBuffer(ib)
     {
         glCreateVertexArrays(1, &m_ID);
         Bind();
-        vb.Bind();
-        ib.Bind();
+        m_VertexBuffer->Bind();
+        m_IndexBuffer->Bind();
 
         uint32_t index = 0;
-        const BufferLayout &layout = vb.GetLayout();
-        for (const BufferElement &element : layout.GetElements())
+        const BufferLayout &layout = m_VertexBuffer->GetLayout();
+        for (const BufferElement &element : layout)
         {
+            glVertexAttribPointer(index, element.GetElementCount(), ShaderDataTypeToOpenGLBaseType(element.Type), element.Normalized, layout.GetStride(), (void *)element.Offset);
             glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, element.GetElementCount(), ShaderDataTypeToOpenGLBaseType(element.Type), element.Normalized, layout.GetStride(), (const void *)element.Offset);
             index++;
         }
 

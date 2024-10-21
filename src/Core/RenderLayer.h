@@ -17,9 +17,7 @@ namespace Botanica
         virtual void OnUpdate();
     
     private:
-        std::unique_ptr<VertexBuffer> m_VertexBuffer;
-        std::unique_ptr<IndexBuffer> m_IndexBuffer;
-        std::unique_ptr<VertexArray> m_VertexArray;
-        std::unique_ptr<Shader> m_Shader;
+        std::shared_ptr<VertexArray> m_VertexArray;
+        std::shared_ptr<Shader> m_Shader;
     };
 }

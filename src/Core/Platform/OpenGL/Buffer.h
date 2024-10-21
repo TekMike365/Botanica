@@ -9,13 +9,16 @@ namespace Botanica::OpenGL
     class IndexBuffer : public Botanica::IndexBuffer
     {
     public:
-        IndexBuffer(uint32_t size, const uint32_t *data);
+        IndexBuffer(uint32_t count, const uint32_t *data);
         ~IndexBuffer();
 
         void Bind() const override;
         void Unbind() const override;
 
+        inline uint32_t GetCount() const override { return m_Count; }
+
     private:
+        uint32_t m_Count;
         uint32_t m_ID;
     };
 

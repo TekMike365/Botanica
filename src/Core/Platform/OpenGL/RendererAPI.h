@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Renderer/RendererAPI.h"
+#include "Core/Renderer/VertexArray.h"
 
 namespace Botanica::OpenGL
 {
@@ -10,7 +11,7 @@ namespace Botanica::OpenGL
         RendererAPI();
         ~RendererAPI();
 
-        void DrawIndexed() const override;
+        void DrawIndexed(std::shared_ptr<VertexArray> vertexArray) const override;
         void SetClearColor(glm::vec4 color) const override;
         void ClearScreen() const override;
     };

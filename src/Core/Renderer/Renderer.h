@@ -9,7 +9,7 @@ namespace Botanica
     {
     public:
         static void BeginScene();
-        static void Submit(const Shader &shader, const VertexArray &mesh);
+        static void Submit(std::shared_ptr<Shader> shader, std::shared_ptr<VertexArray> vertexArray);
         static void EndScene();
     };
 }
