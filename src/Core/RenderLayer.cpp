@@ -24,10 +24,21 @@ const char *VERTEX_SHADER_SOURCE = R"(
 
     out vec4 v_Color;
 
+    vec4 Run()
+    {
+        v_Color = a_Color;
+        return vec4(a_Position, 1.0);
+    }
+)";
+
+const char *VERTEX_SHADER_CORE_SOURCE = R"(
+    #version 330 core
+
+    vec4 Run();
+
     void main()
     {
-        gl_Position = vec4(a_Position, 1.0);
-        v_Color = a_Color;
+        gl_Position = Run();
     }
 )";
 
@@ -59,6 +70,7 @@ namespace Botanica
         m_VertexArray.reset(VertexArray::Create(vertexBuffer, indexBuffer));
 
         m_Shader.reset(Shader::Create());
+        m_Shader->AddSource(ShaderSourceType::Vertex, VERTEX_SHADER_CORE_SOURCE);
         m_Shader->AddSource(ShaderSourceType::Vertex, VERTEX_SHADER_SOURCE);
         m_Shader->AddSource(ShaderSourceType::Fragment, FRAGMENT_SHADER_SOURCE);
     }
