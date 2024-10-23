@@ -37,6 +37,7 @@ set(
 
     src/Core/Renderer/RenderCommand.cpp
     src/Core/Renderer/Renderer.cpp
+    src/Core/Renderer/Camera.cpp
 
     src/Core/Platform/OpenGL/Context.cpp
     src/Core/Platform/OpenGL/RendererAPI.cpp

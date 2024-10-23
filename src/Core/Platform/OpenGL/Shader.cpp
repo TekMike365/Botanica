@@ -2,6 +2,7 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Botanica
 {
@@ -111,5 +112,11 @@ namespace Botanica::OpenGL
 
         glLinkProgram(m_ID);
         LogProgramLinkError(m_ID);
+    }
+
+    void Shader::UploadUniform(const std::string &name, const glm::mat4 &mat) const
+    {
+        int location = glGetUniformLocation(m_ID, name.c_str());
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
     }
 }

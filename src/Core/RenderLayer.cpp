@@ -1,10 +1,6 @@
 #include "btpch.h"
 #include "RenderLayer.h"
 
-#include <glad/glad.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 
@@ -80,17 +76,8 @@ namespace Botanica
         m_Shader->AddSource(ShaderSourceType::Vertex, VERTEX_SHADER_SOURCE);
         m_Shader->AddSource(ShaderSourceType::Fragment, FRAGMENT_SHADER_SOURCE);
 
-        // camera ;)
-        glm::mat4 view(1.0);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
-        float fov = 45.0f;
-        float aspect = 1280.0f / 720.0f;
-        float znear = 0.1f;
-        float zfar = 100.0f;
-        glm::mat4 projection = glm::perspective(glm::radians(fov), aspect, znear, zfar);
-
-        m_VP = projection * view;
+        m_Camera = std::make_shared<Camera>(45.0f, 0.1f, 100.0f);
+        m_Camera->Translate(glm::vec3(0.5f, 0.0f, -2.0f));
     }
 
     RenderLayer::~RenderLayer()
@@ -102,14 +89,9 @@ namespace Botanica
         RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
         RenderCommand::ClearScreen();
 
-        Renderer::BeginScene();
+        Renderer::BeginScene(m_Camera);
 
-        m_VertexArray->Bind();
-        m_Shader->Bind();
-        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(m_VP));
-        RenderCommand::DrawIndexed(m_VertexArray);
-
-        // Renderer::Submit(m_Shader, m_VertexArray);
+        Renderer::Submit(m_Shader, m_VertexArray);
 
         Renderer::EndScene();
     }
