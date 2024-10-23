@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Event/Event.h"
+#include "TimeStep.h"
 
 namespace Botanica
 {
@@ -15,7 +16,7 @@ namespace Botanica
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate() {}
+        virtual void OnUpdate(Timestep dt) {}
         virtual void OnEvent(Event &e) {}
 
         const std::string &GetName() const { return m_DebugName; }

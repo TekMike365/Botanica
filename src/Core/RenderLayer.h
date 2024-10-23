@@ -15,7 +15,7 @@ namespace Botanica
         RenderLayer();
         ~RenderLayer();
 
-        virtual void OnUpdate();
+        virtual void OnUpdate(Timestep dt) override;
     
     private:
         std::shared_ptr<VertexArray> m_VertexArray;

@@ -29,5 +29,6 @@ namespace Botanica
         bool m_Running;
         std::unique_ptr<Window> m_Window;
         LayerStack m_LayerStack;
+        double m_LastTime = 0;
     };
 }

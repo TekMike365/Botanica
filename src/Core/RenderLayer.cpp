@@ -84,7 +84,7 @@ namespace Botanica
     {
     }
 
-    void RenderLayer::OnUpdate()
+    void RenderLayer::OnUpdate(Timestep dt)
     {
         RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
         RenderCommand::ClearScreen();

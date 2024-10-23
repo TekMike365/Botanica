@@ -1,6 +1,8 @@
 #include "btpch.h"
 #include "Application.h"
 
+#include "Platform.h"
+
 #include "RenderLayer.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -28,10 +30,14 @@ namespace Botanica
 
         while (m_Running)
         {
+            double nextTime = Platform::GetTime();
+            Timestep dt = nextTime - m_LastTime;
+            m_LastTime = nextTime;
+            
             m_Window->OnUpdate();
 
             for (Layer *layer : m_LayerStack)
-                layer->OnUpdate();
+                layer->OnUpdate(dt);
         }
     }
 
