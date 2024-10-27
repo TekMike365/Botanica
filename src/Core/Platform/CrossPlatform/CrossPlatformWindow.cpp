@@ -19,10 +19,10 @@ namespace Botanica
 
     Window *Window::Create(const WindowProps &props)
     {
-        return new LinuxWindow(props);
+        return new CrossPlatformWindow(props);
     }
 
-    LinuxWindow::LinuxWindow(const WindowProps &props)
+    CrossPlatformWindow::CrossPlatformWindow(const WindowProps &props)
     {
         m_WindowData.Title = props.Title;
         m_WindowData.Height = props.Height;
@@ -46,13 +46,13 @@ namespace Botanica
         Init();
     }
 
-    LinuxWindow::~LinuxWindow()
+    CrossPlatformWindow::~CrossPlatformWindow()
     {
         glfwDestroyWindow(m_Window);
         delete m_Context;
     }
 
-    void LinuxWindow::Init()
+    void CrossPlatformWindow::Init()
     {
         m_Context->Init();
 
@@ -150,13 +150,13 @@ namespace Botanica
             } });
     }
 
-    void LinuxWindow::OnUpdate()
+    void CrossPlatformWindow::OnUpdate()
     {
         glfwPollEvents();
         m_Context->SwapBuffers();
     }
 
-    void LinuxWindow::SetVSync(bool enabled)
+    void CrossPlatformWindow::SetVSync(bool enabled)
     {
         if (enabled)
             glfwSwapInterval(1);

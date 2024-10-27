@@ -20,6 +20,10 @@ namespace Botanica
         void PushLayer(Layer *layer);
         void PushOverlay(Layer *overlay);
 
+        inline Window &GetWindow() { return *m_Window; }
+
+        inline static Application &Get() { return *s_Instace; }
+        
     private:
         void OnEvent(Event &e);
 
@@ -30,5 +34,7 @@ namespace Botanica
         std::unique_ptr<Window> m_Window;
         LayerStack m_LayerStack;
         double m_LastTime = 0;
+
+        static Application *s_Instace;
     };
 }

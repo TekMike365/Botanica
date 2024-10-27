@@ -9,8 +9,13 @@
 
 namespace Botanica
 {
+    Application *Application::s_Instace = nullptr;
+
     Application::Application()
     {
+        BT_CORE_ASSERT(!s_Instace, "Can have only one Application!")
+        s_Instace = this;
+
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallbackFunction(BIND_EVENT_CALLBACK(OnEvent));
 

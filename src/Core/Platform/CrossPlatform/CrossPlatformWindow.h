@@ -7,14 +7,13 @@
 #include "Core/Window.h"
 #include "Core/Renderer/GraphicsContext.h"
 
-
 namespace Botanica
 {
-    class LinuxWindow : public Window
+    class CrossPlatformWindow : public Window
     {
     public:
-        LinuxWindow(const WindowProps &props);
-        virtual ~LinuxWindow();
+        CrossPlatformWindow(const WindowProps &props);
+        virtual ~CrossPlatformWindow();
 
         void OnUpdate() override;
 
@@ -26,6 +25,8 @@ namespace Botanica
 
         void SetVSync(bool enabled) override;
         inline bool IsVSync() const override { return m_WindowData.VSync; }
+
+        inline virtual void *GetGetNativeWindow() override { return m_Window; }
 
     private:
         struct WindowData
