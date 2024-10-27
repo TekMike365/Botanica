@@ -116,7 +116,7 @@ namespace Botanica
         m_LastMousePos = mousePos;
 
         float angularSpeed = 3.141592f * 100.0f;
-        glm::vec3 rotationDir = m_Camera->transform.GetRightVector() * mouseDir.y + m_Camera->transform.GetUpVector() * mouseDir.x;
+        glm::vec3 rotationDir = m_Camera->transform.GetRightVector() * mouseDir.y + glm::vec3(0.0f, 1.0f, 0.0f) * mouseDir.x;
         m_Camera->transform.Rotate(rotationDir * angularSpeed * dt.GetSeconds());
 
         RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
