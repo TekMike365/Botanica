@@ -10,8 +10,8 @@ namespace Botanica
         {
         }
 
-        inline double GetSeconds() const { return m_TimeSec; }
-        inline double GetMiliseconds() const { return m_TimeSec / 1000.0f; }
+        inline float GetSeconds() const { return (float)m_TimeSec; }
+        inline float GetMiliseconds() const { return (float)(m_TimeSec / 1000.0f); }
 
     private:
         double m_TimeSec;
