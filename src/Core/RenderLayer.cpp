@@ -4,6 +4,8 @@
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 
+#include "Input.h"
+
 const float VERTICES[] = {
     // 0
     0.0f, 0.5f, 0.0f,
@@ -77,7 +79,7 @@ namespace Botanica
         m_Shader->AddSource(ShaderSourceType::Fragment, FRAGMENT_SHADER_SOURCE);
 
         m_Camera = std::make_shared<Camera>(45.0f, 0.1f, 100.0f);
-        m_Camera->Translate(glm::vec3(0.5f, 0.0f, -2.0f));
+        m_Camera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
     }
 
     RenderLayer::~RenderLayer()
@@ -86,6 +88,17 @@ namespace Botanica
 
     void RenderLayer::OnUpdate(Timestep dt)
     {
+        float speed = 4.0f;
+        const glm::vec3 &camPos = m_Camera->GetPosition();
+        if (Input::IsKeyPressed(GLFW_KEY_W))
+            m_Camera->SetPosition(camPos + glm::vec3(0.0f, 0.0f, -speed * dt.GetSeconds()));
+        if (Input::IsKeyPressed(GLFW_KEY_S))
+            m_Camera->SetPosition(camPos + glm::vec3(0.0f, 0.0f, speed * dt.GetSeconds()));
+        if (Input::IsKeyPressed(GLFW_KEY_D))
+            m_Camera->SetPosition(camPos + glm::vec3(speed * dt.GetSeconds(), 0.0f, 0.0f));
+        if (Input::IsKeyPressed(GLFW_KEY_A))
+            m_Camera->SetPosition(camPos + glm::vec3(-speed * dt.GetSeconds(), 0.0f, 0.0f));
+
         RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
         RenderCommand::ClearScreen();
 

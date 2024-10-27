@@ -11,13 +11,31 @@ namespace Botanica
         Camera(float fovDeg, float zNear, float zFar);
         ~Camera();
 
-        inline void Translate(const glm::vec3 &v) { m_VP = glm::translate(m_VP, v); }
-        inline void Scale(const glm::vec3 &v) { m_VP = glm::scale(m_VP, v); }
-        inline void Rotate(float angleRad, const glm::vec3 &v) { m_VP = glm::rotate(m_VP, angleRad, v); }
+        inline const glm::vec3 &GetPosition() const { return m_Position; }
+        inline void SetPosition(const glm::vec3 &position)
+        {
+            m_Position = position;
+            RecalculateViewMat();
+        }
 
-        inline const glm::mat4 &GetVP() const { return m_VP; }
+        inline float GetRotationY() const { return m_RotationY; }
+        inline void SetRotationY(float rotation)
+        {
+            m_RotationY = rotation;
+            RecalculateViewMat();
+        }
+
+        inline const glm::mat4 &GetVPMat() const { return m_VPMat; }
 
     private:
-        glm::mat4 m_VP;
+        void RecalculateViewMat();
+
+    private:
+        glm::mat4 m_ProjectionMat;
+        glm::mat4 m_ViewMat;
+        glm::mat4 m_VPMat;
+
+        glm::vec3 m_Position;
+        float m_RotationY;
     };
 }
