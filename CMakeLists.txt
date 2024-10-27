@@ -46,6 +46,7 @@ set(
     src/Core/Platform/OpenGL/Shader.cpp
     src/Core/Platform/CrossPlatform/CrossPlatformWindow.cpp
     src/Core/Platform/CrossPlatform/CrossPlatformPlatform.cpp
+    src/Core/Platform/CrossPlatform/CrossPlatformInput.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
