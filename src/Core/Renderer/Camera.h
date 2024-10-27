@@ -1,41 +1,25 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "Core/Transform.h"
 
 namespace Botanica
 {
     class Camera
     {
     public:
-        Camera(float fovDeg, float zNear, float zFar);
-        ~Camera();
-
-        inline const glm::vec3 &GetPosition() const { return m_Position; }
-        inline void SetPosition(const glm::vec3 &position)
+        Camera(float fovDeg, float zNear, float zFar)
         {
-            m_Position = position;
-            RecalculateViewMat();
+            float aspect = 1280.0f / 720.0f;
+            m_ProjectionMat = glm::perspective(glm::radians(fovDeg), aspect, zNear, zFar);
         }
+        ~Camera() {}
 
-        inline float GetRotationY() const { return m_RotationY; }
-        inline void SetRotationY(float rotation)
-        {
-            m_RotationY = rotation;
-            RecalculateViewMat();
-        }
+        glm::mat4 GetVPMat() const { return m_ProjectionMat * transform.GetInverseMatrix(); }
 
-        inline const glm::mat4 &GetVPMat() const { return m_VPMat; }
-
-    private:
-        void RecalculateViewMat();
+    public:
+        Transform transform;
 
     private:
         glm::mat4 m_ProjectionMat;
-        glm::mat4 m_ViewMat;
-        glm::mat4 m_VPMat;
-
-        glm::vec3 m_Position;
-        float m_RotationY;
     };
 }
