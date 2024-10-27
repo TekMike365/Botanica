@@ -3,7 +3,7 @@
 
 #include "Platform.h"
 
-#include "RenderLayer.h"
+#include "TestLayer.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -22,7 +22,7 @@ namespace Botanica
         WindowResizeEvent event(m_Window->GetWidth(), m_Window->GetHeight());
         m_Window->GetEventCallbackFunction()(event);
 
-        m_LayerStack.PushLayer(new RenderLayer);
+        m_LayerStack.PushLayer(new TestLayer);
     }
 
     Application::~Application()

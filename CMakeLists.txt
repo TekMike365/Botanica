@@ -29,11 +29,11 @@ set(
 
     src/EntryPoint.cpp
     src/Log.cpp
+    src/TestLayer.cpp
     
     src/Core/Application.cpp
     src/Core/Layer.cpp
     src/Core/LayerStack.cpp
-    src/Core/RenderLayer.cpp
 
     src/Core/Renderer/RenderCommand.cpp
     src/Core/Renderer/Renderer.cpp

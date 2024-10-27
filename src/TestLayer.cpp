@@ -1,10 +1,11 @@
 #include "btpch.h"
-#include "RenderLayer.h"
+#include "TestLayer.h"
 
-#include "Renderer/RenderCommand.h"
-#include "Renderer/Renderer.h"
+#include "Core/Renderer/RenderCommand.h"
+#include "Core/Renderer/Renderer.h"
 
-#include "Input.h"
+#include "Core/Input.h"
+#include "Core/Application.h"
 
 const float VERTICES[] = {
     // 0
@@ -60,8 +61,8 @@ const char *FRAGMENT_SHADER_SOURCE = R"(
 
 namespace Botanica
 {
-    RenderLayer::RenderLayer()
-        : Layer("RenderLayer")
+    TestLayer::TestLayer()
+        : Layer("TestLayer")
     {
         BufferLayout layout;
         layout.PushElement({ShaderDataType::Float3, "a_Position", false});
@@ -80,23 +81,43 @@ namespace Botanica
 
         m_Camera = std::make_shared<Camera>(45.0f, 0.1f, 100.0f);
         m_Camera->transform.SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+
+        auto [x, y] = Input::GetMousePosition();
+        m_LastMousePos = glm::vec2(x, y);
     }
 
-    RenderLayer::~RenderLayer()
+    TestLayer::~TestLayer()
     {
     }
 
-    void RenderLayer::OnUpdate(Timestep dt)
+    void TestLayer::OnUpdate(Timestep dt)
     {
         float speed = 4.0f;
         if (Input::IsKeyPressed(GLFW_KEY_W))
-            m_Camera->transform.Translate(glm::vec3(0.0f, 0.0f, -speed * dt.GetSeconds()));
+            m_Camera->transform.Translate(m_Camera->transform.GetForwardVector() * speed * dt.GetSeconds());
         if (Input::IsKeyPressed(GLFW_KEY_S))
-            m_Camera->transform.Translate(glm::vec3(0.0f, 0.0f, speed * dt.GetSeconds()));
+            m_Camera->transform.Translate(m_Camera->transform.GetForwardVector() * -speed * dt.GetSeconds());
         if (Input::IsKeyPressed(GLFW_KEY_D))
-            m_Camera->transform.Translate(glm::vec3(speed * dt.GetSeconds(), 0.0f, 0.0f));
+            m_Camera->transform.Translate(m_Camera->transform.GetRightVector() * speed * dt.GetSeconds());
         if (Input::IsKeyPressed(GLFW_KEY_A))
-            m_Camera->transform.Translate(glm::vec3(-speed * dt.GetSeconds(), 0.0f, 0.0f));
+            m_Camera->transform.Translate(m_Camera->transform.GetRightVector() * -speed * dt.GetSeconds());
+        if (Input::IsKeyPressed(GLFW_KEY_SPACE))
+            m_Camera->transform.Translate(m_Camera->transform.GetUpVector() * speed * dt.GetSeconds());
+        if (Input::IsKeyPressed(GLFW_KEY_LEFT_SHIFT))
+            m_Camera->transform.Translate(m_Camera->transform.GetUpVector() * -speed * dt.GetSeconds());
+
+        auto [x, y] = Input::GetMousePosition();
+        glm::vec2 mousePos(x, y);
+
+        glm::vec2 mouseDir = m_LastMousePos - mousePos;
+        mouseDir.x /= Application::Get().GetWindow().GetWidth();
+        mouseDir.y /= Application::Get().GetWindow().GetHeight();
+
+        m_LastMousePos = mousePos;
+
+        float angularSpeed = 3.141592f * 100.0f;
+        glm::vec3 rotationDir = m_Camera->transform.GetRightVector() * mouseDir.y + m_Camera->transform.GetUpVector() * mouseDir.x;
+        m_Camera->transform.Rotate(rotationDir * angularSpeed * dt.GetSeconds());
 
         RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
         RenderCommand::ClearScreen();

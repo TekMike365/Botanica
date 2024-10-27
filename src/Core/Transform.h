@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Botanica
@@ -9,7 +10,7 @@ namespace Botanica
     {
     public:
         Transform()
-            : m_Position(0.0f), m_Rotation(0.0f), m_Scale(1.0f)
+            : m_Position(0.0f), m_Rotation(glm::vec3(0.0f)), m_Scale(1.0f)
         {
             UpdateMatrix();
         }
@@ -27,13 +28,15 @@ namespace Botanica
             m_Matrix = glm::scale(m_Matrix, scale);
         }
 
-        inline void Rotate(glm::vec3 rotation)
+        inline void Rotate(glm::quat rotation)
         {
-            m_Rotation += rotation;
-            m_Matrix = glm::rotate(glm::mat4(1.0f), rotation.y, glm::vec3(0, 1, 0)) *
-                             glm::rotate(glm::mat4(1.0f), rotation.x, glm::vec3(1, 0, 0)) *
-                             glm::rotate(glm::mat4(1.0f), rotation.z, glm::vec3(0, 0, 1)) *
-                             m_Matrix;
+            m_Rotation = rotation * m_Rotation;
+            UpdateMatrix();
+        }
+
+        inline void Rotate(glm::vec3 euler)
+        {
+            Rotate(glm::quat(euler));
         }
 
         inline const glm::vec3 &GetPosition() const { return m_Position; }
@@ -50,12 +53,21 @@ namespace Botanica
             UpdateMatrix();
         }
 
-        inline const glm::vec3 &GetRotation() const { return m_Rotation; }
-        inline void SetRotation(glm::vec3 rotation)
+        inline const glm::quat &GetRotation() const { return m_Rotation; }
+        inline glm::vec3 GetEulerRotation() const { return glm::eulerAngles(m_Rotation); }
+        inline void SetRotation(glm::quat rotation)
         {
             m_Rotation = rotation;
             UpdateMatrix();
         }
+        inline void SetRotation(glm::vec3 euler)
+        {
+            SetRotation(glm::quat(euler));
+        }
+
+        inline glm::vec3 GetForwardVector() const { return m_Rotation * glm::vec3(0.0f, 0.0f, -1.0f); }
+        inline glm::vec3 GetUpVector() const { return m_Rotation * glm::vec3(0.0f, 1.0f, 0.0f); }
+        inline glm::vec3 GetRightVector() const { return m_Rotation * glm::vec3(1.0f, 0.0f, 0.0f); }
 
         inline const glm::mat4 &GetMatrtix() const { return m_Matrix; }
         inline glm::mat4 GetInverseMatrix() const { return glm::inverse(m_Matrix); }
@@ -64,10 +76,8 @@ namespace Botanica
         inline void UpdateMatrix()
         {
             m_Matrix = glm::translate(glm::mat4(1.0f), m_Position) *
-                             glm::rotate(glm::mat4(1.0f), m_Rotation.y, glm::vec3(0, 1, 0)) *
-                             glm::rotate(glm::mat4(1.0f), m_Rotation.x, glm::vec3(1, 0, 0)) *
-                             glm::rotate(glm::mat4(1.0f), m_Rotation.z, glm::vec3(0, 0, 1)) *
-                             glm::scale(glm::mat4(1.0f), m_Scale);
+                       glm::mat4(m_Rotation) *
+                       glm::scale(glm::mat4(1.0f), m_Scale);
         }
 
     private:
@@ -75,6 +85,6 @@ namespace Botanica
 
         glm::vec3 m_Position;
         glm::vec3 m_Scale;
-        glm::vec3 m_Rotation;
+        glm::quat m_Rotation;
     };
 }

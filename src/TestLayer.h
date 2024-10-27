@@ -2,24 +2,26 @@
 
 #include <memory>
 
-#include "Layer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Camera.h"
+#include "Core/Layer.h"
+#include "Core/Renderer/VertexArray.h"
+#include "Core/Renderer/Shader.h"
+#include "Core/Renderer/Camera.h"
 
 namespace Botanica
 {
-    class RenderLayer : public Layer
+    class TestLayer : public Layer
     {
     public:
-        RenderLayer();
-        ~RenderLayer();
+        TestLayer();
+        ~TestLayer();
 
         virtual void OnUpdate(Timestep dt) override;
-    
+
     private:
         std::shared_ptr<VertexArray> m_VertexArray;
         std::shared_ptr<Shader> m_Shader;
         std::shared_ptr<Camera> m_Camera;
+
+        glm::vec2 m_LastMousePos;
     };
 }
