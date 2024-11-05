@@ -38,7 +38,7 @@ namespace Botanica::OpenGL
     VertexArray::VertexArray(VertexBuffer *vb, IndexBuffer *ib)
         : m_VertexBuffer(vb), m_IndexBuffer(ib)
     {
-        glCreateVertexArrays(1, &m_ID);
+        glGenVertexArrays(1, &m_ID);
         Bind();
         m_VertexBuffer->Bind();
         m_IndexBuffer->Bind();

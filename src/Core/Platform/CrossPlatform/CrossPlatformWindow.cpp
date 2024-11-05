@@ -44,6 +44,8 @@ namespace Botanica
         m_Context = new OpenGL::Context(m_Window);
 
         Init();
+
+        BT_CORE_INFO("Window Created!");
     }
 
     CrossPlatformWindow::~CrossPlatformWindow()

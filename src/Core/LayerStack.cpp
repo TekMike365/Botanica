@@ -19,12 +19,14 @@ namespace Botanica
         m_Layers.insert(m_LayerInsert, layer);
         m_LayerInsert++;
         layer->OnAttach();
+        BT_CORE_INFO("Pushed layer on the stack: {}", layer->GetName());
     }
 
     void LayerStack::PushOverlay(Layer *overlay)
     {
         m_Layers.push_back(overlay);
         overlay->OnAttach();
+        BT_CORE_INFO("Pushed overlay on the stack: {}", overlay->GetName());
     }
 
     void LayerStack::PopLayer(Layer *layer)
@@ -35,7 +37,10 @@ namespace Botanica
             m_Layers.erase(it);
             m_LayerInsert--;
             layer->OnDetach();
+            BT_CORE_INFO("Popped layer of the stack: {}", layer->GetName());
+            return;
         }
+        BT_CORE_INFO("Failed to pop layer of the stack: {}", layer->GetName());
     }
 
     void LayerStack::PopOverlay(Layer *overlay)
@@ -45,6 +50,9 @@ namespace Botanica
         {
             m_Layers.erase(it);
             overlay->OnDetach();
+            BT_CORE_INFO("Popped overlay of the stack: {}", overlay->GetName());
+            return;
         }
+        BT_CORE_INFO("Failed to pop overlay of the stack: {}", overlay->GetName());
     }
 }

@@ -21,9 +21,10 @@ namespace Botanica::OpenGL
     IndexBuffer::IndexBuffer(uint32_t count, const uint32_t *data)
         : m_Count(count)
     {
-        glCreateBuffers(1, &m_ID);
+        glGenBuffers(1, &m_ID);
+        Bind();
         //TODO: abstract buffer usage
-        glNamedBufferData(m_ID, count * sizeof(uint32_t), data, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), data, GL_STATIC_DRAW);
     }
 
     IndexBuffer::~IndexBuffer()
@@ -43,9 +44,10 @@ namespace Botanica::OpenGL
 
     VertexBuffer::VertexBuffer(uint32_t size, const void *data)
     {
-        glCreateBuffers(1, &m_ID);
+        glGenBuffers(1, &m_ID);
+        Bind();
         //TODO: abstract buffer usage
-        glNamedBufferData(m_ID, size, data, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     }
 
     VertexBuffer::~VertexBuffer()
