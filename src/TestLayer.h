@@ -15,7 +15,14 @@ namespace Botanica
         TestLayer();
         ~TestLayer();
 
+        virtual void OnAttach() override;
         virtual void OnUpdate(Timestep dt) override;
+
+    private:
+        void HandleInput(Timestep dt);
+        void Render();
+
+        void Setup();
 
     private:
         std::shared_ptr<VertexArray> m_VertexArray;
