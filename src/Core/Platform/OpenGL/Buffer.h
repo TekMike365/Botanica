@@ -17,6 +17,8 @@ namespace Botanica::OpenGL
 
         inline uint32_t GetCount() const override { return m_Count; }
 
+        virtual void UploadData(uint32_t offset, uint32_t size, const void *data) const override;
+
     private:
         uint32_t m_Count;
         uint32_t m_ID;
@@ -33,6 +35,8 @@ namespace Botanica::OpenGL
 
         inline void SetLayout(const BufferLayout &layout) override { m_Layout = layout; }
         inline const BufferLayout &GetLayout() const override { return m_Layout; }
+
+        virtual void UploadData(uint32_t offset, uint32_t size, const void *data) const override;
 
     private:
         BufferLayout m_Layout;

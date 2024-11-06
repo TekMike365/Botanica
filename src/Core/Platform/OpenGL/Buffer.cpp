@@ -42,6 +42,12 @@ namespace Botanica::OpenGL
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
+    void IndexBuffer::UploadData(uint32_t offset, uint32_t size, const void *data) const
+    {
+        Bind();
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+    }
+
     VertexBuffer::VertexBuffer(uint32_t size, const void *data)
     {
         glGenBuffers(1, &m_ID);
@@ -63,5 +69,11 @@ namespace Botanica::OpenGL
     void VertexBuffer::Unbind() const
     {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    void VertexBuffer::UploadData(uint32_t offset, uint32_t size, const void *data) const
+    {
+        Bind();
+        glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
     }
 }
