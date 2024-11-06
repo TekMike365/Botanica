@@ -92,20 +92,6 @@ namespace Botanica
 
     void TestLayer::OnUpdate(Timestep dt)
     {
-        float speed = 4.0f;
-        if (Input::IsKeyPressed(GLFW_KEY_W))
-            m_Camera->transform.Translate(m_Camera->transform.GetForwardVector() * speed * dt.GetSeconds());
-        if (Input::IsKeyPressed(GLFW_KEY_S))
-            m_Camera->transform.Translate(m_Camera->transform.GetForwardVector() * -speed * dt.GetSeconds());
-        if (Input::IsKeyPressed(GLFW_KEY_D))
-            m_Camera->transform.Translate(m_Camera->transform.GetRightVector() * speed * dt.GetSeconds());
-        if (Input::IsKeyPressed(GLFW_KEY_A))
-            m_Camera->transform.Translate(m_Camera->transform.GetRightVector() * -speed * dt.GetSeconds());
-        if (Input::IsKeyPressed(GLFW_KEY_SPACE))
-            m_Camera->transform.Translate(m_Camera->transform.GetUpVector() * speed * dt.GetSeconds());
-        if (Input::IsKeyPressed(GLFW_KEY_LEFT_SHIFT))
-            m_Camera->transform.Translate(m_Camera->transform.GetUpVector() * -speed * dt.GetSeconds());
-
         auto [x, y] = Input::GetMousePosition();
         glm::vec2 mousePos(x, y);
 
@@ -115,9 +101,26 @@ namespace Botanica
 
         m_LastMousePos = mousePos;
 
-        float angularSpeed = 3.141592f * 100.0f;
-        glm::vec3 rotationDir = m_Camera->transform.GetRightVector() * mouseDir.y + glm::vec3(0.0f, 1.0f, 0.0f) * mouseDir.x;
-        m_Camera->transform.Rotate(rotationDir * angularSpeed * dt.GetSeconds());
+        if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
+        {
+            float speed = 4.0f;
+            if (Input::IsKeyPressed(GLFW_KEY_W))
+                m_Camera->transform.Translate(m_Camera->transform.GetForwardVector() * speed * dt.GetSeconds());
+            if (Input::IsKeyPressed(GLFW_KEY_S))
+                m_Camera->transform.Translate(m_Camera->transform.GetForwardVector() * -speed * dt.GetSeconds());
+            if (Input::IsKeyPressed(GLFW_KEY_D))
+                m_Camera->transform.Translate(m_Camera->transform.GetRightVector() * speed * dt.GetSeconds());
+            if (Input::IsKeyPressed(GLFW_KEY_A))
+                m_Camera->transform.Translate(m_Camera->transform.GetRightVector() * -speed * dt.GetSeconds());
+            if (Input::IsKeyPressed(GLFW_KEY_SPACE))
+                m_Camera->transform.Translate(m_Camera->transform.GetUpVector() * speed * dt.GetSeconds());
+            if (Input::IsKeyPressed(GLFW_KEY_LEFT_SHIFT))
+                m_Camera->transform.Translate(m_Camera->transform.GetUpVector() * -speed * dt.GetSeconds());
+
+            float angularSpeed = 3.141592f * 100.0f;
+            glm::vec3 rotationDir = m_Camera->transform.GetRightVector() * mouseDir.y + glm::vec3(0.0f, 1.0f, 0.0f) * mouseDir.x;
+            m_Camera->transform.Rotate(rotationDir * angularSpeed * dt.GetSeconds());
+        }
 
         RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
         RenderCommand::ClearScreen();
