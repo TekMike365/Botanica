@@ -1,137 +1,106 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
-#include <string>
 
 namespace Botanica
 {
     enum class ShaderDataType
     {
-        None = 0,
-        Float,
-        Float2,
-        Float3,
-        Float4,
-        Int,
-        Int2,
-        Int3,
-        Int4,
-        Bool
+        None = 0, Bool,
+        Float, Float2, Float3, Float4,
+        Int, Int2, Int3, Int4
     };
 
-    inline uint32_t ShaderDataTypeSize(ShaderDataType type)
+    inline uint8_t GetSubTypeCount(ShaderDataType type)
     {
         switch (type)
         {
-        case ShaderDataType::Float:
-            return 4;
-        case ShaderDataType::Float2:
-            return 4 * 2;
-        case ShaderDataType::Float3:
-            return 4 * 3;
-        case ShaderDataType::Float4:
-            return 4 * 4;
-        case ShaderDataType::Int:
-            return 4;
-        case ShaderDataType::Int2:
-            return 4 * 2;
-        case ShaderDataType::Int3:
-            return 4 * 3;
-        case ShaderDataType::Int4:
-            return 4 * 4;
         case ShaderDataType::Bool:
+        case ShaderDataType::Int:
+        case ShaderDataType::Float:
             return 1;
+        case ShaderDataType::Int2:
+        case ShaderDataType::Float2:
+            return 2;
+        case ShaderDataType::Int3:
+        case ShaderDataType::Float3:
+            return 3;
+        case ShaderDataType::Int4:
+        case ShaderDataType::Float4:
+            return 4;
         }
 
         BT_CORE_ASSERT(false, "Unknown SaderDataType.");
         return 0;
     }
 
-    struct BufferElement
+    inline uint32_t GetTypeSize(ShaderDataType type)
     {
-        std::string Name;
-        ShaderDataType Type;
-        bool Normalized;
-        uint32_t Size;
-        uint32_t Offset;
+        if (type == ShaderDataType::Bool)
+            return 1;
+        
+        return GetSubTypeCount(type) * 4;
+    }
 
-        BufferElement(ShaderDataType type, const std::string &name, bool normalized)
-            : Name(name), Type(type), Normalized(normalized), Size(ShaderDataTypeSize(type)), Offset(0)
-        {
-        }
-
-        uint32_t GetElementCount() const
-        {
-            switch (Type)
-            {
-            case ShaderDataType::Bool:
-            case ShaderDataType::Int:
-            case ShaderDataType::Float:
-                return 1;
-            case ShaderDataType::Int2:
-            case ShaderDataType::Float2:
-                return 2;
-            case ShaderDataType::Int3:
-            case ShaderDataType::Float3:
-                return 3;
-            case ShaderDataType::Int4:
-            case ShaderDataType::Float4:
-                return 4;
-            }
-
-            BT_CORE_ASSERT(false, "Unknown SaderDataType.");
-            return 0;
-        }
+    enum class BufferType {
+        None = 0, VertexBuffer, IndexBuffer, ShaderBuffer
     };
 
-    class BufferLayout
+    enum class BufferUsage {
+        None = 0,
+        StreamDraw, StreamRead, StreamCopy,
+        StaticDraw, StaticRead, StaticCopy,
+        DynamicDraw, DynamicRead, DynamicCopy
+    };
+
+    struct BufferLayout
     {
     public:
-        void PushElement(const BufferElement &element)
-        {
-            m_Elements.push_back(element);
-            m_Elements.back().Offset = m_Stride;
-            m_Stride += element.Size;
+        struct DataType {
+            ShaderDataType Type;
+            bool Normalized;
+            size_t Offset;
+
+            DataType(ShaderDataType type, bool normalized = false)
+                :Type(type), Normalized(normalized), Offset(0) {}
+        };
+
+    public:
+        BufferLayout() {}
+
+        BufferLayout(std::initializer_list<DataType> layout){
+            for (const auto& e : layout) {
+                m_Layout.push_back(e);
+                m_Layout.back().Offset = m_Stride;
+                m_Stride += GetTypeSize(e.Type);
+            }
         }
 
         inline uint32_t GetStride() const { return m_Stride; }
-        inline const std::vector<BufferElement> &GetElements() const { return m_Elements; }
 
-        std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
-        std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
-        std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
-        std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
+        inline std::vector<DataType>::const_iterator begin() const { return m_Layout.begin(); }
+        inline std::vector<DataType>::const_iterator end() const { return m_Layout.end(); }
 
     private:
-        std::vector<BufferElement> m_Elements;
+        std::vector<DataType> m_Layout;
         uint32_t m_Stride = 0;
     };
 
-    class VertexBuffer
+    class Buffer
     {
     public:
-        virtual void Bind() const = 0;
-        virtual void Unbind() const = 0;
+        inline void SetLayout(const BufferLayout &layout) { m_Layout = layout; }
+        inline const BufferLayout &GetLayout() const { return m_Layout; }
 
-        virtual void SetLayout(const BufferLayout &layout) = 0;
-        virtual const BufferLayout &GetLayout() const = 0;
+        static std::shared_ptr<Buffer> Create(size_t size, void* data = nullptr, BufferUsage usage = BufferUsage::StaticDraw);
 
-        virtual void UploadData(uint32_t offset, uint32_t size, const void *data) const = 0;
-
-        static VertexBuffer *Create(uint32_t size, const void *data);
-    };
-
-    class IndexBuffer
-    {
     public:
-        virtual void Bind() const = 0;
-        virtual void Unbind() const = 0;
+        virtual void Bind(BufferType type) const = 0;
+        virtual void Unbind(BufferType type) const = 0;
 
-        virtual uint32_t GetCount() const = 0;
+        virtual void UploadData(size_t start, size_t size, void* data) const = 0;
 
-        virtual void UploadData(uint32_t offset, uint32_t size, const void *data) const = 0;
-
-        static IndexBuffer *Create(uint32_t count, const uint32_t *data);
+    private:
+        BufferLayout m_Layout;
     };
 }

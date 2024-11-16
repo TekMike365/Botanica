@@ -17,7 +17,7 @@ namespace Botanica
     {
         shader->Bind();
         vertexArray->Bind();
-        shader->UploadUniform("u_VP", s_Camera->GetVPMat());
+        shader->UploadUniform("uVP", s_Camera->GetVPMat());
         RenderCommand::DrawIndexed(vertexArray);
     }
     

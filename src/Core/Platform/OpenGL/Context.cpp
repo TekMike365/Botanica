@@ -8,9 +8,6 @@ namespace Botanica::OpenGL
 {
     static void APIENTRY GLErrorCallback(GLenum source, GLenum type, GLenum id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
     {
-        if (id == GL_INVALID_OPERATION)
-            return;
-
         std::string msg(message, length);
         switch (severity)
         {
@@ -41,6 +38,9 @@ namespace Botanica::OpenGL
 
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         BT_CORE_ASSERT(status, "Glad it fucked up!");
+
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         glDebugMessageCallback(GLErrorCallback, nullptr);
 
         BT_CORE_INFO("OpenGL version: {}", (const char *)glGetString(GL_VERSION));

@@ -23,8 +23,7 @@ namespace Botanica::OpenGL
 
     void RendererAPI::DrawIndexed(std::shared_ptr<VertexArray> vertexArray) const
     {
-        //TODO: refactor
-        glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, vertexArray->IndexCount, GL_UNSIGNED_INT, 0);
     }
 
     void RendererAPI::SetClearColor(glm::vec4 color) const

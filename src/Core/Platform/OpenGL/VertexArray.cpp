@@ -5,15 +5,15 @@
 
 namespace Botanica
 {
-    VertexArray *VertexArray::Create(VertexBuffer *vb, IndexBuffer *ib)
+    std::shared_ptr<VertexArray> VertexArray::Create(BufferSPtr vb, BufferSPtr ib)
     {
-        return new OpenGL::VertexArray(vb, ib);
+        return std::make_shared<OpenGL::VertexArray>(vb, ib);
     }
 }
 
 namespace Botanica::OpenGL
 {
-    GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
+    GLenum GetGLType(ShaderDataType type)
     {
         switch (type)
         {
@@ -35,23 +35,25 @@ namespace Botanica::OpenGL
         return GL_FALSE;
     }
 
-    VertexArray::VertexArray(VertexBuffer *vb, IndexBuffer *ib)
+    VertexArray::VertexArray(BufferSPtr vb, BufferSPtr ib)
         : m_VertexBuffer(vb), m_IndexBuffer(ib)
     {
         glGenVertexArrays(1, &m_ID);
         Bind();
-        m_VertexBuffer->Bind();
-        m_IndexBuffer->Bind();
+        m_VertexBuffer->Bind(BufferType::VertexBuffer);
+        m_IndexBuffer->Bind(BufferType::IndexBuffer);
 
+        uint32_t stride = vb->GetLayout().GetStride();
         uint32_t index = 0;
-        const BufferLayout &layout = m_VertexBuffer->GetLayout();
-        for (const BufferElement &element : layout)
+        for (const BufferLayout::DataType &e : vb->GetLayout())
         {
-            glVertexAttribPointer(index, element.GetElementCount(), ShaderDataTypeToOpenGLBaseType(element.Type), element.Normalized, layout.GetStride(), (void *)element.Offset);
+            glVertexAttribPointer(index, GetSubTypeCount(e.Type), GetGLType(e.Type), e.Normalized, stride, (const void *)e.Offset);
             glEnableVertexAttribArray(index);
             index++;
         }
 
+        m_VertexBuffer->Unbind(BufferType::VertexBuffer);
+        m_IndexBuffer->Unbind(BufferType::IndexBuffer);
         Unbind();
     }
 

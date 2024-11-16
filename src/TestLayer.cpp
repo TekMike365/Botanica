@@ -73,10 +73,68 @@ namespace Botanica
         RenderCommand::ClearScreen();
 
         Renderer::BeginScene(m_Camera);
+        Renderer::Submit(m_Shader, m_VertexArray);
         Renderer::EndScene();
     }
     
     void TestLayer::Setup()
     {
+        struct Vertex {
+            glm::vec3 Position;
+            glm::vec4 Color;
+        };
+
+        Vertex vertices[] = {
+            { glm::vec3( 0.0f,  0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) },
+            { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) },
+            { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) },
+        };
+        std::shared_ptr<Buffer> vb = Buffer::Create(3 * sizeof(Vertex), &vertices);
+        vb->SetLayout(BufferLayout({
+            { ShaderDataType::Float3 }, // Position
+            { ShaderDataType::Float4 } // Color
+        }));
+
+        uint32_t indices[] = {0, 1, 2};
+        std::shared_ptr<Buffer> ib = Buffer::Create(3 * sizeof(uint32_t), &indices);
+        ib->SetLayout(BufferLayout({
+            { ShaderDataType::Int },
+        }));
+
+        m_VertexArray = VertexArray::Create(vb, ib);
+        m_VertexArray->IndexCount = 3;
+
+        const char* vert = R"(
+            #version 430 core
+            layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec4 aColor;
+
+            out vec4 vColor;
+
+            uniform mat4 uVP;
+
+            void main()
+            {
+                gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
+                vColor = aColor;
+            }
+        )";
+
+        const char* frag = R"(
+            #version 430 core
+            
+            in vec4 vColor;
+
+            out vec4 fColor;
+
+            void main()
+            {
+                fColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+            }
+        )";
+
+        m_Shader = std::shared_ptr<Shader>(Shader::Create());
+        m_Shader->AddSource(ShaderSourceType::Vertex, vert);
+        m_Shader->AddSource(ShaderSourceType::Fragment, frag);
     }
 }

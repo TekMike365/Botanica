@@ -9,18 +9,18 @@ namespace Botanica::OpenGL
     class VertexArray : public Botanica::VertexArray
     {
     public:
-        VertexArray(VertexBuffer *vb, IndexBuffer *ib);
+        VertexArray(BufferSPtr vb, BufferSPtr ib);
         ~VertexArray();
 
         void Bind() const override;
         void Unbind() const override;
 
-        inline std::shared_ptr<VertexBuffer> GetVertexBuffer() const override { return m_VertexBuffer; }
-        inline std::shared_ptr<IndexBuffer> GetIndexBuffer() const override { return m_IndexBuffer; }
+        virtual inline BufferSPtr GetVertexBuffer() const override { return m_VertexBuffer; }
+        virtual inline BufferSPtr GetIndexBuffer() const override { return m_IndexBuffer; }
 
     private:
         uint32_t m_ID;
-        std::shared_ptr<VertexBuffer> m_VertexBuffer;
-        std::shared_ptr<IndexBuffer> m_IndexBuffer;
+        BufferSPtr m_VertexBuffer;
+        BufferSPtr m_IndexBuffer;
     };
 }
