@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     enum class ShaderSourceType
     {

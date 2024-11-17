@@ -44,6 +44,6 @@ namespace Botanica
     private:
         WindowData m_WindowData;
         GLFWwindow *m_Window;
-        GraphicsContext *m_Context;
+        Renderer::GraphicsContext *m_Context;
     };
 }

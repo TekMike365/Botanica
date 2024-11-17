@@ -5,9 +5,9 @@
 
 #include "Core/Renderer/Shader.h"
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
-    class ShaderSource : public Botanica::ShaderSource
+    class ShaderSource : public Renderer::ShaderSource
     {
         friend class Shader;
     public:
@@ -21,7 +21,7 @@ namespace Botanica::OpenGL
         uint32_t m_ID;
     };
 
-    class Shader : public Botanica::Shader
+    class Shader : public Renderer::Shader
     {
     public:
         Shader(const ShaderSourceSPtrVec &sources);

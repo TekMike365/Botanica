@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     std::shared_ptr<Buffer> Buffer::Create(size_t size, void* data, BufferUsage usage)
     {
@@ -11,7 +11,7 @@ namespace Botanica
     }
 }
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
     GLenum GetGLTarget(BufferType type) {
         switch (type)

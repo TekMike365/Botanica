@@ -4,7 +4,7 @@
 
 #include "Buffer.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     class VertexArray
     {

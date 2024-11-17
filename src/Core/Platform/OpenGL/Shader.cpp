@@ -54,7 +54,7 @@ void LogProgramLinkError(uint32_t id)
     BT_CORE_ERROR("Information:\n{}", std::string(message));
 }
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     std::shared_ptr<ShaderSource> ShaderSource::Create(ShaderSourceType type, const std::string &source)
     {
@@ -67,7 +67,7 @@ namespace Botanica
     }
 }
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
     ShaderSource::ShaderSource(ShaderSourceType type, const std::string &source)
         :m_Type(type)

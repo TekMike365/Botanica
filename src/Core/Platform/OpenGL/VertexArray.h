@@ -4,9 +4,9 @@
 
 #include "Core/Renderer/VertexArray.h"
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
-    class VertexArray : public Botanica::VertexArray
+    class VertexArray : public Renderer::VertexArray
     {
     public:
         VertexArray(BufferSPtr vb, BufferSPtr ib);

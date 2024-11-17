@@ -41,7 +41,7 @@ namespace Botanica
         m_Window = glfwCreateWindow(m_WindowData.Width, m_WindowData.Height, m_WindowData.Title.c_str(), 0, 0);
         BT_CORE_ASSERT(m_Window, "GLFW failed to create window.");
 
-        m_Context = new OpenGL::Context(m_Window);
+        m_Context = new Renderer::OpenGL::Context(m_Window);
 
         Init();
 

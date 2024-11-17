@@ -3,9 +3,9 @@
 #include "Core/Renderer/RendererAPI.h"
 #include "Core/Renderer/VertexArray.h"
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
-    class RendererAPI : public Botanica::RendererAPI
+    class RendererAPI : public Renderer::RendererAPI
     {
     public:
         RendererAPI();

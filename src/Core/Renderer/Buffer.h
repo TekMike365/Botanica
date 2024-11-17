@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     enum class ShaderDataType
     {

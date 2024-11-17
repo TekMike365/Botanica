@@ -4,9 +4,9 @@
 
 #include "Core/Renderer/Buffer.h"
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
-    class Buffer : public Botanica::Buffer
+    class Buffer : public Renderer::Buffer
     {
     public:
         Buffer(size_t size, void* data, BufferUsage usage);

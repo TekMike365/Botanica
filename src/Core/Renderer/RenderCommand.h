@@ -4,7 +4,7 @@
 
 #include "RendererAPI.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     class RenderCommand
     {

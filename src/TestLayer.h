@@ -25,9 +25,9 @@ namespace Botanica
         void Setup();
 
     private:
-        std::shared_ptr<VertexArray> m_VertexArray;
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<Camera> m_Camera;
+        std::shared_ptr<Renderer::VertexArray> m_VertexArray;
+        std::shared_ptr<Renderer::Shader> m_Shader;
+        std::shared_ptr<Renderer::Camera> m_Camera;
 
         glm::vec2 m_LastMousePos;
     };

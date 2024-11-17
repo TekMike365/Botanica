@@ -4,16 +4,16 @@
 
 #include "RenderCommand.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
-    std::shared_ptr<Camera> Renderer::s_Camera;
+    std::shared_ptr<Camera> s_Camera;
 
-    void Renderer::BeginScene(std::shared_ptr<Camera> camera)
+    void BeginScene(std::shared_ptr<Camera> camera)
     {
         s_Camera = camera;
     }
 
-    void Renderer::Submit(std::shared_ptr<Shader> shader, std::shared_ptr<VertexArray> vertexArray)
+    void Submit(std::shared_ptr<Shader> shader, std::shared_ptr<VertexArray> vertexArray)
     {
         shader->Bind();
         vertexArray->Bind();
@@ -21,7 +21,7 @@ namespace Botanica
         RenderCommand::DrawIndexed(vertexArray);
     }
     
-    void Renderer::EndScene()
+    void EndScene()
     {
     }
 }

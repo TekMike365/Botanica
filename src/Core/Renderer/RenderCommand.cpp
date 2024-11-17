@@ -2,7 +2,7 @@
 
 #include "Core/Platform/OpenGL/RendererAPI.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     RendererAPI *RenderCommand::s_Renderer = RendererAPI::Create();
 

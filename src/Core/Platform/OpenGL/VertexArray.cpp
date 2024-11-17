@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     std::shared_ptr<VertexArray> VertexArray::Create(BufferSPtr vb, BufferSPtr ib)
     {
@@ -11,7 +11,7 @@ namespace Botanica
     }
 }
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
     GLenum GetGLType(ShaderDataType type)
     {

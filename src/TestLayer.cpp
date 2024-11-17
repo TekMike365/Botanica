@@ -12,7 +12,7 @@ namespace Botanica
     TestLayer::TestLayer()
         : Layer("TestLayer")
     {
-        m_Camera = std::make_shared<Camera>(45.0f, 0.1f, 100.0f);
+        m_Camera = std::make_shared<Renderer::Camera>(45.0f, 0.1f, 100.0f);
         m_Camera->transform.SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
 
         Setup();
@@ -69,8 +69,8 @@ namespace Botanica
 
     void TestLayer::Render()
     {
-        RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
-        RenderCommand::ClearScreen();
+        Renderer::RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+        Renderer::RenderCommand::ClearScreen();
 
         Renderer::BeginScene(m_Camera);
         Renderer::Submit(m_Shader, m_VertexArray);
@@ -89,19 +89,19 @@ namespace Botanica
             { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) },
             { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) },
         };
-        std::shared_ptr<Buffer> vb = Buffer::Create(3 * sizeof(Vertex), &vertices);
-        vb->SetLayout(BufferLayout({
-            { ShaderDataType::Float3 }, // Position
-            { ShaderDataType::Float4 } // Color
+        std::shared_ptr<Renderer::Buffer> vb = Renderer::Buffer::Create(3 * sizeof(Vertex), &vertices);
+        vb->SetLayout(Renderer::BufferLayout({
+            { Renderer::ShaderDataType::Float3 }, // Position
+            { Renderer::ShaderDataType::Float4 } // Color
         }));
 
         uint32_t indices[] = {0, 1, 2};
-        std::shared_ptr<Buffer> ib = Buffer::Create(3 * sizeof(uint32_t), &indices);
-        ib->SetLayout(BufferLayout({
-            { ShaderDataType::Int },
+        std::shared_ptr<Renderer::Buffer> ib = Renderer::Buffer::Create(3 * sizeof(uint32_t), &indices);
+        ib->SetLayout(Renderer::BufferLayout({
+            { Renderer::ShaderDataType::Int },
         }));
 
-        m_VertexArray = VertexArray::Create(vb, ib);
+        m_VertexArray = Renderer::VertexArray::Create(vb, ib);
         m_VertexArray->IndexCount = 3;
 
         const char* vert = R"(
@@ -133,8 +133,8 @@ namespace Botanica
             }
         )";
 
-        std::shared_ptr<ShaderSource> vs = ShaderSource::Create(ShaderSourceType::Vertex, vert);
-        std::shared_ptr<ShaderSource> fs = ShaderSource::Create(ShaderSourceType::Fragment, frag);
-        m_Shader = Shader::Create({vs, fs});
+        std::shared_ptr<Renderer::ShaderSource> vs = Renderer::ShaderSource::Create(Renderer::ShaderSourceType::Vertex, vert);
+        std::shared_ptr<Renderer::ShaderSource> fs = Renderer::ShaderSource::Create(Renderer::ShaderSourceType::Fragment, frag);
+        m_Shader = Renderer::Shader::Create({vs, fs});
     }
 }

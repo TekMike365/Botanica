@@ -2,7 +2,7 @@
 
 #include "Core/Transform.h"
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     class Camera
     {

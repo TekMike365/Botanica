@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Botanica
+namespace Botanica::Renderer
 {
     class GraphicsContext
     {

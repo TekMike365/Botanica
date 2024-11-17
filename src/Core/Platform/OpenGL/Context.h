@@ -4,7 +4,7 @@
 
 struct GLFWwindow;
 
-namespace Botanica::OpenGL
+namespace Botanica::Renderer::OpenGL
 {
     class Context : public GraphicsContext
     {
