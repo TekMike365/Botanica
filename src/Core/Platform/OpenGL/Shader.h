@@ -1,25 +1,39 @@
 #pragma once
 
 #include <cstdint>
+#include <unordered_map>
 
 #include "Core/Renderer/Shader.h"
 
 namespace Botanica::OpenGL
 {
+    class ShaderSource : public Botanica::ShaderSource
+    {
+        friend class Shader;
+    public:
+        ShaderSource(ShaderSourceType type, const std::string &source);
+        ~ShaderSource();
+
+        virtual inline ShaderSourceType GetType() const override { return m_Type; }
+
+    private:
+        ShaderSourceType m_Type;
+        uint32_t m_ID;
+    };
+
     class Shader : public Botanica::Shader
     {
     public:
-        Shader();
+        Shader(const ShaderSourceSPtrVec &sources);
         ~Shader();
         
         void Bind() const override;
         void Unbind() const override;
 
-        void AddSource(ShaderSourceType type, const std::string &source) override;
-
         void UploadUniform(const std::string &name, const glm::mat4 &mat) const override;
     
     private:
         uint32_t m_ID;
+        std::unordered_map<std::string, int> m_UniformNameLocationMap;
     };
 }

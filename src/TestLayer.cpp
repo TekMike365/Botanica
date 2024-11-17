@@ -133,8 +133,8 @@ namespace Botanica
             }
         )";
 
-        m_Shader = std::shared_ptr<Shader>(Shader::Create());
-        m_Shader->AddSource(ShaderSourceType::Vertex, vert);
-        m_Shader->AddSource(ShaderSourceType::Fragment, frag);
+        std::shared_ptr<ShaderSource> vs = ShaderSource::Create(ShaderSourceType::Vertex, vert);
+        std::shared_ptr<ShaderSource> fs = ShaderSource::Create(ShaderSourceType::Fragment, frag);
+        m_Shader = Shader::Create({vs, fs});
     }
 }
