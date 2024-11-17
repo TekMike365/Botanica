@@ -42,14 +42,14 @@ namespace Botanica::OpenGL
     void LogProgramLinkError(uint32_t id)
     {
         GLint linked;
-        glGetShaderiv(id, GL_LINK_STATUS, &linked);
+        glGetProgramiv(id, GL_LINK_STATUS, &linked);
         if (linked == GL_TRUE)
             return;
 
         BT_CORE_ERROR("Program couldn't be linked.");
 
         GLint messageLength;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &messageLength);
+        glGetProgramiv(id, GL_INFO_LOG_LENGTH, &messageLength);
 
         if (messageLength <= 0.0)
         {
@@ -59,7 +59,7 @@ namespace Botanica::OpenGL
 
         GLsizei log_length = 0;
         GLchar message[messageLength];
-        glGetShaderInfoLog(id, messageLength, &log_length, message);
+        glGetProgramInfoLog(id, messageLength, &log_length, message);
 
         BT_CORE_ERROR("Information:\n{}", std::string(message));
     }

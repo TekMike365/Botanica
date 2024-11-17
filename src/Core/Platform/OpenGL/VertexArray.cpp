@@ -65,10 +65,12 @@ namespace Botanica::OpenGL
     void VertexArray::Bind() const
     {
         glBindVertexArray(m_ID);
+        m_IndexBuffer->Bind(BufferType::IndexBuffer);
     }
 
     void VertexArray::Unbind() const
     {
+        m_IndexBuffer->Unbind(BufferType::IndexBuffer);
         glBindVertexArray(0);
     }
 }
