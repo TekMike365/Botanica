@@ -6,18 +6,18 @@
 
 namespace Botanica::Renderer
 {
-    std::shared_ptr<Camera> s_Camera;
+    std::shared_ptr<Camera> g_Camera;
 
     void BeginScene(std::shared_ptr<Camera> camera)
     {
-        s_Camera = camera;
+        g_Camera = camera;
     }
 
     void Submit(std::shared_ptr<Shader> shader, std::shared_ptr<VertexArray> vertexArray)
     {
         shader->Bind();
         vertexArray->Bind();
-        shader->UploadUniform("uVP", s_Camera->GetVPMat());
+        shader->UploadUniform("uVP", g_Camera->GetVPMat());
         RenderCommand::DrawIndexed(vertexArray);
     }
     
