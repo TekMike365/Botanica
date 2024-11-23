@@ -21,9 +21,9 @@ namespace Botanica::Renderer::OpenGL
     {
     }
 
-    void RendererAPI::DrawIndexed(std::shared_ptr<VertexArray> vertexArray) const
+    void RendererAPI::DrawIndexed(size_t count, size_t offset) const
     {
-        glDrawElements(GL_TRIANGLES, vertexArray->IndexCount, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (const void*)offset);
     }
 
     void RendererAPI::SetClearColor(glm::vec4 color) const

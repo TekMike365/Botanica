@@ -11,7 +11,7 @@ namespace Botanica::Renderer::OpenGL
         RendererAPI();
         ~RendererAPI();
 
-        void DrawIndexed(std::shared_ptr<VertexArray> vertexArray) const override;
+        void DrawIndexed(size_t count, size_t offset) const override;
         void SetClearColor(glm::vec4 color) const override;
         void ClearScreen() const override;
     };

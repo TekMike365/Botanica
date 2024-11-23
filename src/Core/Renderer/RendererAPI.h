@@ -10,7 +10,7 @@ namespace Botanica::Renderer
     class RendererAPI
     {
     public:
-        virtual void DrawIndexed(std::shared_ptr<VertexArray> vertexArray) const = 0;
+        virtual void DrawIndexed(size_t count, size_t offset) const = 0;
         virtual void SetClearColor(glm::vec4 color) const = 0;
         virtual void ClearScreen() const = 0;
 

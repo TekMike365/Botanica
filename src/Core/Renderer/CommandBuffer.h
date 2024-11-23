@@ -6,10 +6,10 @@
 
 namespace Botanica::Renderer
 {
-    class RenderCommand
+    class CommandBuffer
     {
     public:
-        static void DrawIndexed(std::shared_ptr<VertexArray> vertexArray);
+        static void DrawIndexed(size_t count, size_t offset);
         static void SetClearColor(glm::vec4 color);
         static void ClearScreen();
 

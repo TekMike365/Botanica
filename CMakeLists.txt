@@ -35,8 +35,7 @@ set(
     src/Core/Layer.cpp
     src/Core/LayerStack.cpp
 
-    src/Core/Renderer/RenderCommand.cpp
-    src/Core/Renderer/Renderer.cpp
+    src/Core/Renderer/CommandBuffer.cpp
 
     src/Core/Platform/OpenGL/Context.cpp
     src/Core/Platform/OpenGL/RendererAPI.cpp
