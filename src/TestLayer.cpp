@@ -71,9 +71,9 @@ namespace Botanica
         Renderer::CommandBuffer::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
         Renderer::CommandBuffer::ClearScreen();
 
-        Renderer::CommandBuffer::SetShader(m_Shader);
+        m_VertexArray->Bind();
+        m_Shader->Bind();
         m_Shader->UploadUniform("uVP", m_Camera->GetVPMat());
-        Renderer::CommandBuffer::SetVertexArray(m_VertexArray);
         Renderer::CommandBuffer::DrawIndexed(m_VertexArray->IndexCount, 0);
     }
     
