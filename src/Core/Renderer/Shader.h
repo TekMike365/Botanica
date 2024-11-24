@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Botanica::Renderer
 {
@@ -24,6 +25,18 @@ namespace Botanica::Renderer
         static std::shared_ptr<ShaderSource> Create(ShaderSourceType type, const std::string &source);
     };
 
+    enum class UniformType
+    {
+        None = 0, Mat4
+    };
+
+    struct Uniform
+    {
+        UniformType Type;
+        const std::string &Name;
+        const void *Data;
+    };
+
     class Shader
     {
     protected:
@@ -33,7 +46,11 @@ namespace Botanica::Renderer
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        virtual void UploadUniform(const std::string &name, const glm::mat4 &mat) const = 0;
+        virtual void UploadUniform(const Uniform& uniform) const = 0;
+
+        inline void UploadUniform(const std::string &name, const glm::mat4 &mat) const {
+            UploadUniform({UniformType::Mat4, name, glm::value_ptr(mat)});
+        }
 
         static std::shared_ptr<Shader> Create(const ShaderSourceSPtrVec &sources);
     };

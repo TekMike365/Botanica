@@ -36,8 +36,7 @@ set(
     src/Core/LayerStack.cpp
     src/Core/RenderLayer.cpp
 
-    src/Core/Renderer/CommandBuffer.cpp
-
+    src/Core/Platform/OpenGL/CommandBuffer.cpp
     src/Core/Platform/OpenGL/Context.cpp
     src/Core/Platform/OpenGL/RendererAPI.cpp
     src/Core/Platform/OpenGL/Buffer.cpp

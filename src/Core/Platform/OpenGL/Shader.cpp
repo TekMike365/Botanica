@@ -2,7 +2,6 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
-#include <glm/gtc/type_ptr.hpp>
 
 void LogShaderCompileError(uint32_t id)
 {
@@ -122,7 +121,6 @@ namespace Botanica::Renderer::OpenGL
         char name[maxNameLen];
         for (int i = 0; i < uniformCount; i++)
         {
-            //! segfault v
             glGetActiveUniform(m_ID, i, maxNameLen, nullptr, &size, &type, (GLchar *)&name);
             m_UniformNameLocationMap[name] = glGetUniformLocation(m_ID, name);
         }
@@ -143,9 +141,12 @@ namespace Botanica::Renderer::OpenGL
         glUseProgram(0);
     }
 
-    void Shader::UploadUniform(const std::string &name, const glm::mat4 &mat) const
+    void OpenGL::Shader::UploadUniform(const Uniform &uniform) const
     {
-        int location = m_UniformNameLocationMap.at(name);
-        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+        int location = m_UniformNameLocationMap.at(uniform.Name);
+        switch (uniform.Type)
+        {
+        case UniformType::Mat4: glUniformMatrix4fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        }
     }
 }
