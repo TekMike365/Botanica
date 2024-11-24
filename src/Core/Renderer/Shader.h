@@ -29,7 +29,14 @@ namespace Botanica::Renderer
 
     enum class UniformType
     {
-        None = 0, Mat4
+        None = 0,
+        Mat4, Mat3, Mat2,
+        Float, Float2, Float3, Float4,
+        Int, Int2, Int3, Int4,
+        UInt, UInt2, UInt3, UInt4,
+        FloatVec, Float2Vec, Float3Vec, Float4Vec,
+        IntVec, Int2Vec, Int3Vec, Int4Vec,
+        UIntVec, UInt2Vec, UInt3Vec, UInt4Vec,
     };
 
     struct Uniform
@@ -37,10 +44,11 @@ namespace Botanica::Renderer
         UniformType Type;
         std::string Name;
         const void *Data;
+        size_t Count = 0;
 
         Uniform() = default;
-        Uniform(UniformType type, const std::string& name, const void* data)
-            : Type(type), Name(name), Data(data) {}
+        Uniform(UniformType type, const std::string& name, const void* data, size_t count = 0)
+            : Type(type), Name(name), Data(data), Count(count) {}
     };
 
     class Shader
@@ -54,10 +62,6 @@ namespace Botanica::Renderer
 
         virtual void UploadUniform(const Uniform& uniform) const = 0;
         virtual void UploadUniformBuffer(const std::string &name, std::shared_ptr<Buffer> ub, uint32_t bindingPoint) const = 0;
-
-        inline void UploadUniform(const std::string &name, const glm::mat4 &mat) const {
-            UploadUniform({UniformType::Mat4, name, glm::value_ptr(mat)});
-        }
 
         static std::shared_ptr<Shader> Create(const ShaderSourceSPtrVec &sources);
     };

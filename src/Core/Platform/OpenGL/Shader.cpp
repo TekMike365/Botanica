@@ -135,6 +135,32 @@ namespace Botanica::Renderer::OpenGL
         switch (uniform.Type)
         {
         case UniformType::Mat4: glUniformMatrix4fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        case UniformType::Mat3: glUniformMatrix3fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        case UniformType::Mat2: glUniformMatrix2fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        case UniformType::FloatVec: glUniform1fv(location, uniform.Count, (const GLfloat*)uniform.Data); return;
+        case UniformType::Float2Vec: glUniform1fv(location, uniform.Count, (const GLfloat*)uniform.Data); return;
+        case UniformType::Float3Vec: glUniform1fv(location, uniform.Count, (const GLfloat*)uniform.Data); return;
+        case UniformType::Float4Vec: glUniform1fv(location, uniform.Count, (const GLfloat*)uniform.Data); return;
+        case UniformType::IntVec: glUniform1iv(location, uniform.Count, (const GLint*)uniform.Data); return;
+        case UniformType::Int2Vec: glUniform1iv(location, uniform.Count, (const GLint*)uniform.Data); return;
+        case UniformType::Int3Vec: glUniform1iv(location, uniform.Count, (const GLint*)uniform.Data); return;
+        case UniformType::Int4Vec: glUniform1iv(location, uniform.Count, (const GLint*)uniform.Data); return;
+        case UniformType::UIntVec: glUniform1uiv(location, uniform.Count, (const GLuint*)uniform.Data); return;
+        case UniformType::UInt2Vec: glUniform1uiv(location, uniform.Count, (const GLuint*)uniform.Data); return;
+        case UniformType::UInt3Vec: glUniform1uiv(location, uniform.Count, (const GLuint*)uniform.Data); return;
+        case UniformType::UInt4Vec: glUniform1uiv(location, uniform.Count, (const GLuint*)uniform.Data); return;
+        case UniformType::Float: glUniform1f(location, *(GLfloat*)uniform.Data); return;
+        case UniformType::Float2: glUniform2f(location, *(GLfloat*)uniform.Data, *((GLfloat*)uniform.Data + 1)); return;
+        case UniformType::Float3: glUniform3f(location, *(GLfloat*)uniform.Data, *((GLfloat*)uniform.Data + 1), *((GLfloat*)uniform.Data + 2)); return;
+        case UniformType::Float4: glUniform4f(location, *(GLfloat*)uniform.Data, *((GLfloat*)uniform.Data + 1), *((GLfloat*)uniform.Data + 2), *((GLfloat*)uniform.Data + 3)); return;
+        case UniformType::Int: glUniform1i(location, *(GLint*)uniform.Data); return;
+        case UniformType::Int2: glUniform2i(location, *(GLint*)uniform.Data, *((GLint*)uniform.Data + 1)); return;
+        case UniformType::Int3: glUniform3i(location, *(GLint*)uniform.Data, *((GLint*)uniform.Data + 1), *((GLint*)uniform.Data + 2)); return;
+        case UniformType::Int4: glUniform4i(location, *(GLint*)uniform.Data, *((GLint*)uniform.Data + 1), *((GLint*)uniform.Data + 2), *((GLint*)uniform.Data + 3)); return;
+        case UniformType::UInt: glUniform1i(location, *(GLuint*)uniform.Data); return;
+        case UniformType::UInt2: glUniform2i(location, *(GLuint*)uniform.Data, *((GLuint*)uniform.Data + 1)); return;
+        case UniformType::UInt3: glUniform3i(location, *(GLuint*)uniform.Data, *((GLuint*)uniform.Data + 1), *((GLuint*)uniform.Data + 2)); return;
+        case UniformType::UInt4: glUniform4i(location, *(GLuint*)uniform.Data, *((GLuint*)uniform.Data + 1), *((GLuint*)uniform.Data + 2), *((GLuint*)uniform.Data + 3)); return;
         }
     }
 
