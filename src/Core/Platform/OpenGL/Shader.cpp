@@ -110,20 +110,8 @@ namespace Botanica::Renderer::OpenGL
         glLinkProgram(m_ID);
         LogProgramLinkError(m_ID);
 
-        int uniformCount;
-        glGetProgramiv(m_ID, GL_ACTIVE_UNIFORMS, &uniformCount);
-
-        int maxNameLen = 0;
-        glGetProgramiv(m_ID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxNameLen);
-
-        GLsizei size;
-        GLenum type;
-        char name[maxNameLen];
-        for (int i = 0; i < uniformCount; i++)
-        {
-            glGetActiveUniform(m_ID, i, maxNameLen, nullptr, &size, &type, (GLchar *)&name);
-            m_UniformNameLocationMap[name] = glGetUniformLocation(m_ID, name);
-        }
+        StoreUniformNameLocations();
+        StoreUniformBufferNameLocations();
     }
 
     Shader::~Shader()
@@ -147,6 +135,46 @@ namespace Botanica::Renderer::OpenGL
         switch (uniform.Type)
         {
         case UniformType::Mat4: glUniformMatrix4fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        }
+    }
+
+    void OpenGL::Shader::UploadUniformBuffer(const std::string &name, std::shared_ptr<Buffer> ub, uint32_t bindingPoint) const
+    {
+        int location = m_UniformBufferNameLocationMap.at(name);
+        glUniformBlockBinding(m_ID, location, bindingPoint);
+    }
+
+    void OpenGL::Shader::StoreUniformNameLocations()
+    {
+        int count;
+        glGetProgramiv(m_ID, GL_ACTIVE_UNIFORMS, &count);
+
+        int maxNameLen = 0;
+        glGetProgramiv(m_ID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxNameLen);
+
+        GLsizei size;
+        char name[maxNameLen];
+        for (int i = 0; i < count; i++)
+        {
+            glGetActiveUniformName(m_ID, i, maxNameLen, &size, name);
+            m_UniformNameLocationMap[name] = glGetUniformLocation(m_ID, name);
+        }
+    }
+
+    void OpenGL::Shader::StoreUniformBufferNameLocations()
+    {
+        int count;
+        glGetProgramiv(m_ID, GL_ACTIVE_UNIFORM_BLOCKS, &count);
+
+        int maxNameLen = 0;
+        glGetProgramiv(m_ID, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &maxNameLen);
+
+        GLsizei size;
+        char name[maxNameLen];
+        for (int i = 0; i < count; i++)
+        {
+            glGetActiveUniformBlockName(m_ID, i, maxNameLen,&size, name);
+            m_UniformNameLocationMap[name] = glGetUniformBlockIndex(m_ID, name); // no idea if i need to get the index again ¯\_(ツ)_/¯
         }
     }
 }

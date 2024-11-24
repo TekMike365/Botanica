@@ -43,7 +43,7 @@ namespace Botanica::Renderer
     }
 
     enum class BufferType {
-        None = 0, VertexBuffer, IndexBuffer, ShaderBuffer
+        None = 0, Vertex, Index, Shader, Uniform
     };
 
     enum class BufferUsage {

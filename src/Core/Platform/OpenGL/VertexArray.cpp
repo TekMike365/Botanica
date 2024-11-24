@@ -40,8 +40,8 @@ namespace Botanica::Renderer::OpenGL
     {
         glGenVertexArrays(1, &m_ID);
         Bind();
-        m_VertexBuffer->Bind(BufferType::VertexBuffer);
-        m_IndexBuffer->Bind(BufferType::IndexBuffer);
+        m_VertexBuffer->Bind(BufferType::Vertex);
+        m_IndexBuffer->Bind(BufferType::Index);
 
         uint32_t stride = vb->GetLayout().GetStride();
         uint32_t index = 0;
@@ -52,8 +52,8 @@ namespace Botanica::Renderer::OpenGL
             index++;
         }
 
-        m_VertexBuffer->Unbind(BufferType::VertexBuffer);
-        m_IndexBuffer->Unbind(BufferType::IndexBuffer);
+        m_VertexBuffer->Unbind(BufferType::Vertex);
+        m_IndexBuffer->Unbind(BufferType::Index);
         Unbind();
     }
 
@@ -65,12 +65,12 @@ namespace Botanica::Renderer::OpenGL
     void VertexArray::Bind() const
     {
         glBindVertexArray(m_ID);
-        m_IndexBuffer->Bind(BufferType::IndexBuffer);
+        m_IndexBuffer->Bind(BufferType::Index);
     }
 
     void VertexArray::Unbind() const
     {
-        m_IndexBuffer->Unbind(BufferType::IndexBuffer);
+        m_IndexBuffer->Unbind(BufferType::Index);
         glBindVertexArray(0);
     }
 }

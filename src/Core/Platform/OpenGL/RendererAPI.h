@@ -12,10 +12,13 @@ namespace Botanica::Renderer::OpenGL
         ~RendererAPI() = default;
 
         virtual void SetClearColor(glm::vec4 color) const override;
-        virtual void SetShader(std::shared_ptr<Shader> shader) const override;
-        virtual void SetVertexArray(std::shared_ptr<VertexArray> va) const override;
+        virtual void SetRenderState(const RenderState& state) override;
+        virtual void SetShaderUniforms(const std::vector<Uniform> &uniforms) const override;
 
         virtual void DrawIndexed(size_t count, size_t offset) const override;
         virtual void ClearScreen() const override;
+    
+    private:
+        RenderState m_RenderState;
     };
 }

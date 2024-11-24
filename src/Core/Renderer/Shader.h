@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Buffer.h"
+
 namespace Botanica::Renderer
 {
     enum class ShaderSourceType
@@ -33,8 +35,12 @@ namespace Botanica::Renderer
     struct Uniform
     {
         UniformType Type;
-        const std::string &Name;
+        std::string Name;
         const void *Data;
+
+        Uniform() = default;
+        Uniform(UniformType type, const std::string& name, const void* data)
+            : Type(type), Name(name), Data(data) {}
     };
 
     class Shader
@@ -47,6 +53,7 @@ namespace Botanica::Renderer
         virtual void Unbind() const = 0;
 
         virtual void UploadUniform(const Uniform& uniform) const = 0;
+        virtual void UploadUniformBuffer(const std::string &name, std::shared_ptr<Buffer> ub, uint32_t bindingPoint) const = 0;
 
         inline void UploadUniform(const std::string &name, const glm::mat4 &mat) const {
             UploadUniform({UniformType::Mat4, name, glm::value_ptr(mat)});

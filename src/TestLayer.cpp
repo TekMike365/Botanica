@@ -1,6 +1,8 @@
 #include "btpch.h"
 #include "TestLayer.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Core/Renderer/RenderCommand.h"
 
 #include "Core/Input.h"
@@ -68,43 +70,50 @@ namespace Botanica
 
     void TestLayer::Render()
     {
-        Renderer::RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
-        Renderer::RenderCommand::ClearScreen();
+        using namespace Renderer;
 
-        Renderer::RenderCommand::SetShader(m_Shader);
-        m_Shader->UploadUniform("uVP", m_Camera->GetVPMat());
-        Renderer::RenderCommand::SetVertexArray(m_VertexArray);
-        Renderer::RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
+        RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+        RenderCommand::ClearScreen();
+
+        RenderCommand::SetRenderState({.ShaderPtr = m_Shader,
+                                       .VertexArrayPtr = m_VertexArray});
+
+        std::vector<Uniform> uniforms;
+        uniforms.emplace_back(UniformType::Mat4, "uVP", glm::value_ptr(m_Camera->GetVPMat()));
+        RenderCommand::SetShaderUniforms(uniforms);
+
+        RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
     }
-    
+
     void TestLayer::Setup()
     {
-        struct Vertex {
+        struct Vertex
+        {
             glm::vec3 Position;
             glm::vec4 Color;
         };
 
         Vertex vertices[] = {
-            { glm::vec3( 0.0f,  0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) },
-            { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) },
-            { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) },
+            {glm::vec3(0.0f, 0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+            {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
+            {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
         };
         std::shared_ptr<Renderer::Buffer> vb = Renderer::Buffer::Create(3 * sizeof(Vertex), &vertices);
         vb->SetLayout(Renderer::BufferLayout({
-            { Renderer::ShaderDataType::Float3 }, // Position
-            { Renderer::ShaderDataType::Float4 } // Color
+            {Renderer::ShaderDataType::Float3}, // Position
+            {Renderer::ShaderDataType::Float4}  // Color
         }));
 
         uint32_t indices[] = {0, 1, 2};
         std::shared_ptr<Renderer::Buffer> ib = Renderer::Buffer::Create(3 * sizeof(uint32_t), &indices);
         ib->SetLayout(Renderer::BufferLayout({
-            { Renderer::ShaderDataType::Int },
+            {Renderer::ShaderDataType::Int},
         }));
 
         m_VertexArray = Renderer::VertexArray::Create(vb, ib);
         m_VertexArray->IndexCount = 3;
 
-        const char* vert = R"(
+        const char *vert = R"(
             #version 430 core
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec4 aColor;
@@ -120,7 +129,7 @@ namespace Botanica
             }
         )";
 
-        const char* frag = R"(
+        const char *frag = R"(
             #version 430 core
             
             in vec4 vColor;

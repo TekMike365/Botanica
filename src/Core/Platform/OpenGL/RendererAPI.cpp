@@ -18,14 +18,17 @@ namespace Botanica::Renderer::OpenGL
         glClearColor(color.r, color.g, color.b, color.a);
     }
 
-    void OpenGL::RendererAPI::SetShader(std::shared_ptr<Shader> shader) const
+    void OpenGL::RendererAPI::SetRenderState(const RenderState &state)
     {
-        shader->Bind();
+        m_RenderState = state;
+        state.ShaderPtr->Bind();
+        state.VertexArrayPtr->Bind();
     }
 
-    void OpenGL::RendererAPI::SetVertexArray(std::shared_ptr<VertexArray> va) const
+    void OpenGL::RendererAPI::SetShaderUniforms(const std::vector<Uniform> &uniforms) const
     {
-        va->Bind();
+        for (auto &uniform : uniforms)
+            m_RenderState.ShaderPtr->UploadUniform(uniform);
     }
 
     void RendererAPI::DrawIndexed(size_t count, size_t offset) const
