@@ -44,10 +44,10 @@ namespace Botanica::Renderer
         UniformType Type;
         std::string Name;
         const void *Data;
-        size_t Count = 0;
+        size_t Count = 1;
 
         Uniform() = default;
-        Uniform(UniformType type, const std::string& name, const void* data, size_t count = 0)
+        Uniform(UniformType type, const std::string& name, const void* data, size_t count = 1)
             : Type(type), Name(name), Data(data), Count(count) {}
     };
 

@@ -14,12 +14,17 @@ namespace Botanica::Renderer
         }
         ~Camera() {}
 
-        glm::mat4 GetVPMat() const { return m_ProjectionMat * transform.GetInverseMatrix(); }
+        const glm::mat4 &GetVPMat()
+        {
+            m_MVPMat = m_ProjectionMat * transform.GetInverseMatrix();
+            return m_MVPMat;
+        }
 
     public:
         Transform transform;
 
     private:
         glm::mat4 m_ProjectionMat;
+        glm::mat4 m_MVPMat;
     };
 }

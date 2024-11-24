@@ -134,9 +134,9 @@ namespace Botanica::Renderer::OpenGL
         int location = m_UniformNameLocationMap.at(uniform.Name);
         switch (uniform.Type)
         {
-        case UniformType::Mat4: glUniformMatrix4fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
-        case UniformType::Mat3: glUniformMatrix3fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
-        case UniformType::Mat2: glUniformMatrix2fv(location, 1, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        case UniformType::Mat4: glUniformMatrix4fv(location, uniform.Count, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        case UniformType::Mat3: glUniformMatrix3fv(location, uniform.Count, GL_FALSE, (const GLfloat*)uniform.Data); return;
+        case UniformType::Mat2: glUniformMatrix2fv(location, uniform.Count, GL_FALSE, (const GLfloat*)uniform.Data); return;
         case UniformType::FloatVec: glUniform1fv(location, uniform.Count, (const GLfloat*)uniform.Data); return;
         case UniformType::Float2Vec: glUniform1fv(location, uniform.Count, (const GLfloat*)uniform.Data); return;
         case UniformType::Float3Vec: glUniform1fv(location, uniform.Count, (const GLfloat*)uniform.Data); return;
