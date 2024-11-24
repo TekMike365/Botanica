@@ -1,6 +1,6 @@
 #include "RenderLayer.h"
 
-#include "Renderer/CommandBuffer.h"
+#include "Renderer/RenderCommand.h"
 
 namespace Botanica
 {
@@ -16,6 +16,6 @@ namespace Botanica
 
     void RenderLayer::OnUpdate(Timestep dt)
     {
-        Renderer::CommandBuffer::Execute();
+        Renderer::RenderCommand::Execute();
     }
 }

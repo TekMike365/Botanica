@@ -11,7 +11,7 @@
 
 namespace Botanica::Renderer
 {
-    class CommandBuffer
+    class RenderCommand
     {
     public:
         static void SetClearColor(glm::vec4 color);

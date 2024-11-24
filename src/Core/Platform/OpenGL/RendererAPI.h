@@ -8,11 +8,14 @@ namespace Botanica::Renderer::OpenGL
     class RendererAPI : public Renderer::RendererAPI
     {
     public:
-        RendererAPI();
-        ~RendererAPI();
+        RendererAPI() = default;
+        ~RendererAPI() = default;
 
-        void DrawIndexed(size_t count, size_t offset) const override;
-        void SetClearColor(glm::vec4 color) const override;
-        void ClearScreen() const override;
+        virtual void SetClearColor(glm::vec4 color) const override;
+        virtual void SetShader(std::shared_ptr<Shader> shader) const override;
+        virtual void SetVertexArray(std::shared_ptr<VertexArray> va) const override;
+
+        virtual void DrawIndexed(size_t count, size_t offset) const override;
+        virtual void ClearScreen() const override;
     };
 }

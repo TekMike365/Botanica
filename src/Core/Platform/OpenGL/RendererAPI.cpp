@@ -13,22 +13,24 @@ namespace Botanica::Renderer
 
 namespace Botanica::Renderer::OpenGL
 {
-    RendererAPI::RendererAPI()
+    void RendererAPI::SetClearColor(glm::vec4 color) const
     {
+        glClearColor(color.r, color.g, color.b, color.a);
     }
 
-    RendererAPI::~RendererAPI()
+    void OpenGL::RendererAPI::SetShader(std::shared_ptr<Shader> shader) const
     {
+        shader->Bind();
+    }
+
+    void OpenGL::RendererAPI::SetVertexArray(std::shared_ptr<VertexArray> va) const
+    {
+        va->Bind();
     }
 
     void RendererAPI::DrawIndexed(size_t count, size_t offset) const
     {
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (const void*)offset);
-    }
-
-    void RendererAPI::SetClearColor(glm::vec4 color) const
-    {
-        glClearColor(color.r, color.g, color.b, color.a);
     }
 
     void RendererAPI::ClearScreen() const

@@ -1,7 +1,7 @@
 #include "btpch.h"
 #include "TestLayer.h"
 
-#include "Core/Renderer/CommandBuffer.h"
+#include "Core/Renderer/RenderCommand.h"
 
 #include "Core/Input.h"
 #include "Core/Application.h"
@@ -68,13 +68,13 @@ namespace Botanica
 
     void TestLayer::Render()
     {
-        Renderer::CommandBuffer::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
-        Renderer::CommandBuffer::ClearScreen();
+        Renderer::RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+        Renderer::RenderCommand::ClearScreen();
 
-        Renderer::CommandBuffer::SetShader(m_Shader);
+        Renderer::RenderCommand::SetShader(m_Shader);
         m_Shader->UploadUniform("uVP", m_Camera->GetVPMat());
-        Renderer::CommandBuffer::SetVertexArray(m_VertexArray);
-        Renderer::CommandBuffer::DrawIndexed(m_VertexArray->IndexCount, 0);
+        Renderer::RenderCommand::SetVertexArray(m_VertexArray);
+        Renderer::RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
     }
     
     void TestLayer::Setup()
