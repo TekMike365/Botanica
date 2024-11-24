@@ -74,11 +74,10 @@ namespace App
     {
         using namespace Renderer;
 
-        RenderCommand::SetClearColor(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
-        RenderCommand::ClearScreen();
-
         RenderCommand::SetRenderState({.ShaderPtr = m_Shader,
-                                       .VertexArrayPtr = m_VertexArray});
+                                       .VertexArrayPtr = m_VertexArray,
+                                       .ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f)});
+        RenderCommand::ClearScreen();
 
         std::vector<Uniform> uniforms;
         uniforms.emplace_back(UniformType::Mat4, "uVP", glm::value_ptr(m_Camera->GetVPMat()));

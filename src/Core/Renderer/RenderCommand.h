@@ -14,7 +14,6 @@ namespace Botanica::Renderer
     class RenderCommand
     {
     public:
-        static void SetClearColor(glm::vec4 color);
         static void SetRenderState(const RenderState& state);
         static void SetShaderUniforms(const std::vector<Uniform> &uniforms);
 

@@ -13,17 +13,19 @@ namespace Botanica::Renderer
     {
         std::shared_ptr<Shader> ShaderPtr;
         std::shared_ptr<VertexArray> VertexArrayPtr;
+        glm::vec4 ClearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     };
 
     class RendererAPI
     {
     public:
-        virtual void SetClearColor(glm::vec4 color) const = 0;
         virtual void SetRenderState(const RenderState& state) = 0;
-        virtual void SetShaderUniforms(const std::vector<Uniform> &uniforms) const = 0;
+        virtual void SetShaderUniforms(const std::vector<Uniform> &uniforms) = 0;
 
-        virtual void DrawIndexed(size_t count, size_t offset) const = 0;
-        virtual void ClearScreen() const = 0;
+        virtual void DrawIndexed(size_t count, size_t offset) = 0;
+        virtual void ClearScreen() = 0;
+
+        virtual void Execute() = 0;
 
         static RendererAPI *Create();
     };

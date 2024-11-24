@@ -6,11 +6,6 @@ namespace Botanica::Renderer
 {
     RendererAPI *RenderCommand::s_Renderer = RendererAPI::Create();
 
-    void RenderCommand::SetClearColor(glm::vec4 color)
-    {
-        s_Renderer->SetClearColor(color);
-    }
-
     void RenderCommand::SetRenderState(const RenderState &state)
     {
         s_Renderer->SetRenderState(state);
@@ -33,5 +28,6 @@ namespace Botanica::Renderer
 
     void RenderCommand::Execute()
     {
+        s_Renderer->Execute();
     }
 }

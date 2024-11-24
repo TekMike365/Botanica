@@ -13,31 +13,63 @@ namespace Botanica::Renderer
 
 namespace Botanica::Renderer::OpenGL
 {
-    void RendererAPI::SetClearColor(glm::vec4 color) const
-    {
-        glClearColor(color.r, color.g, color.b, color.a);
-    }
-
     void OpenGL::RendererAPI::SetRenderState(const RenderState &state)
     {
-        m_RenderState = state;
-        state.ShaderPtr->Bind();
-        state.VertexArrayPtr->Bind();
+        m_States.push_back(state);
+        m_Commands.emplace_back(CommandType::AdvanceState);
     }
 
-    void OpenGL::RendererAPI::SetShaderUniforms(const std::vector<Uniform> &uniforms) const
+    void OpenGL::RendererAPI::SetShaderUniforms(const std::vector<Uniform> &uniforms)
     {
-        for (auto &uniform : uniforms)
-            m_RenderState.ShaderPtr->UploadUniform(uniform);
+        m_DrawUniforms.insert(m_DrawUniforms.begin(), uniforms.begin(), uniforms.end());
     }
 
-    void RendererAPI::DrawIndexed(size_t count, size_t offset) const
+    void RendererAPI::DrawIndexed(size_t count, size_t offset)
     {
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (const void*)offset);
+        m_Commands.emplace_back(CommandType::DrawIndexed, m_DrawUniforms, count, offset);
+        m_DrawUniforms.resize(0);
     }
 
-    void RendererAPI::ClearScreen() const
+    void RendererAPI::ClearScreen()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        m_Commands.emplace_back(CommandType::ClearScreen);
+    }
+
+    void OpenGL::RendererAPI::Execute()
+    {
+        auto stateIt = m_States.begin() - 1;
+        for (const Command &command : m_Commands)
+        {
+            switch (command.Type)
+            {
+            case CommandType::None:
+                BT_CORE_ASSERT(false, "CommandType cannot be None!")
+                continue;
+            case CommandType::AdvanceState:
+            {
+                stateIt++;
+                stateIt->VertexArrayPtr->Bind();
+                stateIt->ShaderPtr->Bind();
+                continue;
+            }
+            case CommandType::ClearScreen:
+            {
+                glClearColor(stateIt->ClearColor.r, stateIt->ClearColor.g, stateIt->ClearColor.b, stateIt->ClearColor.a);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                continue;
+            }
+            case CommandType::DrawIndexed:
+            {
+                for (const auto &uniform : command.Uniforms)
+                    stateIt->ShaderPtr->UploadUniform(uniform);
+                glDrawElements(GL_TRIANGLES, command.Count, GL_UNSIGNED_INT, (const void *)command.Offset);
+                continue;
+            }
+            }
+            BT_CORE_ASSERT(false, "Unknown CommandType.")
+        }
+
+        m_Commands.resize(0);
+        m_States.resize(0);
     }
 }
