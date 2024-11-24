@@ -16,6 +16,8 @@ namespace Botanica
 
     void LayerStack::PushLayer(Layer *layer)
     {
+        ResizeLayers();
+
         m_Layers.insert(m_LayerInsert, layer);
         m_LayerInsert++;
         layer->OnAttach();
@@ -24,6 +26,8 @@ namespace Botanica
 
     void LayerStack::PushOverlay(Layer *overlay)
     {
+        ResizeLayers();
+
         m_Layers.push_back(overlay);
         overlay->OnAttach();
         BT_CORE_INFO("Pushed overlay on the stack: {}", overlay->GetName());
@@ -54,5 +58,17 @@ namespace Botanica
             return;
         }
         BT_CORE_INFO("Failed to pop overlay of the stack: {}", overlay->GetName());
+    }
+
+    void LayerStack::ResizeLayers()
+    {
+        if (m_Layers.capacity() > m_Layers.size())
+            return;
+
+        int idx = m_LayerInsert - m_Layers.begin();
+        int allocate = 2;
+        m_Layers.reserve(m_Layers.size() + allocate);
+
+        m_LayerInsert = m_Layers.begin() + idx;
     }
 }

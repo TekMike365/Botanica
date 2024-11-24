@@ -34,6 +34,7 @@ set(
     src/Core/Application.cpp
     src/Core/Layer.cpp
     src/Core/LayerStack.cpp
+    src/Core/RenderLayer.cpp
 
     src/Core/Renderer/CommandBuffer.cpp
 

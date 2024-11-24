@@ -20,7 +20,7 @@ namespace Botanica
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallbackFunction(BIND_EVENT_CALLBACK(OnEvent));
 
-        m_LayerStack.PushLayer(new RenderLayer);
+        m_LayerStack.PushOverlay(new RenderLayer);
 
         WindowResizeEvent event(m_Window->GetWidth(), m_Window->GetHeight());
         m_Window->GetEventCallbackFunction()(event);
