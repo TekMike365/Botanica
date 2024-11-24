@@ -29,7 +29,8 @@ set(
 
     src/EntryPoint.cpp
     src/Log.cpp
-    src/TestLayer.cpp
+
+    src/App/MainLayer.cpp
     
     src/Core/Application.cpp
     src/Core/Layer.cpp

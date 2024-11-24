@@ -1,5 +1,5 @@
 #include "btpch.h"
-#include "TestLayer.h"
+#include "MainLayer.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -8,9 +8,11 @@
 #include "Core/Input.h"
 #include "Core/Application.h"
 
-namespace Botanica
+namespace App
 {
-    TestLayer::TestLayer()
+    using namespace Botanica;
+
+    MainLayer::MainLayer()
         : Layer("TestLayer")
     {
         m_Camera = std::make_shared<Renderer::Camera>(45.0f, 0.1f, 100.0f);
@@ -19,23 +21,23 @@ namespace Botanica
         Setup();
     }
 
-    TestLayer::~TestLayer()
+    MainLayer::~MainLayer()
     {
     }
 
-    void TestLayer::OnAttach()
+    void MainLayer::OnAttach()
     {
         auto [x, y] = Input::GetMousePosition();
         m_LastMousePos = glm::vec2(x, y);
     }
 
-    void TestLayer::OnUpdate(Timestep dt)
+    void MainLayer::OnUpdate(Timestep dt)
     {
         HandleInput(dt);
         Render();
     }
 
-    void TestLayer::HandleInput(Timestep dt)
+    void MainLayer::HandleInput(Timestep dt)
     {
         auto [x, y] = Input::GetMousePosition();
         glm::vec2 mousePos(x, y);
@@ -68,7 +70,7 @@ namespace Botanica
         }
     }
 
-    void TestLayer::Render()
+    void MainLayer::Render()
     {
         using namespace Renderer;
 
@@ -85,7 +87,7 @@ namespace Botanica
         RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
     }
 
-    void TestLayer::Setup()
+    void MainLayer::Setup()
     {
         struct Vertex
         {
