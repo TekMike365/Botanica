@@ -19,9 +19,9 @@ namespace App
 
     private:
         void HandleInput(Botanica::Timestep dt);
-        void Render();
-
         void Setup();
+
+        void TestRenderPass();
 
     private:
         std::shared_ptr<Botanica::Renderer::VertexArray> m_VertexArray;

@@ -3,6 +3,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Core/Renderer/Renderer.h"
+#include "Core/Renderer/RenderPipeline.h"
 #include "Core/Renderer/RenderCommand.h"
 
 #include "Core/Input.h"
@@ -29,12 +31,14 @@ namespace App
     {
         auto [x, y] = Input::GetMousePosition();
         m_LastMousePos = glm::vec2(x, y);
+
+        Renderer::RenderPipeline pipeline({ std::bind(&MainLayer::TestRenderPass, this) });
+        Renderer::SetRenderPipeline(pipeline);
     }
 
     void MainLayer::OnUpdate(Timestep dt)
     {
         HandleInput(dt);
-        Render();
     }
 
     void MainLayer::HandleInput(Timestep dt)
@@ -68,22 +72,6 @@ namespace App
             glm::vec3 rotationDir = m_Camera->transform.GetRightVector() * mouseDir.y + glm::vec3(0.0f, 1.0f, 0.0f) * mouseDir.x;
             m_Camera->transform.Rotate(rotationDir * angularSpeed * dt.GetSeconds());
         }
-    }
-
-    void MainLayer::Render()
-    {
-        using namespace Renderer;
-
-        RenderCommand::SetRenderState({.ShaderPtr = m_Shader,
-                                       .VertexArrayPtr = m_VertexArray,
-                                       .ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f)});
-        RenderCommand::ClearScreen();
-
-        std::vector<Uniform> uniforms;
-        uniforms.emplace_back(UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_Camera->GetVPMat()));
-        RenderCommand::SetShaderUniforms(uniforms);
-
-        RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
     }
 
     void MainLayer::Setup()
@@ -146,5 +134,21 @@ namespace App
         std::shared_ptr<Renderer::ShaderSource> vs = Renderer::ShaderSource::Create(Renderer::ShaderSourceType::Vertex, vert);
         std::shared_ptr<Renderer::ShaderSource> fs = Renderer::ShaderSource::Create(Renderer::ShaderSourceType::Fragment, frag);
         m_Shader = Renderer::Shader::Create({vs, fs});
+    }
+
+    void MainLayer::TestRenderPass()
+    {
+        using namespace Renderer;
+
+        RenderCommand::SetRenderState({.ShaderPtr = m_Shader,
+                                       .VertexArrayPtr = m_VertexArray,
+                                       .ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f)});
+        RenderCommand::ClearScreen();
+
+        std::vector<Uniform> uniforms;
+        uniforms.emplace_back(UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_Camera->GetVPMat()));
+        RenderCommand::SetShaderUniforms(uniforms);
+
+        RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
     }
 }
