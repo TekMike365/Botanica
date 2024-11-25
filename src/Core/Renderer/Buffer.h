@@ -92,7 +92,10 @@ namespace Botanica::Renderer
         inline void SetLayout(const BufferLayout &layout) { m_Layout = layout; }
         inline const BufferLayout &GetLayout() const { return m_Layout; }
 
-        static std::shared_ptr<Buffer> Create(size_t size, void* data = nullptr, BufferUsage usage = BufferUsage::StaticDraw);
+        static std::shared_ptr<Buffer> Create(size_t size = MAX_SIZE, void* data = nullptr, BufferUsage usage = BufferUsage::StaticDraw);
+
+    public:
+        static const size_t MAX_SIZE = 1024;
 
     public:
         virtual void Bind(BufferType type) const = 0;
