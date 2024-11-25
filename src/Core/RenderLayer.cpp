@@ -16,6 +16,9 @@ namespace Botanica
 
     void RenderLayer::OnUpdate(Timestep dt)
     {
+        if (Renderer::RenderCommand::IsRendering())
+            BT_CORE_ASSERT(false, "IMPOSSIBLE!")
+
         Renderer::RenderCommand::Execute();
     }
 }

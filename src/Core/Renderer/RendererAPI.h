@@ -27,6 +27,8 @@ namespace Botanica::Renderer
 
         virtual void Execute() = 0;
 
+        virtual bool IsRendering() const = 0;
+
         static RendererAPI *Create();
     };
 }

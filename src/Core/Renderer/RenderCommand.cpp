@@ -30,4 +30,9 @@ namespace Botanica::Renderer
     {
         s_Renderer->Execute();
     }
+
+    bool RenderCommand::IsRendering()
+    {
+        return s_Renderer->IsRendering();
+    }
 }

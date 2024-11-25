@@ -22,6 +22,8 @@ namespace Botanica::Renderer
 
         static void Execute();
 
+        static bool IsRendering();
+
     private:
         static RendererAPI *s_Renderer;
     };

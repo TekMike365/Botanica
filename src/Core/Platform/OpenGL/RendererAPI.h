@@ -26,10 +26,16 @@ namespace Botanica::Renderer::OpenGL
             : Type(type), Uniforms(uniforms), Count(count), Offset(offset) {}
     };
 
+    struct CommandBuffer
+    {
+        std::vector<RenderState> States;
+        std::vector<Command> Commands;
+    };
+
     class RendererAPI : public Renderer::RendererAPI
     {
     public:
-        RendererAPI() = default;
+        RendererAPI();
         ~RendererAPI() = default;
 
         virtual void SetRenderState(const RenderState& state) override;
@@ -39,10 +45,15 @@ namespace Botanica::Renderer::OpenGL
         virtual void ClearScreen() override;
 
         virtual void Execute() override;
+
+        virtual inline bool IsRendering() const override { return m_IsRendering; }
     
     private:
+        bool m_IsRendering = false;
         std::vector<Uniform> m_DrawUniforms;
-        std::vector<RenderState> m_States;
-        std::vector<Command> m_Commands;
+        CommandBuffer *m_PushBuffer;
+        CommandBuffer *m_RenderBuffer;
+        CommandBuffer m_BufferA;
+        CommandBuffer m_BufferB;
     };
 }

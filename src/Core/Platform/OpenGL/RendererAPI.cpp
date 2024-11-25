@@ -13,10 +13,16 @@ namespace Botanica::Renderer
 
 namespace Botanica::Renderer::OpenGL
 {
+    OpenGL::RendererAPI::RendererAPI()
+    {
+        m_PushBuffer = &m_BufferA;
+        m_RenderBuffer = &m_BufferB;
+    }
+
     void OpenGL::RendererAPI::SetRenderState(const RenderState &state)
     {
-        m_States.push_back(state);
-        m_Commands.emplace_back(CommandType::AdvanceState);
+        m_PushBuffer->States.push_back(state);
+        m_PushBuffer->Commands.emplace_back(CommandType::AdvanceState);
     }
 
     void OpenGL::RendererAPI::SetShaderUniforms(const std::vector<Uniform> &uniforms)
@@ -26,19 +32,27 @@ namespace Botanica::Renderer::OpenGL
 
     void RendererAPI::DrawIndexed(size_t count, size_t offset)
     {
-        m_Commands.emplace_back(CommandType::DrawIndexed, m_DrawUniforms, count, offset);
+        m_PushBuffer->Commands.emplace_back(CommandType::DrawIndexed, m_DrawUniforms, count, offset);
         m_DrawUniforms.resize(0);
     }
 
     void RendererAPI::ClearScreen()
     {
-        m_Commands.emplace_back(CommandType::ClearScreen);
+        m_PushBuffer->Commands.emplace_back(CommandType::ClearScreen);
     }
 
     void OpenGL::RendererAPI::Execute()
     {
-        auto stateIt = m_States.begin() - 1;
-        for (const Command &command : m_Commands)
+        m_IsRendering = true;
+
+        {
+        CommandBuffer *hold = m_RenderBuffer;
+        m_PushBuffer = m_RenderBuffer;
+        m_RenderBuffer = hold;
+        }
+
+        auto stateIt = m_RenderBuffer->States.begin() - 1;
+        for (const Command &command : m_RenderBuffer->Commands)
         {
             switch (command.Type)
             {
@@ -69,7 +83,9 @@ namespace Botanica::Renderer::OpenGL
             BT_CORE_ASSERT(false, "Unknown CommandType.")
         }
 
-        m_Commands.resize(0);
-        m_States.resize(0);
+        m_RenderBuffer->Commands.resize(0);
+        m_RenderBuffer->States.resize(0);
+
+        m_IsRendering = false;
     }
 }
