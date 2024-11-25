@@ -1,5 +1,6 @@
 #include "RenderLayer.h"
 
+#include "Renderer/Renderer.h"
 #include "Renderer/RenderCommand.h"
 
 namespace Botanica
@@ -7,7 +8,6 @@ namespace Botanica
     RenderLayer::RenderLayer()
         :Layer("Render Layer")
     {
-        // TODO: Setup Renderer
     }
 
     RenderLayer::~RenderLayer()
@@ -16,6 +16,8 @@ namespace Botanica
 
     void RenderLayer::OnUpdate(Timestep dt)
     {
+        Renderer::ExecuteRenderPipeline();
+
         if (Renderer::RenderCommand::IsRendering())
             BT_CORE_ASSERT(false, "IMPOSSIBLE!")
 
