@@ -41,13 +41,13 @@ namespace Botanica::Renderer
 
     struct Uniform
     {
-        UniformType Type;
-        std::string Name;
-        const void *Data;
+        UniformType Type = UniformType::None;
+        std::string Name = "";
+        std::shared_ptr<void> Data = nullptr;
         size_t Count = 1;
 
         Uniform() = default;
-        Uniform(UniformType type, const std::string& name, const void* data, size_t count = 1)
+        Uniform(UniformType type, const std::string &name, std::shared_ptr<void> data, size_t count = 1)
             : Type(type), Name(name), Data(data), Count(count) {}
     };
 
@@ -60,7 +60,7 @@ namespace Botanica::Renderer
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        virtual void UploadUniform(const Uniform& uniform) const = 0;
+        virtual void UploadUniform(const Uniform &uniform) const = 0;
         virtual void UploadUniformBuffer(const std::string &name, std::shared_ptr<Buffer> ub, uint32_t bindingPoint) const = 0;
 
         static std::shared_ptr<Shader> Create(const ShaderSourceSPtrVec &sources);

@@ -80,7 +80,7 @@ namespace App
         RenderCommand::ClearScreen();
 
         std::vector<Uniform> uniforms;
-        uniforms.emplace_back(UniformType::Mat4, "uVP", glm::value_ptr(m_Camera->GetVPMat()));
+        uniforms.emplace_back(UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_Camera->GetVPMat()));
         RenderCommand::SetShaderUniforms(uniforms);
 
         RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
