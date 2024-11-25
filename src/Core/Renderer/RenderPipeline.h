@@ -7,24 +7,19 @@
 
 namespace Botanica::Renderer
 {
-    class RenderPass
-    {
-    public:
-        virtual void Execute() = 0;
-    };
-
     class RenderPipeline
     {
+        using PassFn = std::function<void()>;
     public:
         RenderPipeline() = default;
         ~RenderPipeline() = default;
 
-        RenderPipeline(std::initializer_list<std::shared_ptr<RenderPass>> renderPasses);
+        RenderPipeline(std::initializer_list<PassFn> renderPasses);
 
-        void AddPass(const std::shared_ptr<RenderPass> &pass);
+        void AddPass(PassFn pass);
         void Execute();
 
     private:
-        std::vector<std::shared_ptr<RenderPass>> m_RenderPasses;
+        std::vector<PassFn> m_RenderPasses;
     };
 }

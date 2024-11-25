@@ -2,17 +2,17 @@
 
 namespace Botanica::Renderer
 {
-    RenderPipeline::RenderPipeline(std::initializer_list<std::shared_ptr<RenderPass>> renderPasses)
+    RenderPipeline::RenderPipeline(std::initializer_list<PassFn> renderPasses)
         : m_RenderPasses(renderPasses) {}
 
-    void RenderPipeline::AddPass(const std::shared_ptr<RenderPass> &pass)
+    void RenderPipeline::AddPass(PassFn pass)
     {
         m_RenderPasses.push_back(pass);
     }
 
     void RenderPipeline::Execute()
     {
-        for (auto &pass : m_RenderPasses)
-            pass->Execute();
+        for (PassFn exec : m_RenderPasses)
+            exec();
     }
 }
