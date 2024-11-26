@@ -31,6 +31,7 @@ set(
     src/Log.cpp
 
     src/App/MainLayer.cpp
+    src/App/CameraController.cpp
     
     src/Core/Application.cpp
     src/Core/Layer.cpp
