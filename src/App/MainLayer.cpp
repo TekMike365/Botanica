@@ -46,26 +46,30 @@ namespace App
     {
         using namespace Renderer;
 
-        RenderCommand::SetRenderState({.ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f)});
-        RenderCommand::ClearScreen();
+        if (m_World->DataUpdated)
+        {
+            m_World->DataUpdated = false;
 
-        RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
+            RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
 
-        std::vector<UniformBuffer> uniformBuffers;
-        uniformBuffers.emplace_back("Voxels", m_VoxelBuffer);
-        uniformBuffers.emplace_back("Vertices", m_VertexArray->GetVertexBuffer());
-        RenderCommand::SetShaderUniformBuffers(uniformBuffers);
+            std::vector<UniformBuffer> uniformBuffers;
+            uniformBuffers.emplace_back("Voxels", m_VoxelBuffer, 0);
+            uniformBuffers.emplace_back("Vertices", m_VertexArray->GetVertexBuffer(), 1);
+            RenderCommand::SetShaderUniformBuffers(uniformBuffers);
 
-        RenderCommand::DispatchCompute();
+            RenderCommand::DispatchCompute();
+        }
 
         RenderCommand::SetRenderState({.ShaderPtr = m_Shader,
-                                       .VertexArrayPtr = m_VertexArray});
+                                       .VertexArrayPtr = m_VertexArray,
+                                       .ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f)});
+        RenderCommand::ClearScreen();
 
         std::vector<Uniform> uniforms;
         uniforms.emplace_back(UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_CameraController->GetCamera().GetVPMat()));
         RenderCommand::SetShaderUniforms(uniforms);
 
-        RenderCommand::DrawIndexed(m_VertexArray->IndexCount, 0);
+        RenderCommand::DrawIndexed(24, 0);
     }
 
     void MainLayer::Setup()

@@ -20,6 +20,9 @@ namespace App
         inline glm::uvec3 GetSize() const { return m_Size; }
         inline const std::vector<uint8_t> &GetVoxels() const { return m_Voxels; }
 
+    public:
+        bool DataUpdated;
+
     private:
         glm::uvec3 m_Size;
         std::vector<uint8_t> m_Voxels;

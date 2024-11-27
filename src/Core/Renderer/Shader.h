@@ -58,8 +58,8 @@ namespace Botanica::Renderer
         uint32_t Binding = 0;
 
         UniformBuffer() = default;
-        UniformBuffer(const std::string &name, std::shared_ptr<Renderer::Buffer> buffer)
-            : Name(name), Buffer(buffer) {}
+        UniformBuffer(const std::string &name, std::shared_ptr<Renderer::Buffer> buffer, uint32_t binding)
+            : Name(name), Buffer(buffer), Binding(binding) {}
     };
 
     class Shader
