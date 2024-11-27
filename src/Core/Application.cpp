@@ -1,160 +1,77 @@
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
+#include "btpch.h"
 #include "Application.h"
-#include "Renderer/Renderer.h"
 
-#include "Camera.h"
+#include "Platform.h"
+
+#include "RenderLayer.h"
+
+#define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 namespace Botanica
 {
-
-    Application *Application::s_Instance = nullptr;
+    Application *Application::s_Instace = nullptr;
 
     Application::Application()
-        :m_Player(4.0f/3.0f)
     {
-        BT_ASSERT(!s_Instance, "Application already exists!");
-        s_Instance = this;
+        BT_CORE_ASSERT(!s_Instace, "Can have only one Application!")
+        s_Instace = this;
 
-        m_Window = std::make_unique<Window>();
-        m_Window->SetEventCallbackFunction(BIND_EVENT_FN(Application::OnEvent));
+        m_Window = std::unique_ptr<Window>(Window::Create());
+        m_Window->SetEventCallbackFunction(BIND_EVENT_CALLBACK(OnEvent));
 
-        Renderer::Init();
+        m_LayerStack.PushOverlay(new RenderLayer);
 
-        m_Player = Player(m_Window->GetAspect());
+        WindowResizeEvent event(m_Window->GetWidth(), m_Window->GetHeight());
+        m_Window->GetEventCallbackFunction()(event);
     }
 
-    Application::~Application() {}
+    Application::~Application()
+    {
+    }
 
     void Application::Run()
     {
-        BT_INFO("Running application.");
+        BT_CORE_INFO("Running application.");
 
-        struct Vertex
-        {
-            glm::vec3 Position;
-            glm::vec3 Color;
-        };
-
-        Vertex vertices[] = {
-            // bottom
-            { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 0.0f, 0.0f) },
-            { glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f) },
-            { glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(1.0f, 0.0f, 1.0f) },
-            { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f) },
-
-            // top
-            { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f) },
-            { glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f) },
-            { glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3(1.0f, 1.0f, 1.0f) },
-            { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 1.0f, 1.0f) }
-        };
-
-        uint32_t indices[] = {
-            // top
-            4, 7, 6,
-            6, 5, 4,
-            // bottom
-            3, 0, 1,
-            1, 2, 3,
-            // left
-            3, 7, 4,
-            4, 0, 3,
-            // right
-            1, 5, 6,
-            6, 2, 1,
-            // front
-            0, 4, 5,
-            5, 1, 0,
-            // back
-            2, 6, 7,
-            7, 3, 2
-        };
-
-        Renderer::Shader shader(PROJECT_SOURCE_DIR"shaders/Test.vert", PROJECT_SOURCE_DIR"shaders/Test.frag");
-
-        Renderer::VertexLayout vertexLayout;
-        vertexLayout.PushElement(GL_FLOAT, 3, false);
-        vertexLayout.PushElement(GL_FLOAT, 3, true);
-
-        Renderer::Mesh mesh(vertices, 8 * sizeof(Vertex), vertexLayout, indices, 36);
-
-        glm::mat4 model(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
-
-        const Camera& cam = m_Player.GetCamera();
-
-        double oldTime = glfwGetTime();
-        float deltaTime = 0;
         while (m_Running)
         {
-            glClearColor(0.6f, 0.7f, 0.9f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            shader.SetMat4("model", model);
-            shader.SetMat4("view", cam.GetView());
-            shader.SetMat4("projection", cam.GetProjection());
-            mesh.Render(shader);
-
+            double nextTime = Platform::GetTime();
+            Timestep dt = nextTime - m_LastTime;
+            m_LastTime = nextTime;
+            
             m_Window->OnUpdate();
-            if (m_EnablePlayer)
-                m_Player.OnUpdate(deltaTime);
 
-            double newTime = glfwGetTime();
-            deltaTime = (float)(newTime - oldTime);
-            oldTime = newTime;
+            for (Layer *layer : m_LayerStack)
+                layer->OnUpdate(dt);
         }
+    }
+
+    void Application::PushLayer(Layer *layer)
+    {
+        m_LayerStack.PushLayer(layer);
+    }
+
+    void Application::PushOverlay(Layer *overlay)
+    {
+        m_LayerStack.PushOverlay(overlay);
     }
 
     void Application::OnEvent(Event &e)
     {
-        // BT_TRACE("{}", e.ToString());
+        // BT_CORE_TRACE(e.ToString());
 
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(Application::OnKeyPressed));
-        dispatcher.Dispatch<MouseButtonReleasedEvent>(BIND_EVENT_FN(Application::OnMouseButtonReleased));
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_CALLBACK(OnWindowClose));
 
-        if (m_EnablePlayer)
-            m_Player.OnEvent(e);
+        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+            (*--it)->OnEvent(e);
     }
 
     bool Application::OnWindowClose(WindowCloseEvent &e)
     {
+        BT_CORE_WARN("Closing window ({})", e.ToString());
         m_Running = false;
         return true;
-    }
-
-    bool Application::OnKeyPressed(KeyPressedEvent &e)
-    {
-        if (e.GetKey() == GLFW_KEY_ESCAPE && m_EnablePlayer)
-        {
-            m_EnablePlayer = false;
-            m_Player.OnDisable();
-            m_Window->ShowCursor();
-            return true;
-        }
-
-        return false;
-    }
-
-    bool Application::OnMouseButtonReleased(MouseButtonReleasedEvent &e)
-    {
-        if (e.GetButton() == GLFW_MOUSE_BUTTON_1 && !m_EnablePlayer)
-        {
-            m_EnablePlayer = true;
-            m_Window->HideCursor();
-            
-            double mouseX, mouseY;
-            m_Window->GetMousePos(&mouseX, &mouseY);
-            m_Player.OnEnable((float)mouseX / (float)m_Window->GetWidth(), (float)mouseY / (float)m_Window->GetHeight());
-            return true;
-        }
-
-        return false;
     }
 
 }

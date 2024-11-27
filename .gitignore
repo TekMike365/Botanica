@@ -1,3 +1,5 @@
 # dirs
 build/
 .vscode/
+.cache/
+*.bak/

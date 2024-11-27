@@ -14,4 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <glm/glm.hpp>
+
+#include "Core.h"
 #include "Log.h"

@@ -1,57 +1,38 @@
 #pragma once
 
-#include "btpch.h"
-#include "Events/Event.h"
-
-#include <GLFW/glfw3.h>
+#include "Event/Event.h"
 
 namespace Botanica
 {
-
-    struct WindowParams
+    struct WindowProps
     {
         std::string Title;
         unsigned int Width, Height;
 
-        WindowParams(const std::string& title = "Botanica", unsigned int widht = 1080, unsigned int height = 720)
-            :Title(title), Width(widht), Height(height) {}
+        WindowProps(const std::string &title = "Botanica", unsigned int width = 1280, unsigned int height = 720)
+            : Title(title), Width(width), Height(height) {}
     };
-
 
     class Window
     {
     public:
-        using EventCallbackFn = std::function<void(Event&)>;
+        using EventCallbackFn = std::function<void(Event &)>;
 
-        Window(const WindowParams& params = WindowParams());
-        virtual ~Window();
+        virtual ~Window() {}
 
-        void OnUpdate();
+        virtual void OnUpdate() = 0;
 
-        inline unsigned int GetWidth() const { return m_Data.Width; }
-        inline unsigned int GetHeight() const { return m_Data.Height; }
-        inline float GetAspect() const { return (float)m_Data.Width / (float)m_Data.Height; }
-        inline void GetMousePos(double* xpos, double* ypos) { glfwGetCursorPos(m_Window, xpos, ypos); }
+        virtual unsigned int GetWidth() const = 0;
+        virtual unsigned int GetHeight() const = 0;
 
-        inline void SetEventCallbackFunction(const EventCallbackFn& fn) { m_Data.EventCallback = fn; }
-        void SetVSync(bool enabled);
-        inline bool IsVSync() const { return m_Data.VSync; }
+        virtual void SetEventCallbackFunction(const EventCallbackFn &fn) = 0;
+        virtual const EventCallbackFn &GetEventCallbackFunction() const = 0;
 
-        inline void HideCursor() { glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN | GLFW_CURSOR_DISABLED); }
-        inline void ShowCursor() { glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); }
-    private:
-        GLFWwindow* m_Window;
+        virtual void SetVSync(bool enabled) = 0;
+        virtual bool IsVSync() const = 0;
 
-        struct WindowData
-        {
-            std::string Title;
-            unsigned int Width, Height;
-            bool VSync;
+        virtual void *GetGetNativeWindow() = 0;
 
-            EventCallbackFn EventCallback;
-        };
-
-        WindowData m_Data;
+        static Window *Create(const WindowProps &props = WindowProps());
     };
-
 }

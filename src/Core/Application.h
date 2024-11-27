@@ -1,37 +1,40 @@
 #pragma once
 
-#include "btpch.h"
+#include <memory>
+
 #include "Window.h"
+#include "LayerStack.h"
 
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyboardEvent.h"
-#include "Events/MouseEvent.h"
+#include "Event/Event.h"
+#include "Event/WindowEvent.h"
 
-#include "Player.h"
-
-namespace Botanica {
-
+namespace Botanica
+{
     class Application
     {
     public:
         Application();
-        ~Application();
-        
+        virtual ~Application();
+
         void Run();
-        void OnEvent(Event& e);
+        void PushLayer(Layer *layer);
+        void PushOverlay(Layer *overlay);
 
-        inline Application& Get() const { return *s_Instance; }
-    private:
-        bool OnWindowClose(WindowCloseEvent& e);
-        bool OnKeyPressed(KeyPressedEvent& e);
-        bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
-    private:
-        Player m_Player;
-        bool m_EnablePlayer = false;
+        inline Window &GetWindow() { return *m_Window; }
 
+        inline static Application &Get() { return *s_Instace; }
+        
+    private:
+        void OnEvent(Event &e);
+
+        bool OnWindowClose(WindowCloseEvent &e);
+
+    private:
+        bool m_Running;
         std::unique_ptr<Window> m_Window;
-        bool m_Running = true;
-        static Application* s_Instance;
-    };
+        LayerStack m_LayerStack;
+        double m_LastTime = 0;
 
+        static Application *s_Instace;
+    };
 }
