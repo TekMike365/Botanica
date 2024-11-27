@@ -31,7 +31,7 @@ namespace Botanica::Renderer::OpenGL
         void Unbind() const override;
 
         virtual void UploadUniform(const Uniform& uniform) const override;
-        virtual void UploadUniformBuffer(const std::string &name, std::shared_ptr<Buffer> ub, uint32_t bindingPoint) const override;
+        virtual void UploadUniformBuffer(const UniformBuffer &ub) const override;
 
     private:
         void StoreUniformNameLocations();

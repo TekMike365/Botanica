@@ -16,9 +16,19 @@ namespace Botanica::Renderer
         s_Renderer->SetShaderUniforms(uniforms);
     }
 
+    void RenderCommand::SetShaderUniformBuffers(const std::vector<UniformBuffer> &uniformBuffers)
+    {
+        s_Renderer->SetShaderUniformBuffers(uniformBuffers);
+    }
+
     void RenderCommand::ClearScreen()
     {
         s_Renderer->ClearScreen();
+    }
+
+    void RenderCommand::DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z)
+    {
+        s_Renderer->DispatchCompute(groups_x, groups_y, groups_z);
     }
 
     void RenderCommand::DrawIndexed(size_t count, size_t offset)

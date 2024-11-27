@@ -32,6 +32,7 @@ set(
 
     src/App/MainLayer.cpp
     src/App/CameraController.cpp
+    src/App/World.cpp
     
     src/Core/Application.cpp
     src/Core/Layer.cpp

@@ -5,7 +5,7 @@
 
 namespace Botanica::Renderer
 {
-    std::shared_ptr<Buffer> Buffer::Create(size_t size, void* data, BufferUsage usage)
+    std::shared_ptr<Buffer> Buffer::Create(size_t size, const void* data, BufferUsage usage)
     {
         return std::make_shared<OpenGL::Buffer>(size, data, usage);
     }
@@ -45,7 +45,7 @@ namespace Botanica::Renderer::OpenGL
         return 0;
     }
 
-    Buffer::Buffer(size_t size, void *data, BufferUsage usage)
+    Buffer::Buffer(size_t size, const void *data, BufferUsage usage)
     {
         glGenBuffers(1, &m_ID);
         Bind(BufferType::Shader);
@@ -68,7 +68,7 @@ namespace Botanica::Renderer::OpenGL
         glBindBuffer(GetGLTarget(type), 0);
     }
     
-    void Buffer::UploadData(size_t start, size_t size, void *data) const
+    void Buffer::UploadData(size_t start, size_t size, const void *data) const
     {
         Bind(BufferType::Shader);
         glBufferSubData(GetGLTarget(BufferType::Shader), start, size, data);

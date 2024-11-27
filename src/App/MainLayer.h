@@ -8,6 +8,7 @@
 #include "Core/Renderer/Camera.h"
 
 #include "CameraController.h"
+#include "World.h"
 
 namespace App
 {
@@ -21,15 +22,18 @@ namespace App
         virtual void OnUpdate(Timestep dt) override;
 
     private:
+        void RenderPass();
         void Setup();
-
-        void TestRenderPass();
 
     private:
         std::shared_ptr<Botanica::Renderer::VertexArray> m_VertexArray;
         std::shared_ptr<Botanica::Renderer::Shader> m_Shader;
+        std::shared_ptr<Botanica::Renderer::Shader> m_ComputeShader;
+
+        std::shared_ptr<Botanica::Renderer::Buffer> m_VoxelBuffer;
 
         Botanica::LayerStack m_ObjStack;
         CameraController *m_CameraController;
+        World *m_World;
     };
 }

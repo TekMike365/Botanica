@@ -30,6 +30,17 @@ namespace Botanica::Renderer::OpenGL
         m_DrawUniforms.insert(m_DrawUniforms.begin(), uniforms.begin(), uniforms.end());
     }
 
+    void OpenGL::RendererAPI::SetShaderUniformBuffers(const std::vector<UniformBuffer> &uniformBuffers)
+    {
+        m_DrawUniformBuffers.insert(m_DrawUniformBuffers.begin(), uniformBuffers.begin(), uniformBuffers.end());
+    }
+
+    void OpenGL::RendererAPI::DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z)
+    {
+        m_PushBuffer->Commands.emplace_back(CommandType::DispatchCompute, m_DrawUniformBuffers, groups_x, groups_y, groups_z);
+        m_DrawUniformBuffers.resize(0);
+    }
+
     void RendererAPI::DrawIndexed(size_t count, size_t offset)
     {
         m_PushBuffer->Commands.emplace_back(CommandType::DrawIndexed, m_DrawUniforms, count, offset);
@@ -62,8 +73,10 @@ namespace Botanica::Renderer::OpenGL
             case CommandType::AdvanceState:
             {
                 stateIt++;
-                stateIt->VertexArrayPtr->Bind();
-                stateIt->ShaderPtr->Bind();
+                if (stateIt->VertexArrayPtr)
+                    stateIt->VertexArrayPtr->Bind();
+                if (stateIt->ShaderPtr)
+                    stateIt->ShaderPtr->Bind();
                 continue;
             }
             case CommandType::ClearScreen:
@@ -77,6 +90,15 @@ namespace Botanica::Renderer::OpenGL
                 for (const auto &uniform : command.Uniforms)
                     stateIt->ShaderPtr->UploadUniform(uniform);
                 glDrawElements(GL_TRIANGLES, command.Count, GL_UNSIGNED_INT, (const void *)command.Offset);
+                continue;
+            }
+            case CommandType::DispatchCompute:
+            {
+                for (const auto &ub : command.UniformBuffers)
+                    stateIt->ShaderPtr->UploadUniformBuffer(ub);
+                glDispatchCompute(command.WorkGroups_x, command.WorkGroups_y, command.WorkGroups_z);
+                // make sure writing to buffers has finished before read
+                glMemoryBarrier(GL_ALL_BARRIER_BITS);
                 continue;
             }
             }

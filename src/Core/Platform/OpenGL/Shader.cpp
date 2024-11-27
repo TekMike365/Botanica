@@ -164,10 +164,14 @@ namespace Botanica::Renderer::OpenGL
         }
     }
 
-    void OpenGL::Shader::UploadUniformBuffer(const std::string &name, std::shared_ptr<Buffer> ub, uint32_t bindingPoint) const
+    void OpenGL::Shader::UploadUniformBuffer(const UniformBuffer &ub) const
     {
-        int location = m_UniformBufferNameLocationMap.at(name);
-        glUniformBlockBinding(m_ID, location, bindingPoint);
+        ub.Buffer->Bind(BufferType::Uniform);
+
+        int location = m_UniformBufferNameLocationMap.at(ub.Name);
+        glUniformBlockBinding(m_ID, location, ub.Binding);
+
+        ub.Buffer->Unbind(BufferType::Uniform);
     }
 
     void OpenGL::Shader::StoreUniformNameLocations()

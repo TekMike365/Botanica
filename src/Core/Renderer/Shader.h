@@ -51,6 +51,17 @@ namespace Botanica::Renderer
             : Type(type), Name(name), Data(data), Count(count) {}
     };
 
+    struct UniformBuffer
+    {
+        std::string Name = "";
+        std::shared_ptr<Renderer::Buffer> Buffer = nullptr;
+        uint32_t Binding = 0;
+
+        UniformBuffer() = default;
+        UniformBuffer(const std::string &name, std::shared_ptr<Renderer::Buffer> buffer)
+            : Name(name), Buffer(buffer) {}
+    };
+
     class Shader
     {
     protected:
@@ -61,7 +72,7 @@ namespace Botanica::Renderer
         virtual void Unbind() const = 0;
 
         virtual void UploadUniform(const Uniform &uniform) const = 0;
-        virtual void UploadUniformBuffer(const std::string &name, std::shared_ptr<Buffer> ub, uint32_t bindingPoint) const = 0;
+        virtual void UploadUniformBuffer(const UniformBuffer &ub) const = 0;
 
         static std::shared_ptr<Shader> Create(const ShaderSourceSPtrVec &sources);
     };
