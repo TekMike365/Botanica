@@ -15,17 +15,17 @@ namespace App
         World();
         World(glm::uvec3 size);
 
-        void SetVoxel(glm::uvec3 pos, uint8_t type);
-        uint8_t GetVoxel(glm::uvec3 pos) const;
+        void SetVoxel(glm::uvec3 pos, uint32_t type);
+        uint32_t GetVoxel(glm::uvec3 pos) const;
 
         inline glm::uvec3 GetSize() const { return m_Size; }
-        inline const std::vector<uint8_t> &GetVoxels() const { return m_Voxels; }
+        inline const std::vector<uint32_t> &GetVoxels() const { return m_Voxels; }
 
     public:
         bool DataUpdated;
 
     private:
         glm::uvec3 m_Size;
-        std::vector<uint8_t> m_Voxels;
+        std::vector<uint32_t> m_Voxels;
     };
 }

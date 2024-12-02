@@ -12,15 +12,14 @@ namespace App
     {
     }
 
-    void World::SetVoxel(glm::uvec3 pos, uint8_t type)
+    void World::SetVoxel(glm::uvec3 pos, uint32_t type)
     {
         m_Voxels.at(pos.x + pos.y * m_Size.x + pos.z * m_Size.x * m_Size.y) = type;
         DataUpdated = true;
     }
 
-    uint8_t World::GetVoxel(glm::uvec3 pos) const
+    uint32_t World::GetVoxel(glm::uvec3 pos) const
     {
         return m_Voxels.at(pos.x + pos.y * m_Size.x + pos.z * m_Size.x * m_Size.y);
-;
     }
 }

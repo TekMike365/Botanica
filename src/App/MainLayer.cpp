@@ -81,8 +81,13 @@ namespace App
             #version 430 core
             layout (local_size_x = 8, local_size_y = 8, local_size_z = 8) in;
 
-            layout (std430, binding = 0) buffer Voxels { uint ids[]; };
-            layout (std430, binding = 1) buffer Vertices { vec3 positions[]; };
+            struct Vertex {
+                vec3 Position;
+                vec4 Color;
+            };
+
+            layout (std430, binding = 0) buffer Voxels { uint b_IDs[]; };
+            layout (std430, binding = 1) buffer Vertices { Vertex b_Vertices[]; };
 
             shared uint s_VertIdx = 0;
 
@@ -91,71 +96,103 @@ namespace App
                 return x + y * 8 + z * 8 * 8;
             }
 
+            vec4 g_Colors[8] = {
+                vec4(0.0f, 0.0f, 0.0f, 1.0f),
+                vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                vec4(0.0f, 1.0f, 1.0f, 1.0f),
+                vec4(1.0f, 0.0f, 0.0f, 1.0f),
+                vec4(1.0f, 0.0f, 1.0f, 1.0f),
+                vec4(1.0f, 1.0f, 0.0f, 1.0f),
+                vec4(1.0f, 1.0f, 1.0f, 1.0f)
+            };
+
+            uint g_VertCount = 0;
+            float g_Scale = 1.0f / 8.0f;
+            void SetVertex(vec3 position, vec4 color)
+            {
+                uint idx = g_VertCount++;
+                b_Vertices[idx].Position = g_Scale * (position + gl_GlobalInvocationID);
+                b_Vertices[idx].Color = color;
+            }
+
             void main()
             {
-                uint index = GetIndex(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y, gl_GlobalInvocationID.z);
+                uint idx = GetIndex(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y, gl_GlobalInvocationID.z);
+                uint id = b_IDs[idx];
 
-                uint vertIdx = atomicAdd(s_VertIdx, 24);
+                if (id == 0)
+                    return;
+
+                vec4 color = g_Colors[id];
+
+                g_VertCount = atomicAdd(s_VertIdx, 24);
                 float scale = 1.0f / 8.0f;
 
                 // front
-                positions[vertIdx + 0] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 1] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 2] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 3] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                SetVertex(vec3( 0.5f, -0.5f, -0.5f), color);
+                SetVertex(vec3( 0.5f,  0.5f, -0.5f), color);
+                SetVertex(vec3(-0.5f,  0.5f, -0.5f), color);
+                SetVertex(vec3(-0.5f, -0.5f, -0.5f), color);
 
                 // back
-                positions[vertIdx + 4] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 5] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 6] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 7] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                SetVertex(vec3( 0.5f, -0.5f,  0.5f), color);
+                SetVertex(vec3( 0.5f,  0.5f,  0.5f), color);
+                SetVertex(vec3(-0.5f,  0.5f,  0.5f), color);
+                SetVertex(vec3(-0.5f, -0.5f,  0.5f), color);
 
                 // bottom
-                positions[vertIdx + 8] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 9] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 10] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 11] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                SetVertex(vec3( 0.5f, -0.5f, -0.5f), color);
+                SetVertex(vec3( 0.5f, -0.5f,  0.5f), color);
+                SetVertex(vec3(-0.5f, -0.5f,  0.5f), color);
+                SetVertex(vec3(-0.5f, -0.5f, -0.5f), color);
 
                 // top
-                positions[vertIdx + 12] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 13] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 14] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 15] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                SetVertex(vec3( 0.5f,  0.5f, -0.5f), color);
+                SetVertex(vec3( 0.5f,  0.5f,  0.5f), color);
+                SetVertex(vec3(-0.5f,  0.5f,  0.5f), color);
+                SetVertex(vec3(-0.5f,  0.5f, -0.5f), color);
 
                 // left
-                positions[vertIdx + 16] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 17] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 18] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 19] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                SetVertex(vec3(-0.5f,  0.5f, -0.5f), color);
+                SetVertex(vec3(-0.5f, -0.5f, -0.5f), color);
+                SetVertex(vec3(-0.5f, -0.5f,  0.5f), color);
+                SetVertex(vec3(-0.5f,  0.5f,  0.5f), color);
 
                 // right
-                positions[vertIdx + 20] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 21] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 22] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                positions[vertIdx + 23] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                SetVertex(vec3( 0.5f,  0.5f, -0.5f), color);
+                SetVertex(vec3( 0.5f, -0.5f, -0.5f), color);
+                SetVertex(vec3( 0.5f, -0.5f,  0.5f), color);
+                SetVertex(vec3( 0.5f,  0.5f,  0.5f), color);
             }
         )";
 
         const char *vert = R"(
             #version 430 core
             layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec4 aCol;
 
             uniform mat4 uVP;
+
+            out vec4 vCol;
 
             void main()
             {
                 gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
+                vCol = aCol;
             }
         )";
 
         const char *frag = R"(
             #version 430 core
 
+            in vec4 vCol;
+
             out vec4 fColor;
 
             void main()
             {
-                fColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
+                fColor = vCol;
             }
         )";
 
@@ -180,10 +217,13 @@ namespace App
         std::shared_ptr<ShaderSource> fs = ShaderSource::Create(ShaderSourceType::Fragment, frag);
         m_Shader = Shader::Create({vs, fs});
 
-        m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size() * sizeof(uint8_t), m_World->GetVoxels().data());
+        BufferLayout voxelBL({ShaderDataType::Int});
+        m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size() * voxelBL.GetStride(), m_World->GetVoxels().data());
+        m_VoxelBuffer->SetLayout(voxelBL);
 
         BufferLayout vbl({
-            ShaderDataType::Float4, // vec3 is float4 in shader
+            ShaderDataType::Float4, // Position (vec3 is float4 in shader)
+            ShaderDataType::Float4, // Color
         });
         std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride());
         vb->SetLayout(vbl);
