@@ -112,6 +112,7 @@ namespace Botanica::Renderer::OpenGL
 
         StoreUniformNameLocations();
         StoreUniformBufferNameLocations();
+        StoreShaderStorageBufferNameLocations();
     }
 
     Shader::~Shader()
@@ -164,7 +165,7 @@ namespace Botanica::Renderer::OpenGL
         }
     }
 
-    void Shader::UploadUniformBuffer(const UploadBuffer &buffer) const
+    void Shader::UploadUploadBuffer(const UploadBuffer &buffer) const
     {
         int location = m_UploadBufferNameLocationMap.at(buffer.Name);
 
@@ -173,8 +174,10 @@ namespace Botanica::Renderer::OpenGL
         {
         case UploadBufferType::UniformBuffer:
             target = GL_UNIFORM_BUFFER;
+            break;
         case UploadBufferType::ShaderStorageBuffer:
             target = GL_SHADER_STORAGE_BUFFER;
+            break;
         default:
             BT_CORE_ASSERT(false, "Unknown Buffer Type;");
         }
@@ -214,7 +217,7 @@ namespace Botanica::Renderer::OpenGL
         for (int i = 0; i < count; i++)
         {
             glGetActiveUniformBlockName(m_ID, i, maxNameLen,&size, name);
-            m_UniformNameLocationMap[name] = glGetUniformBlockIndex(m_ID, name);
+            m_UploadBufferNameLocationMap[name] = glGetUniformBlockIndex(m_ID, name);
         }
     }
 
@@ -231,7 +234,7 @@ namespace Botanica::Renderer::OpenGL
         for (int i = 0; i < count; i++)
         {
             glGetProgramResourceName(m_ID, GL_SHADER_STORAGE_BLOCK, i, maxNameLen, &size, name);
-            m_UniformNameLocationMap[name] = glGetProgramResourceIndex(m_ID, GL_SHADER_STORAGE_BLOCK, name);
+            m_UploadBufferNameLocationMap[name] = glGetProgramResourceIndex(m_ID, GL_SHADER_STORAGE_BLOCK, name);
         }
     }
 }

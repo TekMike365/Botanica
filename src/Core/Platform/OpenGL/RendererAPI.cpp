@@ -33,7 +33,7 @@ namespace Botanica::Renderer::OpenGL
     void OpenGL::RendererAPI::SetShaderUploadBuffers(const std::vector<UploadBuffer> &uploadBuffers)
     {
         for (auto &e : uploadBuffers)
-            m_Shader->UploadUniformBuffer(e);
+            m_Shader->UploadUploadBuffer(e);
     }
 
     void OpenGL::RendererAPI::DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z)

@@ -78,7 +78,7 @@ namespace Botanica::Renderer
         virtual void Unbind() const = 0;
 
         virtual void UploadUniform(const Uniform &uniform) const = 0;
-        virtual void UploadUniformBuffer(const UploadBuffer &buffer) const = 0;
+        virtual void UploadUploadBuffer(const UploadBuffer &buffer) const = 0;
 
         static std::shared_ptr<Shader> Create(const ShaderSourceSPtrVec &sources);
     };
