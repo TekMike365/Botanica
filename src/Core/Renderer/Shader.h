@@ -61,11 +61,10 @@ namespace Botanica::Renderer
         UploadBufferType Type = UploadBufferType::None;
         std::string Name = "";
         std::shared_ptr<Renderer::Buffer> Buffer = nullptr;
-        uint32_t Binding = 0;
 
         UploadBuffer() = default;
-        UploadBuffer(UploadBufferType type, const std::string &name, std::shared_ptr<Renderer::Buffer> buffer, uint32_t binding = 0)
-            : Type(type), Name(name), Buffer(buffer), Binding(binding) {}
+        UploadBuffer(UploadBufferType type, const std::string &name, std::shared_ptr<Renderer::Buffer> buffer)
+            : Type(type), Name(name), Buffer(buffer) {}
     };
 
     class Shader

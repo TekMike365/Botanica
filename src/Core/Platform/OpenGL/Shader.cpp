@@ -230,11 +230,14 @@ namespace Botanica::Renderer::OpenGL
         glGetProgramInterfaceiv(m_ID, GL_SHADER_STORAGE_BLOCK, GL_MAX_NAME_LENGTH, &maxNameLen);
 
         GLsizei size;
+        int32_t binding;
+        GLenum props[1] = { GL_BUFFER_BINDING };
         char name[maxNameLen];
         for (int i = 0; i < count; i++)
         {
             glGetProgramResourceName(m_ID, GL_SHADER_STORAGE_BLOCK, i, maxNameLen, &size, name);
-            m_UploadBufferNameLocationMap[name] = glGetProgramResourceIndex(m_ID, GL_SHADER_STORAGE_BLOCK, name);
+            glGetProgramResourceiv(m_ID, GL_SHADER_STORAGE_BLOCK, i, 1, props, sizeof(binding), nullptr, &binding);
+            m_UploadBufferNameLocationMap[name] = binding;
         }
     }
 }

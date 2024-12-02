@@ -54,8 +54,8 @@ namespace App
             RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
 
             RenderCommand::SetShaderUniformBuffers({
-                {UploadBufferType::ShaderStorageBuffer, "Voxels", m_VoxelBuffer, 0},
-                {UploadBufferType::ShaderStorageBuffer, "Vertices", m_VertexArray->GetVertexBuffer(), 1}
+                {UploadBufferType::ShaderStorageBuffer, "Voxels", m_VoxelBuffer},
+                {UploadBufferType::ShaderStorageBuffer, "Vertices", m_VertexArray->GetVertexBuffer()}
             });
 
             RenderCommand::DispatchCompute();
@@ -100,41 +100,41 @@ namespace App
                 //float scale = 1.0f / 8.0f;
                 float scale = 1.0f;
 
-                // top
-                vertices[vertidx]     = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 1] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                // front
+                vertices[vertidx + 0] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 1] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
                 vertices[vertidx + 2] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 3] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-
-                // bottom
-                vertices[vertidx + 4] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 5] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 6] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 7] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-
-                // left
-                vertices[vertidx +  8] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx +  9] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 10] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 11] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-
-                // right
-                vertices[vertidx + 12] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 13] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 14] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 15] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 3] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
 
                 // back
-                vertices[vertidx + 16] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 17] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 18] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 19] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 4] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 5] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 6] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 7] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
 
-                // front
-                vertices[vertidx + 20] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 21] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 22] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                vertices[vertidx + 23] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                // bottom
+                vertices[vertidx + 8] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 9] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 10] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 11] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+
+                // top
+                vertices[vertidx + 12] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 13] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 14] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 15] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+
+                // left
+                vertices[vertidx + 16] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 17] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 18] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 19] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+
+                // right
+                vertices[vertidx + 20] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 21] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 22] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                vertices[vertidx + 23] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
             }
         )";
 
@@ -219,7 +219,7 @@ namespace App
         std::shared_ptr<ShaderSource> fs = ShaderSource::Create(ShaderSourceType::Fragment, frag);
         m_Shader = Shader::Create({vs, fs});
 
-        m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size(), m_World->GetVoxels().data());
+        m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size() * sizeof(uint8_t), m_World->GetVoxels().data());
 
         BufferLayout vbl({ShaderDataType::Float3});
         //std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride(), dummyVertices);
