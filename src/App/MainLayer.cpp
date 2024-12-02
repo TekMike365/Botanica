@@ -199,45 +199,8 @@ namespace App
         )";
 
         const size_t vertexCount = m_World->GetVoxels().size() * 6 * 4;
-        glm::vec3 dummyVertices[] = {
-            // front
-            glm::vec3( 0.5f, -0.5f, -0.5f),
-            glm::vec3( 0.5f,  0.5f, -0.5f),
-            glm::vec3(-0.5f,  0.5f, -0.5f),
-            glm::vec3(-0.5f, -0.5f, -0.5f),
-
-            // back
-            glm::vec3( 0.5f, -0.5f,  0.5f),
-            glm::vec3( 0.5f,  0.5f,  0.5f),
-            glm::vec3(-0.5f,  0.5f,  0.5f),
-            glm::vec3(-0.5f, -0.5f,  0.5f),
-
-            // bottom
-            glm::vec3( 0.5f, -0.5f, -0.5f),
-            glm::vec3( 0.5f, -0.5f,  0.5f),
-            glm::vec3(-0.5f, -0.5f,  0.5f),
-            glm::vec3(-0.5f, -0.5f, -0.5f),
-
-            // top
-            glm::vec3( 0.5f,  0.5f, -0.5f),
-            glm::vec3( 0.5f,  0.5f,  0.5f),
-            glm::vec3(-0.5f,  0.5f,  0.5f),
-            glm::vec3(-0.5f,  0.5f, -0.5f),
-
-            // left
-            glm::vec3(-0.5f,  0.5f, -0.5f),
-            glm::vec3(-0.5f, -0.5f, -0.5f),
-            glm::vec3(-0.5f, -0.5f,  0.5f),
-            glm::vec3(-0.5f,  0.5f,  0.5f),
-
-            // right
-            glm::vec3( 0.5f,  0.5f, -0.5f),
-            glm::vec3( 0.5f, -0.5f, -0.5f),
-            glm::vec3( 0.5f, -0.5f,  0.5f),
-            glm::vec3( 0.5f,  0.5f,  0.5f),
-        };
-
         const size_t indexCount = m_World->GetVoxels().size() * 6 * 2 * 3;
+
         uint32_t indices[indexCount];
         for (int i = 0, j = 0; i < indexCount; j += 4)
         {
@@ -258,8 +221,9 @@ namespace App
 
         m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size() * sizeof(uint8_t), m_World->GetVoxels().data());
 
-        BufferLayout vbl({ShaderDataType::Float3});
-        //std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride(), dummyVertices);
+        BufferLayout vbl({
+            ShaderDataType::Float4, // vec3 is float4 in shader
+        });
         std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride());
         vb->SetLayout(vbl);
 
