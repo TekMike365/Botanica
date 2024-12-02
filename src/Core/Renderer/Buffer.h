@@ -8,7 +8,8 @@ namespace Botanica::Renderer
     {
         None = 0, Bool,
         Float, Float2, Float3, Float4,
-        Int, Int2, Int3, Int4
+        Int, Int2, Int3, Int4,
+        UInt, UInt2, UInt3, UInt4
     };
 
     inline uint8_t GetSubTypeCount(ShaderDataType type)
@@ -17,15 +18,19 @@ namespace Botanica::Renderer
         {
         case ShaderDataType::Bool:
         case ShaderDataType::Int:
+        case ShaderDataType::UInt:
         case ShaderDataType::Float:
             return 1;
         case ShaderDataType::Int2:
+        case ShaderDataType::UInt2:
         case ShaderDataType::Float2:
             return 2;
         case ShaderDataType::Int3:
+        case ShaderDataType::UInt3:
         case ShaderDataType::Float3:
             return 3;
         case ShaderDataType::Int4:
+        case ShaderDataType::UInt4:
         case ShaderDataType::Float4:
             return 4;
         }

@@ -96,7 +96,7 @@ namespace App
                 return x + y * 8 + z * 8 * 8;
             }
 
-            vec4 g_Colors[8] = {
+            vec4 g_Colors[] = {
                 vec4(0.0f, 0.0f, 0.0f, 1.0f),
                 vec4(0.0f, 0.0f, 1.0f, 1.0f),
                 vec4(0.0f, 1.0f, 0.0f, 1.0f),
@@ -121,8 +121,11 @@ namespace App
                 uint idx = GetIndex(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y, gl_GlobalInvocationID.z);
                 uint id = b_IDs[idx];
 
-                if (id == 0)
-                    return;
+                //! ???
+                //! ids are 1 but they're set to 0
+                //! geometry gets messed up when I for example compare id with zero????
+                //if (id == 0)
+                //    return;
 
                 vec4 color = g_Colors[id];
 
@@ -217,7 +220,7 @@ namespace App
         std::shared_ptr<ShaderSource> fs = ShaderSource::Create(ShaderSourceType::Fragment, frag);
         m_Shader = Shader::Create({vs, fs});
 
-        BufferLayout voxelBL({ShaderDataType::Int});
+        BufferLayout voxelBL({ShaderDataType::UInt});
         m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size() * voxelBL.GetStride(), m_World->GetVoxels().data());
         m_VoxelBuffer->SetLayout(voxelBL);
 
@@ -228,7 +231,7 @@ namespace App
         std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride());
         vb->SetLayout(vbl);
 
-        BufferLayout ibl({ShaderDataType::Int});
+        BufferLayout ibl({ShaderDataType::UInt});
         std::shared_ptr<Buffer> ib = Buffer::Create(indexCount * ibl.GetStride(), indices);
         ib->SetLayout(ibl);
 
