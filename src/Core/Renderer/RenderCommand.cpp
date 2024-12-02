@@ -16,9 +16,19 @@ namespace Botanica::Renderer
         s_Renderer->SetShaderUniforms(uniforms);
     }
 
-    void RenderCommand::SetShaderUniformBuffers(const std::vector<UniformBuffer> &uniformBuffers)
+    void RenderCommand::SetShaderUniforms(std::initializer_list<Uniform> uniforms)
     {
-        s_Renderer->SetShaderUniformBuffers(uniformBuffers);
+        s_Renderer->SetShaderUniforms(uniforms);
+    }
+
+    void RenderCommand::SetShaderUniformBuffers(const std::vector<UploadBuffer> &uploadBuffers)
+    {
+        s_Renderer->SetShaderUploadBuffers(uploadBuffers);
+    }
+
+    void RenderCommand::SetShaderUniformBuffers(std::initializer_list<UploadBuffer> uploadBuffers)
+    {
+        s_Renderer->SetShaderUploadBuffers(uploadBuffers);
     }
 
     void RenderCommand::ClearScreen()

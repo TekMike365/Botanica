@@ -31,16 +31,17 @@ namespace Botanica::Renderer::OpenGL
         void Bind() const override;
         void Unbind() const override;
 
-        virtual void UploadUniform(const Uniform& uniform) const override;
-        virtual void UploadUniformBuffer(const UniformBuffer &ub) const override;
+        virtual void UploadUniform(const Uniform &uniform) const override;
+        virtual void UploadUniformBuffer(const UploadBuffer &buffer) const override;
 
     private:
         void StoreUniformNameLocations();
         void StoreUniformBufferNameLocations();
+        void StoreShaderStorageBufferNameLocations();
 
     private:
         uint32_t m_ID;
         std::unordered_map<std::string, int> m_UniformNameLocationMap;
-        std::unordered_map<std::string, int> m_UniformBufferNameLocationMap;
+        std::unordered_map<std::string, int> m_UploadBufferNameLocationMap;
     };
 }

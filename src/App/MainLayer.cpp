@@ -52,10 +52,10 @@ namespace App
 
             RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
 
-            std::vector<UniformBuffer> uniformBuffers;
-            uniformBuffers.emplace_back("Voxels", m_VoxelBuffer, 0);
-            uniformBuffers.emplace_back("Vertices", m_VertexArray->GetVertexBuffer(), 1);
-            RenderCommand::SetShaderUniformBuffers(uniformBuffers);
+            RenderCommand::SetShaderUniformBuffers({
+                {UploadBufferType::ShaderStorageBuffer, "Voxels", m_VoxelBuffer, 0},
+                {UploadBufferType::ShaderStorageBuffer, "Vertices", m_VertexArray->GetVertexBuffer(), 1}
+            });
 
             RenderCommand::DispatchCompute();
         }
@@ -65,9 +65,9 @@ namespace App
                                        .ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f)});
         RenderCommand::ClearScreen();
 
-        std::vector<Uniform> uniforms;
-        uniforms.emplace_back(UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_CameraController->GetCamera().GetVPMat()));
-        RenderCommand::SetShaderUniforms(uniforms);
+        RenderCommand::SetShaderUniforms({
+            {UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_CameraController->GetCamera().GetVPMat())}
+        });
 
         RenderCommand::DrawIndexed(24*8*8*8, 0);
     }

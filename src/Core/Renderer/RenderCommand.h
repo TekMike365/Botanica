@@ -16,7 +16,9 @@ namespace Botanica::Renderer
     public:
         static void SetRenderState(const RenderState& state);
         static void SetShaderUniforms(const std::vector<Uniform> &uniforms);
-        static void SetShaderUniformBuffers(const std::vector<UniformBuffer> &uniformBuffers);
+        static void SetShaderUniforms(std::initializer_list<Uniform> uniforms);
+        static void SetShaderUniformBuffers(const std::vector<UploadBuffer> &uploadBuffers);
+        static void SetShaderUniformBuffers(std::initializer_list<UploadBuffer> uploadBuffers);
 
         static void DispatchCompute(uint32_t groups_x = 1, uint32_t groups_y = 1, uint32_t groups_z = 1);
         static void DrawIndexed(size_t count, size_t offset);

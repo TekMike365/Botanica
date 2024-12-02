@@ -164,12 +164,24 @@ namespace Botanica::Renderer::OpenGL
         }
     }
 
-    void Shader::UploadUniformBuffer(const UniformBuffer &ub) const
+    void Shader::UploadUniformBuffer(const UploadBuffer &buffer) const
     {
-        int location = m_UniformBufferNameLocationMap.at(ub.Name);
-        glUniformBlockBinding(m_ID, location, ub.Binding);
-        auto buff = std::static_pointer_cast<Buffer>(ub.Buffer);
-        glBindBufferBase(GL_UNIFORM_BUFFER, location, buff->GetID());
+        int location = m_UploadBufferNameLocationMap.at(buffer.Name);
+
+        GLenum target = 0;
+        switch (buffer.Type)
+        {
+        case UploadBufferType::UniformBuffer:
+            target = GL_UNIFORM_BUFFER;
+        case UploadBufferType::ShaderStorageBuffer:
+            target = GL_SHADER_STORAGE_BUFFER;
+        default:
+            BT_CORE_ASSERT(false, "Unknown Buffer Type;");
+        }
+
+        // glUniformBlockBinding(m_ID, location, buffer.Binding);
+        auto bufferGL = std::static_pointer_cast<Buffer>(buffer.Buffer);
+        glBindBufferBase(target, location, bufferGL->GetID());
     }
 
     void Shader::StoreUniformNameLocations()
@@ -202,7 +214,24 @@ namespace Botanica::Renderer::OpenGL
         for (int i = 0; i < count; i++)
         {
             glGetActiveUniformBlockName(m_ID, i, maxNameLen,&size, name);
-            m_UniformNameLocationMap[name] = glGetUniformBlockIndex(m_ID, name); // no idea if i need to get the index again ¯\_(ツ)_/¯
+            m_UniformNameLocationMap[name] = glGetUniformBlockIndex(m_ID, name);
+        }
+    }
+
+    void OpenGL::Shader::StoreShaderStorageBufferNameLocations()
+    {
+        int count;
+        glGetProgramInterfaceiv(m_ID, GL_SHADER_STORAGE_BLOCK, GL_ACTIVE_RESOURCES, &count);
+
+        int maxNameLen = 0;
+        glGetProgramInterfaceiv(m_ID, GL_SHADER_STORAGE_BLOCK, GL_MAX_NAME_LENGTH, &maxNameLen);
+
+        GLsizei size;
+        char name[maxNameLen];
+        for (int i = 0; i < count; i++)
+        {
+            glGetProgramResourceName(m_ID, GL_SHADER_STORAGE_BLOCK, i, maxNameLen, &size, name);
+            m_UniformNameLocationMap[name] = glGetProgramResourceIndex(m_ID, GL_SHADER_STORAGE_BLOCK, name);
         }
     }
 }
