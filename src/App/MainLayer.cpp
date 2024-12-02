@@ -15,7 +15,7 @@ namespace App
     using namespace Botanica;
 
     MainLayer::MainLayer()
-        : Layer("Main Layer"), m_CameraController(new CameraController()), m_World(new World(glm::uvec3(1, 1, 1)))
+        : Layer("Main Layer"), m_CameraController(new CameraController()), m_World(new World(glm::uvec3(8, 8, 8)))
     {
         m_ObjStack.PushLayer(m_World);
         m_ObjStack.PushLayer(m_CameraController);
@@ -70,7 +70,7 @@ namespace App
             {UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_CameraController->GetCamera().GetVPMat())}
         });
 
-        RenderCommand::DrawIndexed(36);
+        RenderCommand::DrawIndexed(36 * m_World->GetVoxels().size());
     }
 
     void MainLayer::Setup()
@@ -79,7 +79,7 @@ namespace App
 
         const char *compute = R"(
             #version 430 core
-            layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+            layout (local_size_x = 8, local_size_y = 8, local_size_z = 8) in;
 
             layout (std430, binding = 0) buffer Voxels { uint ids[]; };
             layout (std430, binding = 1) buffer Vertices { vec3 positions[]; };
@@ -93,85 +93,46 @@ namespace App
 
             void main()
             {
-                //uint index = GetIndex(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y, gl_GlobalInvocationID.z);
+                uint index = GetIndex(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y, gl_GlobalInvocationID.z);
 
-                //uint vertIdx = s_VertIdx;
-                uint vertIdx = 0;
-                //s_VertIdx += 6 * 4;
-                //float scale = 1.0f / 8.0f;
-                float scale = 1.0f;
+                uint vertIdx = atomicAdd(s_VertIdx, 24);
+                float scale = 1.0f / 8.0f;
 
                 // front
-                positions[vertIdx + 0] = scale * vec3( 0.5f, -0.5f, -0.5f);
-                positions[vertIdx + 1] = scale * vec3( 0.5f,  0.5f, -0.5f);
-                positions[vertIdx + 2] = scale * vec3(-0.5f,  0.5f, -0.5f);
-                positions[vertIdx + 3] = scale * vec3(-0.5f, -0.5f, -0.5f);
+                positions[vertIdx + 0] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 1] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 2] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 3] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
 
                 // back
-                positions[vertIdx + 4] = scale * vec3( 0.5f, -0.5f,  0.5f);
-                positions[vertIdx + 5] = scale * vec3( 0.5f,  0.5f,  0.5f);
-                positions[vertIdx + 6] = scale * vec3(-0.5f,  0.5f,  0.5f);
-                positions[vertIdx + 7] = scale * vec3(-0.5f, -0.5f,  0.5f);
+                positions[vertIdx + 4] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 5] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 6] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 7] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
 
                 // bottom
-                positions[vertIdx + 8] = scale * vec3( 0.5f, -0.5f, -0.5f);
-                positions[vertIdx + 9] = scale * vec3( 0.5f, -0.5f,  0.5f);
-                positions[vertIdx + 10] = scale * vec3(-0.5f, -0.5f,  0.5f);
-                positions[vertIdx + 11] = scale * vec3(-0.5f, -0.5f, -0.5f);
+                positions[vertIdx + 8] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 9] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 10] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 11] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
 
                 // top
-                positions[vertIdx + 12] = scale * vec3( 0.5f,  0.5f, -0.5f);
-                positions[vertIdx + 13] = scale * vec3( 0.5f,  0.5f,  0.5f);
-                positions[vertIdx + 14] = scale * vec3(-0.5f,  0.5f,  0.5f);
-                positions[vertIdx + 15] = scale * vec3(-0.5f,  0.5f, -0.5f);
+                positions[vertIdx + 12] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 13] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 14] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 15] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
 
                 // left
-                positions[vertIdx + 16] = scale * vec3(-0.5f,  0.5f, -0.5f);
-                positions[vertIdx + 17] = scale * vec3(-0.5f, -0.5f, -0.5f);
-                positions[vertIdx + 18] = scale * vec3(-0.5f, -0.5f,  0.5f);
-                positions[vertIdx + 19] = scale * vec3(-0.5f,  0.5f,  0.5f);
+                positions[vertIdx + 16] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 17] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 18] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 19] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
 
                 // right
-                positions[vertIdx + 20] = scale * vec3( 0.5f,  0.5f, -0.5f);
-                positions[vertIdx + 21] = scale * vec3( 0.5f, -0.5f, -0.5f);
-                positions[vertIdx + 22] = scale * vec3( 0.5f, -0.5f,  0.5f);
-                positions[vertIdx + 23] = scale * vec3( 0.5f,  0.5f,  0.5f);
-
-                // // front
-                // positions[vertIdx + 0] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 1] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 2] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 3] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-
-                // // back
-                // positions[vertIdx + 4] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 5] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 6] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 7] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-
-                // // bottom
-                // positions[vertIdx + 8] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 9] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 10] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 11] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-
-                // // top
-                // positions[vertIdx + 12] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 13] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 14] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 15] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-
-                // // left
-                // positions[vertIdx + 16] = scale * (vec3(-0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 17] = scale * (vec3(-0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 18] = scale * (vec3(-0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 19] = scale * (vec3(-0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
-
-                // // right
-                // positions[vertIdx + 20] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 21] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 22] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
-                // positions[vertIdx + 23] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 20] = scale * (vec3( 0.5f,  0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 21] = scale * (vec3( 0.5f, -0.5f, -0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 22] = scale * (vec3( 0.5f, -0.5f,  0.5f) + gl_GlobalInvocationID);
+                positions[vertIdx + 23] = scale * (vec3( 0.5f,  0.5f,  0.5f) + gl_GlobalInvocationID);
             }
         )";
 
