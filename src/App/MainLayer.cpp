@@ -69,8 +69,7 @@ namespace App
             {UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_CameraController->GetCamera().GetVPMat())}
         });
 
-        //RenderCommand::DrawIndexed(36);
-        RenderCommand::DrawIndexed(3);
+        RenderCommand::DrawIndexed(36);
     }
 
     void MainLayer::Setup()
@@ -145,7 +144,7 @@ namespace App
 
             void main()
             {
-                gl_Position = uVP * vec4(aPos, 1.0f);
+                gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
             }
         )";
 
@@ -160,6 +159,7 @@ namespace App
             }
         )";
 
+        const size_t vertexCount = m_World->GetVoxels().size() * 6 * 4;
         glm::vec3 dummyVertices[] = {
             // front
             glm::vec3( 0.5f, -0.5f, -0.5f),
@@ -210,23 +210,23 @@ namespace App
             indices[i++] = j + 0;
         }
 
-        std::shared_ptr<ShaderSource> computeSrc = ShaderSource::Create(ShaderSourceType::Compute, compute);
-        m_ComputeShader = Shader::Create({computeSrc});
+        std::shared_ptr<ShaderSource> cs = ShaderSource::Create(ShaderSourceType::Compute, compute);
+        m_ComputeShader = Shader::Create({cs});
 
-        std::shared_ptr<ShaderSource> vertSrc = ShaderSource::Create(ShaderSourceType::Vertex, vert);
-        std::shared_ptr<ShaderSource> fragSrc = ShaderSource::Create(ShaderSourceType::Fragment, frag);
-        m_Shader = Shader::Create({vertSrc, fragSrc});
+        std::shared_ptr<ShaderSource> vs = ShaderSource::Create(ShaderSourceType::Vertex, vert);
+        std::shared_ptr<ShaderSource> fs = ShaderSource::Create(ShaderSourceType::Fragment, frag);
+        m_Shader = Shader::Create({vs, fs});
 
         m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size(), m_World->GetVoxels().data());
 
-        BufferLayout verticesLayout({ShaderDataType::Float3});
-        std::shared_ptr<Buffer> vertexBuffer = Buffer::Create(m_World->GetVoxels().size() * verticesLayout.GetStride(), dummyVertices);
-        vertexBuffer->SetLayout(verticesLayout);
+        BufferLayout vbl({ShaderDataType::Float3});
+        std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride(), dummyVertices);
+        vb->SetLayout(vbl);
 
-        BufferLayout indicesLayout({ShaderDataType::Int});
-        std::shared_ptr<Buffer> indexBuffer = Buffer::Create(indexCount * indicesLayout.GetStride(), indices);
-        indexBuffer->SetLayout(indicesLayout);
+        BufferLayout ibl({ShaderDataType::Int});
+        std::shared_ptr<Buffer> ib = Buffer::Create(indexCount * ibl.GetStride(), indices);
+        ib->SetLayout(ibl);
 
-        m_VertexArray = VertexArray::Create(vertexBuffer, indexBuffer);
+        m_VertexArray = VertexArray::Create(vb, ib);
     }
 }
