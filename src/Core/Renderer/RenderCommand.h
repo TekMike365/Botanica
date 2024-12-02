@@ -21,7 +21,7 @@ namespace Botanica::Renderer
         static void SetShaderUniformBuffers(std::initializer_list<UploadBuffer> uploadBuffers);
 
         static void DispatchCompute(uint32_t groups_x = 1, uint32_t groups_y = 1, uint32_t groups_z = 1);
-        static void DrawIndexed(size_t count, size_t offset);
+        static void DrawIndexed(size_t count, size_t offset = 0);
         static void ClearScreen();
 
         static void Execute();

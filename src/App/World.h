@@ -13,6 +13,7 @@ namespace App
     {
     public:
         World();
+        World(glm::uvec3 size);
 
         void SetVoxel(glm::uvec3 pos, uint8_t type);
         uint8_t GetVoxel(glm::uvec3 pos) const;

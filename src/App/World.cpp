@@ -7,6 +7,11 @@ namespace App
     {
     }
 
+    World::World(glm::uvec3 size)
+        : m_Size(size), m_Voxels(m_Size.x * m_Size.y * m_Size.z, 1), DataUpdated(true)
+    {
+    }
+
     void World::SetVoxel(glm::uvec3 pos, uint8_t type)
     {
         m_Voxels.at(pos.x + pos.y * m_Size.x + pos.z * m_Size.x * m_Size.y) = type;

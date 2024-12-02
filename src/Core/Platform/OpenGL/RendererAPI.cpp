@@ -40,7 +40,7 @@ namespace Botanica::Renderer::OpenGL
     {
         glDispatchCompute(groups_x, groups_y, groups_z);
         // make sure writing to buffers has finished before read
-        glMemoryBarrier(GL_UNIFORM_BARRIER_BIT);
+        glMemoryBarrier(GL_ALL_BARRIER_BITS);
     }
 
     void RendererAPI::DrawIndexed(size_t count, size_t offset)

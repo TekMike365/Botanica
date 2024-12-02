@@ -15,7 +15,7 @@ namespace App
     using namespace Botanica;
 
     MainLayer::MainLayer()
-        : Layer("TestLayer"), m_CameraController(new CameraController()), m_World(new World())
+        : Layer("Main Layer"), m_CameraController(new CameraController()), m_World(new World(glm::uvec3(1, 1, 1)))
     {
         m_ObjStack.PushLayer(m_World);
         m_ObjStack.PushLayer(m_CameraController);
@@ -46,19 +46,19 @@ namespace App
     {
         using namespace Renderer;
 
-        if (m_World->DataUpdated)
-        {
-            m_World->DataUpdated = false;
+        //if (m_World->DataUpdated)
+        //{
+        //    m_World->DataUpdated = false;
 
-            RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
+        //    RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
 
-            RenderCommand::SetShaderUniformBuffers({
-                {UploadBufferType::ShaderStorageBuffer, "Voxels", m_VoxelBuffer, 0},
-                {UploadBufferType::ShaderStorageBuffer, "Vertices", m_VertexArray->GetVertexBuffer(), 1}
-            });
+        //    RenderCommand::SetShaderUniformBuffers({
+        //        {UploadBufferType::ShaderStorageBuffer, "Voxels", m_VoxelBuffer, 0},
+        //        {UploadBufferType::ShaderStorageBuffer, "Vertices", m_VertexArray->GetVertexBuffer(), 1}
+        //    });
 
-            RenderCommand::DispatchCompute();
-        }
+        //    RenderCommand::DispatchCompute();
+        //}
 
         RenderCommand::SetRenderState({.ShaderPtr = m_Shader,
                                        .VertexArrayPtr = m_VertexArray,
@@ -69,7 +69,8 @@ namespace App
             {UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_CameraController->GetCamera().GetVPMat())}
         });
 
-        RenderCommand::DrawIndexed(24*8*8*8, 0);
+        //RenderCommand::DrawIndexed(36);
+        RenderCommand::DrawIndexed(3);
     }
 
     void MainLayer::Setup()
@@ -78,7 +79,7 @@ namespace App
 
         const char *compute = R"(
             #version 430 core
-            layout (local_size_x = 8, local_size_y = 8, local_size_z = 8) in;
+            layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
             layout (std430, binding = 0) buffer Voxels { uint ids[]; };
             layout (std430, binding = 1) buffer Vertices { vec3 vertices[]; };
@@ -159,9 +160,55 @@ namespace App
             }
         )";
 
-        uint32_t indices[m_World->GetVoxels().size()];
-        for (int i = 0; i < m_World->GetVoxels().size(); i++)
-            indices[i] = i;
+        glm::vec3 dummyVertices[] = {
+            // front
+            glm::vec3( 0.5f, -0.5f, -0.5f),
+            glm::vec3( 0.5f,  0.5f, -0.5f),
+            glm::vec3(-0.5f,  0.5f, -0.5f),
+            glm::vec3(-0.5f, -0.5f, -0.5f),
+
+            // back
+            glm::vec3( 0.5f, -0.5f,  0.5f),
+            glm::vec3( 0.5f,  0.5f,  0.5f),
+            glm::vec3(-0.5f,  0.5f,  0.5f),
+            glm::vec3(-0.5f, -0.5f,  0.5f),
+
+            // bottom
+            glm::vec3( 0.5f, -0.5f, -0.5f),
+            glm::vec3( 0.5f, -0.5f,  0.5f),
+            glm::vec3(-0.5f, -0.5f,  0.5f),
+            glm::vec3(-0.5f, -0.5f, -0.5f),
+
+            // top
+            glm::vec3( 0.5f,  0.5f, -0.5f),
+            glm::vec3( 0.5f,  0.5f,  0.5f),
+            glm::vec3(-0.5f,  0.5f,  0.5f),
+            glm::vec3(-0.5f,  0.5f, -0.5f),
+
+            // left
+            glm::vec3(-0.5f,  0.5f, -0.5f),
+            glm::vec3(-0.5f, -0.5f, -0.5f),
+            glm::vec3(-0.5f, -0.5f,  0.5f),
+            glm::vec3(-0.5f,  0.5f,  0.5f),
+
+            // right
+            glm::vec3( 0.5f,  0.5f, -0.5f),
+            glm::vec3( 0.5f, -0.5f, -0.5f),
+            glm::vec3( 0.5f, -0.5f,  0.5f),
+            glm::vec3( 0.5f,  0.5f,  0.5f),
+        };
+
+        const size_t indexCount = m_World->GetVoxels().size() * 6 * 2 * 3;
+        uint32_t indices[indexCount];
+        for (int i = 0, j = 0; i < indexCount; j += 4)
+        {
+            indices[i++] = j + 0;
+            indices[i++] = j + 1;
+            indices[i++] = j + 2;
+            indices[i++] = j + 2;
+            indices[i++] = j + 3;
+            indices[i++] = j + 0;
+        }
 
         std::shared_ptr<ShaderSource> computeSrc = ShaderSource::Create(ShaderSourceType::Compute, compute);
         m_ComputeShader = Shader::Create({computeSrc});
@@ -173,13 +220,13 @@ namespace App
         m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size(), m_World->GetVoxels().data());
 
         BufferLayout verticesLayout({ShaderDataType::Float3});
-        std::shared_ptr<Buffer> vertexBuffer = Buffer::Create(m_World->GetVoxels().size() * verticesLayout.GetStride());
+        std::shared_ptr<Buffer> vertexBuffer = Buffer::Create(m_World->GetVoxels().size() * verticesLayout.GetStride(), dummyVertices);
         vertexBuffer->SetLayout(verticesLayout);
 
         BufferLayout indicesLayout({ShaderDataType::Int});
-        std::shared_ptr<Buffer> indexBuff = Buffer::Create(m_World->GetVoxels().size() * sizeof(uint32_t), indices);
-        indexBuff->SetLayout(indicesLayout);
+        std::shared_ptr<Buffer> indexBuffer = Buffer::Create(indexCount * indicesLayout.GetStride(), indices);
+        indexBuffer->SetLayout(indicesLayout);
 
-        m_VertexArray = VertexArray::Create(vertexBuffer, indexBuff);
+        m_VertexArray = VertexArray::Create(vertexBuffer, indexBuffer);
     }
 }
