@@ -11,6 +11,7 @@ namespace Botanica::Renderer
         {
             float aspect = 1280.0f / 720.0f;
             m_ProjectionMat = glm::perspective(glm::radians(fovDeg), aspect, zNear, zFar);
+            transform.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
         }
         ~Camera() {}
 

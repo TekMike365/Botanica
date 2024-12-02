@@ -8,7 +8,6 @@ namespace App
     CameraController::CameraController()
         :m_Camera(45.0f, 0.1f, 100.0f)
     {
-        m_Camera.transform.SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
     }
 
     void CameraController::OnAttach()

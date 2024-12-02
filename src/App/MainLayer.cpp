@@ -19,6 +19,7 @@ namespace App
     {
         m_ObjStack.PushLayer(m_World);
         m_ObjStack.PushLayer(m_CameraController);
+        m_CameraController->GetCamera().transform.SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
 
         Setup();
     }
@@ -46,19 +47,19 @@ namespace App
     {
         using namespace Renderer;
 
-        //if (m_World->DataUpdated)
-        //{
-        //    m_World->DataUpdated = false;
+        if (m_World->DataUpdated)
+        {
+            m_World->DataUpdated = false;
 
-        //    RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
+            RenderCommand::SetRenderState({.ShaderPtr = m_ComputeShader});
 
-        //    RenderCommand::SetShaderUniformBuffers({
-        //        {UploadBufferType::ShaderStorageBuffer, "Voxels", m_VoxelBuffer, 0},
-        //        {UploadBufferType::ShaderStorageBuffer, "Vertices", m_VertexArray->GetVertexBuffer(), 1}
-        //    });
+            RenderCommand::SetShaderUniformBuffers({
+                {UploadBufferType::ShaderStorageBuffer, "Voxels", m_VoxelBuffer, 0},
+                {UploadBufferType::ShaderStorageBuffer, "Vertices", m_VertexArray->GetVertexBuffer(), 1}
+            });
 
-        //    RenderCommand::DispatchCompute();
-        //}
+            RenderCommand::DispatchCompute();
+        }
 
         RenderCommand::SetRenderState({.ShaderPtr = m_Shader,
                                        .VertexArrayPtr = m_VertexArray,
@@ -96,6 +97,7 @@ namespace App
 
                 uint vertidx = vertIndex;
                 vertIndex += 6 * 4;
+                //float scale = 1.0f / 8.0f;
                 float scale = 1.0f;
 
                 // top
@@ -220,7 +222,8 @@ namespace App
         m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size(), m_World->GetVoxels().data());
 
         BufferLayout vbl({ShaderDataType::Float3});
-        std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride(), dummyVertices);
+        //std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride(), dummyVertices);
+        std::shared_ptr<Buffer> vb = Buffer::Create(vertexCount * vbl.GetStride());
         vb->SetLayout(vbl);
 
         BufferLayout ibl({ShaderDataType::Int});
