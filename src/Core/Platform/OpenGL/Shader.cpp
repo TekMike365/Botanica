@@ -129,7 +129,7 @@ namespace Botanica::Renderer::OpenGL
         glUseProgram(0);
     }
 
-    void OpenGL::Shader::UploadUniform(const Uniform &uniform) const
+    void Shader::UploadUniform(const Uniform &uniform) const
     {
         int location = m_UniformNameLocationMap.at(uniform.Name);
         switch (uniform.Type)
@@ -164,17 +164,15 @@ namespace Botanica::Renderer::OpenGL
         }
     }
 
-    void OpenGL::Shader::UploadUniformBuffer(const UniformBuffer &ub) const
+    void Shader::UploadUniformBuffer(const UniformBuffer &ub) const
     {
-        ub.Buffer->Bind(BufferType::Uniform);
-
         int location = m_UniformBufferNameLocationMap.at(ub.Name);
         glUniformBlockBinding(m_ID, location, ub.Binding);
-
-        ub.Buffer->Unbind(BufferType::Uniform);
+        auto buff = std::static_pointer_cast<Buffer>(ub.Buffer);
+        glBindBufferBase(GL_UNIFORM_BUFFER, location, buff->GetID());
     }
 
-    void OpenGL::Shader::StoreUniformNameLocations()
+    void Shader::StoreUniformNameLocations()
     {
         int count;
         glGetProgramiv(m_ID, GL_ACTIVE_UNIFORMS, &count);
@@ -191,7 +189,7 @@ namespace Botanica::Renderer::OpenGL
         }
     }
 
-    void OpenGL::Shader::StoreUniformBufferNameLocations()
+    void Shader::StoreUniformBufferNameLocations()
     {
         int count;
         glGetProgramiv(m_ID, GL_ACTIVE_UNIFORM_BLOCKS, &count);

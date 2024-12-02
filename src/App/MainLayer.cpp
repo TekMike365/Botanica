@@ -69,7 +69,7 @@ namespace App
         uniforms.emplace_back(UniformType::Mat4, "uVP", std::make_shared<glm::mat4>(m_CameraController->GetCamera().GetVPMat()));
         RenderCommand::SetShaderUniforms(uniforms);
 
-        RenderCommand::DrawIndexed(24, 0);
+        RenderCommand::DrawIndexed(24*8*8*8, 0);
     }
 
     void MainLayer::Setup()

@@ -16,6 +16,8 @@ namespace Botanica::Renderer::OpenGL
         virtual void Unbind(BufferType type) const override;
 
         virtual void UploadData(size_t start, size_t size, const  void* data) const override;
+
+        inline uint32_t GetID() const { return m_ID; }
     
     private:
         uint32_t m_ID;

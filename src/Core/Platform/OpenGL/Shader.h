@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "Core/Renderer/Shader.h"
+#include "Buffer.h"
 
 namespace Botanica::Renderer::OpenGL
 {
