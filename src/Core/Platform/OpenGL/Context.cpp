@@ -43,7 +43,11 @@ namespace Botanica::Renderer::OpenGL
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         glDebugMessageCallback(GLErrorCallback, nullptr);
 
-        BT_CORE_INFO("OpenGL version: {}", (const char *)glGetString(GL_VERSION));
+        BT_CORE_INFO("OpenGL information:");
+        BT_CORE_INFO("    version: {}", (const char *)glGetString(GL_VERSION));
+        int size = 0;
+        glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &size);
+        BT_CORE_WARN("    max CS group size: {}", size);
         glEnable(GL_DEPTH_TEST);
     }
 

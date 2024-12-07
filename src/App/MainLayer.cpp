@@ -15,11 +15,28 @@ namespace App
     using namespace Botanica;
 
     MainLayer::MainLayer()
-        : Layer("Main Layer"), m_CameraController(new CameraController()), m_World(new World(glm::uvec3(8, 8, 8)))
+        : Layer("Main Layer")
     {
+        m_World = new World(glm::uvec3(8, 8, 8), 0);
+        m_CameraController = new CameraController();
+
         m_ObjStack.PushLayer(m_World);
         m_ObjStack.PushLayer(m_CameraController);
-        m_CameraController->GetCamera().transform.SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+        m_CameraController->GetCamera().transform.SetPosition(glm::vec3(0.0f, 0.0f, 8.0f));
+
+        m_World->SetVoxel(glm::uvec3(0, 0, 0), 1);
+        m_World->SetVoxel(glm::uvec3(1, 0, 0), 1);
+        m_World->SetVoxel(glm::uvec3(2, 0, 0), 1);
+        m_World->SetVoxel(glm::uvec3(3, 0, 0), 1);
+        m_World->SetVoxel(glm::uvec3(4, 0, 0), 1);
+        m_World->SetVoxel(glm::uvec3(4, 1, 0), 1);
+        m_World->SetVoxel(glm::uvec3(4, 2, 0), 1);
+        m_World->SetVoxel(glm::uvec3(4, 3, 0), 1);
+        m_World->SetVoxel(glm::uvec3(4, 4, 0), 1);
+        m_World->SetVoxel(glm::uvec3(4, 4, 1), 1);
+        m_World->SetVoxel(glm::uvec3(4, 4, 2), 1);
+        m_World->SetVoxel(glm::uvec3(4, 4, 3), 1);
+        m_World->SetVoxel(glm::uvec3(4, 4, 4), 1);
 
         Setup();
     }
@@ -107,29 +124,26 @@ namespace App
                 vec4(1.0f, 1.0f, 1.0f, 1.0f)
             };
 
-            uint g_VertCount = 0;
-            float g_Scale = 1.0f / 8.0f;
+            uint g_VertID = 0;
+            float g_Scale = 1.0f / 4.0f;
             void SetVertex(vec3 position, vec4 color)
             {
-                uint idx = g_VertCount++;
-                b_Vertices[idx].Position = g_Scale * (position + gl_GlobalInvocationID);
+                uint idx = g_VertID++;
+                b_Vertices[idx].Position = g_Scale * (position + gl_LocalInvocationID);
                 b_Vertices[idx].Color = color;
             }
 
             void main()
             {
-                uint idx = GetIndex(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y, gl_GlobalInvocationID.z);
+                uint idx = GetIndex(gl_LocalInvocationID.x, gl_LocalInvocationID.y, gl_LocalInvocationID.z);
                 uint id = b_IDs[idx];
 
-                //! ???
-                //! ids are 1 but they're set to 0
-                //! geometry gets messed up when I for example compare id with zero????
-                //if (id == 0)
-                //    return;
+                if (id == 0)
+                    return;
 
                 vec4 color = g_Colors[id];
 
-                g_VertCount = atomicAdd(s_VertIdx, 24);
+                g_VertID = atomicAdd(s_VertIdx, 24);
                 float scale = 1.0f / 8.0f;
 
                 // front
@@ -221,7 +235,7 @@ namespace App
         m_Shader = Shader::Create({vs, fs});
 
         BufferLayout voxelBL({ShaderDataType::UInt});
-        m_VoxelBuffer = Buffer::Create(m_World->GetVoxels().size() * voxelBL.GetStride(), m_World->GetVoxels().data());
+        m_VoxelBuffer = Buffer::Create(m_World->GetVoxelCount() * voxelBL.GetStride(), m_World->GetVoxels().data());
         m_VoxelBuffer->SetLayout(voxelBL);
 
         BufferLayout vbl({

@@ -12,14 +12,14 @@ namespace App
     class World : public Layer
     {
     public:
-        World();
-        World(glm::uvec3 size);
+        World(glm::uvec3 size, uint32_t init=0);
 
         void SetVoxel(glm::uvec3 pos, uint32_t type);
         uint32_t GetVoxel(glm::uvec3 pos) const;
 
         inline glm::uvec3 GetSize() const { return m_Size; }
         inline const std::vector<uint32_t> &GetVoxels() const { return m_Voxels; }
+        inline uint32_t GetVoxelCount() const { return m_Size.x * m_Size.y * m_Size.z; }
 
     public:
         bool DataUpdated;

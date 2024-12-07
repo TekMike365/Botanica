@@ -2,15 +2,8 @@
 
 namespace App
 {
-    World::World()
-        : m_Size(8, 8, 8), DataUpdated(true)
-    {
-        for (int i = 0; i < m_Size.x * m_Size.y * m_Size.z; i++)
-            m_Voxels[i] = 0;
-    }
-
-    World::World(glm::uvec3 size)
-        : m_Size(size), m_Voxels(m_Size.x * m_Size.y * m_Size.z, 1), DataUpdated(true)
+    World::World(glm::uvec3 size, uint32_t init)
+        : m_Size(size), m_Voxels(GetVoxelCount(), init), DataUpdated(true)
     {
     }
 
