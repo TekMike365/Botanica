@@ -27,6 +27,7 @@ public:
 
     inline unsigned int GetWidth() const { return m_WindowData.Width; }
     inline unsigned int GetHeight() const { return m_WindowData.Height; }
+    inline float GetAspect() const { return m_WindowData.Width / m_WindowData.Height; }
 
     inline void SetEventCallbackFunction(const EventCallbackFn &fn) { m_WindowData.EventCallback = fn; }
     inline const EventCallbackFn &GetEventCallbackFunction() const { return m_WindowData.EventCallback; }
