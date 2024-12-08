@@ -37,6 +37,8 @@ set(
     src/Renderer/Renderer.cpp
     src/Renderer/Buffer.cpp
     src/Renderer/Shader.cpp
+
+    src/Layers/CameraController.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")

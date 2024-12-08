@@ -12,6 +12,10 @@ public:
 
     void Run();
 
+    inline const Window &GetWindow() const { return m_Window; }
+
+    static const Application &Get() { return *s_Instance; }
+
 private:
     void OnEvent(Event &e);
     bool OnWindowClose(WindowCloseEvent &e);
@@ -21,4 +25,6 @@ private:
     Window m_Window;
     LayerStack m_LayerStack;
     double m_LastTime = 0;
+    
+    static Application *s_Instance;
 };

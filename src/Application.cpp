@@ -6,8 +6,13 @@
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+Application *Application::s_Instance = nullptr;
+
 Application::Application()
 {
+    BT_ASSERT(!s_Instance, "application already exists.")
+    s_Instance = this;
+
     m_Window.SetEventCallbackFunction(BIND_EVENT_CALLBACK(OnEvent));
 
     WindowResizeEvent event(m_Window.GetWidth(), m_Window.GetHeight());
