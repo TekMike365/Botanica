@@ -31,6 +31,8 @@ set(
     src/Window.cpp
     src/Input.cpp
     src/Application.cpp
+    src/LayerStack.cpp
+    src/Platform.cpp
 
     src/Renderer/Renderer.cpp
 )

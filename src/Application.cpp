@@ -1,8 +1,8 @@
 #include "pch.h"
-
 #include "Application.h"
 
 #include "Log.h"
+#include "Platform.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -24,7 +24,13 @@ void Application::Run()
 
     while (m_Running)
     {
+        double nextTime = Platform::GetTime();
+        Timestep dt = nextTime - m_LastTime;
+        m_LastTime = nextTime;
         m_Window.OnUpdate();
+
+        for (Layer *layer : m_LayerStack)
+            layer->OnUpdate(dt);
     }
 }
 
@@ -35,6 +41,9 @@ void Application::OnEvent(Event &e)
 
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_CALLBACK(OnWindowClose));
+
+    for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+        (*--it)->OnEvent(e);
 }
 
 bool Application::OnWindowClose(WindowCloseEvent &e)

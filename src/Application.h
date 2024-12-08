@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window.h"
+#include "LayerStack.h"
 #include "Event/WindowEvent.h"
 
 class Application
@@ -18,4 +19,6 @@ private:
 private:
     bool m_Running = true;
     Window m_Window;
+    LayerStack m_LayerStack;
+    double m_LastTime = 0;
 };
