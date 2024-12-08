@@ -16,7 +16,7 @@ add_compile_definitions(
 
 set(
     PRECOMPILED_HEADERS_FILE
-    src/btpch.h
+    src/pch.h
 )
 
 set(
@@ -26,31 +26,8 @@ set(
 
 set(
     APPLICATION_SOURCES
-
-    src/EntryPoint.cpp
+    src/main.cpp
     src/Log.cpp
-
-    src/App/MainLayer.cpp
-    src/App/CameraController.cpp
-    src/App/World.cpp
-    
-    src/Core/Application.cpp
-    src/Core/Layer.cpp
-    src/Core/LayerStack.cpp
-    src/Core/RenderLayer.cpp
-
-    src/Core/Renderer/RenderCommand.cpp
-    src/Core/Renderer/RenderPipeline.cpp
-    src/Core/Renderer/Renderer.cpp
-
-    src/Core/Platform/OpenGL/Context.cpp
-    src/Core/Platform/OpenGL/RendererAPI.cpp
-    src/Core/Platform/OpenGL/Buffer.cpp
-    src/Core/Platform/OpenGL/VertexArray.cpp
-    src/Core/Platform/OpenGL/Shader.cpp
-    src/Core/Platform/CrossPlatform/CrossPlatformWindow.cpp
-    src/Core/Platform/CrossPlatform/CrossPlatformPlatform.cpp
-    src/Core/Platform/CrossPlatform/CrossPlatformInput.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -76,7 +53,7 @@ endif()
 
 add_executable(Application ${APPLICATION_SOURCES})
 
-target_compile_definitions(Application PUBLIC PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
+target_compile_definitions(Application PRIVATE PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
 
 target_precompile_headers(Application PRIVATE ${PRECOMPILED_HEADERS_FILE})
 
