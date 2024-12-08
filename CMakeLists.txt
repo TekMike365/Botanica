@@ -28,6 +28,7 @@ set(
     APPLICATION_SOURCES
     src/main.cpp
     src/Log.cpp
+    src/Application.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
