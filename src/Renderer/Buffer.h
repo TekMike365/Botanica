@@ -12,7 +12,7 @@ namespace Renderer
         None = 0,
         Vertex,
         Index,
-        Shader,
+        ShaderStorage,
         Uniform
     };
 
@@ -68,6 +68,7 @@ namespace Renderer
 
     class Buffer
     {
+        friend class Shader;
     public:
         Buffer(size_t size, const void *data = nullptr, BufferUsage usage = BufferUsage::StaticDraw);
         ~Buffer();

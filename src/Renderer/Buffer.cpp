@@ -11,7 +11,7 @@ namespace Renderer
         case BufferType::None: return GL_SHADER_STORAGE_BUFFER;
         case BufferType::Vertex: return GL_ARRAY_BUFFER;
         case BufferType::Index: return GL_ELEMENT_ARRAY_BUFFER;
-        case BufferType::Shader: return GL_SHADER_STORAGE_BUFFER;
+        case BufferType::ShaderStorage: return GL_SHADER_STORAGE_BUFFER;
         case BufferType::Uniform: return GL_UNIFORM_BUFFER;
         }
         BT_ASSERT(false, "Invalid shader type!");
@@ -40,9 +40,9 @@ namespace Renderer
     Buffer::Buffer(size_t size, const void *data, BufferUsage usage)
     {
         glGenBuffers(1, &m_ID);
-        Bind(BufferType::Shader);
-        glBufferData(GetGLTarget(BufferType::Shader), size, data, GetGLUsage(usage));
-        Unbind(BufferType::Shader);
+        Bind(BufferType::ShaderStorage);
+        glBufferData(GetGLTarget(BufferType::ShaderStorage), size, data, GetGLUsage(usage));
+        Unbind(BufferType::ShaderStorage);
     }
 
     Buffer::~Buffer()
@@ -62,8 +62,8 @@ namespace Renderer
     
     void Buffer::UploadData(size_t start, size_t size, const void *data) const
     {
-        Bind(BufferType::Shader);
-        glBufferSubData(GetGLTarget(BufferType::Shader), start, size, data);
-        Unbind(BufferType::Shader);
+        Bind(BufferType::ShaderStorage);
+        glBufferSubData(GetGLTarget(BufferType::ShaderStorage), start, size, data);
+        Unbind(BufferType::ShaderStorage);
     }
 }
