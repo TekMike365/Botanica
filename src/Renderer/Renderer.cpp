@@ -31,6 +31,7 @@ static void APIENTRY GLErrorCallback(GLenum source, GLenum type, GLenum id, GLen
 
 void Renderer::Init(GLFWwindow *windowHandle)
 {
+    BT_ASSERT(!s_WindowHandle, "renderer initialised multiple times")
     s_WindowHandle = windowHandle;
 
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);

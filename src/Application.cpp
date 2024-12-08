@@ -39,7 +39,7 @@ void Application::OnEvent(Event &e)
 
 bool Application::OnWindowClose(WindowCloseEvent &e)
 {
-    BT_DLOG_WARN("Closing window ({})", e.ToString());
+    BT_DLOG_WARN("Closing window.");
     m_Running = false;
     return true;
 }

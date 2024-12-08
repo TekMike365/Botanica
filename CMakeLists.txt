@@ -29,6 +29,7 @@ set(
     src/main.cpp
     src/Log.cpp
     src/Window.cpp
+    src/Input.cpp
     src/Application.cpp
 
     src/Renderer/Renderer.cpp

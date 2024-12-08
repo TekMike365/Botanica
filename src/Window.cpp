@@ -7,6 +7,7 @@
 #include "Event/MouseEvent.h"
 
 #include "Renderer/Renderer.h"
+#include "Input.h"
 
 static bool s_GLFWInitialized = false;
 
@@ -47,6 +48,7 @@ Window::~Window()
 void Window::Init()
 {
     Renderer::Init(m_Window);
+    Input::Init(m_Window);
 
     glfwSetWindowUserPointer(m_Window, &m_WindowData);
     SetVSync(true);
