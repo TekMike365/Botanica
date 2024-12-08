@@ -37,6 +37,7 @@ set(
     src/Renderer/Renderer.cpp
     src/Renderer/Buffer.cpp
     src/Renderer/Shader.cpp
+    src/Renderer/VertexArray.cpp
 
     src/Layers/CameraController.cpp
 )

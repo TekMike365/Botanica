@@ -29,7 +29,7 @@ namespace Renderer
     void SetClearColor(glm::vec4 col);
     void SetMemoryBarrier(MemoryBarrier barrier);
 
-    void DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z);
-    void DrawIndexed(size_t count, size_t offset);
+    void DispatchCompute(uint32_t groups_x = 1, uint32_t groups_y = 1, uint32_t groups_z = 1);
+    void DrawIndexed(size_t count, size_t offset = 0);
     void ClearScreen();
 }

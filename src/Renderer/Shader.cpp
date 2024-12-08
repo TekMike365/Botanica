@@ -117,7 +117,7 @@ namespace Renderer
         glUseProgram(0);
     }
 
-    void Shader::UploadUniform(UniformType type, const std::string &name, void *data, size_t count)
+    void Shader::UploadUniform(UniformType type, const std::string &name, const void *data, size_t count)
     {
         int location = m_LocationMap.at(name);
         switch (type)
