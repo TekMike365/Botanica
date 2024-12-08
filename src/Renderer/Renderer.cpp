@@ -56,3 +56,38 @@ void Renderer::SwapBuffers()
 {
     glfwSwapBuffers(s_WindowHandle);
 }
+
+uint8_t Renderer::GetSubTypeCount(ShaderDataType type)
+{
+    switch (type)
+    {
+    case ShaderDataType::Bool:
+    case ShaderDataType::Int:
+    case ShaderDataType::UInt:
+    case ShaderDataType::Float:
+        return 1;
+    case ShaderDataType::Int2:
+    case ShaderDataType::UInt2:
+    case ShaderDataType::Float2:
+        return 2;
+    case ShaderDataType::Int3:
+    case ShaderDataType::UInt3:
+    case ShaderDataType::Float3:
+        return 3;
+    case ShaderDataType::Int4:
+    case ShaderDataType::UInt4:
+    case ShaderDataType::Float4:
+        return 4;
+    }
+
+    BT_ASSERT(false, "Unknown SaderDataType.");
+    return 0;
+}
+
+uint32_t Renderer::GetTypeSize(ShaderDataType type)
+{
+    if (type == ShaderDataType::Bool)
+        return 1;
+    
+    return GetSubTypeCount(type) * 4;
+}

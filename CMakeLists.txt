@@ -35,6 +35,7 @@ set(
     src/Platform.cpp
 
     src/Renderer/Renderer.cpp
+    src/Renderer/Buffer.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
