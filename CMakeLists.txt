@@ -41,6 +41,7 @@ set(
 
     src/Layers/CameraController.cpp
     src/Layers/RenderingLayer.cpp
+    src/Layers/SimulationLayer.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")

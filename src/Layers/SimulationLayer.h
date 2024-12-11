@@ -9,18 +9,14 @@
 #include "Renderer/VertexArray.h"
 #include "Renderer/Shader.h"
 
-class RenderingLayer : public Layer
+class SimulationLayer : public Layer
 {
 public:
-    RenderingLayer(Camera &cam, World<uint32_t> &world);
+    SimulationLayer(World<uint32_t> &world);
 
     virtual void OnAttach() override;
     virtual void OnUpdate(Timestep dt) override;
 
 private:
-    std::shared_ptr<Renderer::VertexArray> m_VertexArray;
-    std::shared_ptr<Renderer::Shader> m_Shader;
-
-    Camera &m_Camera;
     World<uint32_t> &m_World;
 };
