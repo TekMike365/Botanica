@@ -40,6 +40,7 @@ set(
     src/Renderer/VertexArray.cpp
 
     src/Layers/CameraController.cpp
+    src/Layers/RenderingLayer.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")

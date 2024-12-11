@@ -4,7 +4,7 @@
 #include "Input.h"
 #include "Application.h"
 
-CameraController::CameraController(const Camera &cam)
+CameraController::CameraController(Camera &cam)
     :m_Camera(cam)
 {
 }
