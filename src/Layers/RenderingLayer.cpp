@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "RenderingLayer.h"
 
-RenderingLayer::RenderingLayer(Camera &cam, World<uint32_t> &world)
+RenderingLayer::RenderingLayer(Camera &cam, Vector2D<uint32_t> &world)
     : m_Camera(cam), m_World(world)
 {
 }

@@ -5,13 +5,13 @@
 #include <glm/glm.hpp>
 
 template <typename T>
-class World
+class Vector2D
 {
 public:
-    World() = default;
-    World(glm::uvec3 size, const T &allocator)
+    Vector2D() = default;
+    Vector2D(glm::uvec3 size, const T &allocator)
         : m_Size(size), m_Data(GetSize(), allocator) {}
-    ~World() = default;
+    ~Vector2D() = default;
 
     inline uint32_t GetSize() const { return m_Size.x * m_Size.y * m_Size.z; }
     inline std::vector<T> &GetData() const { return m_Data; }

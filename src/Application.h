@@ -9,7 +9,7 @@
 #include "LayerStack.h"
 
 #include "Components/Camera.h"
-#include "Components/World.h"
+#include "Components/Vector2D.h"
 
 class Application
 {
@@ -34,7 +34,7 @@ private:
     double m_LastTime = 0;
 
     Camera m_Camera;
-    World<uint32_t> m_World;
+    Vector2D<uint32_t> m_World;
  
     static Application *s_Instance;
 };
