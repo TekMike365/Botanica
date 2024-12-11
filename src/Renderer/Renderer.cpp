@@ -24,11 +24,6 @@ static void APIENTRY GLErrorCallback(GLenum source, GLenum type, GLenum id, GLen
     }
 }
 
-namespace Renderer
-{
-    static GLFWwindow *s_WindowHandle = nullptr;
-}
-
 uint8_t Renderer::GetSubTypeCount(ShaderDataType type)
 {
     switch (type)
@@ -60,8 +55,19 @@ uint32_t Renderer::GetTypeSize(ShaderDataType type)
 {
     if (type == ShaderDataType::Bool)
         return 1;
-    
+
     return GetSubTypeCount(type) * 4;
+}
+
+namespace Renderer
+{
+    static GLFWwindow *s_WindowHandle = nullptr;
+    static RenderAPIInfo s_APIInfo;
+}
+
+const Renderer::RenderAPIInfo &Renderer::GetAPIInfo()
+{
+    return s_APIInfo;
 }
 
 void Renderer::Init(GLFWwindow *windowHandle)
@@ -79,11 +85,22 @@ void Renderer::Init(GLFWwindow *windowHandle)
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(GLErrorCallback, nullptr);
 
-    BT_DLOG_INFO("OpenGL information:");
-    BT_DLOG_INFO("    version: {}", (const char *)glGetString(GL_VERSION));
-    int size = 0;
-    glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &size);
-    BT_DLOG_WARN("    max CS group size: {}", size);
+    glGetIntegerv(GL_MAJOR_VERSION, &s_APIInfo.GLVersionMajor);
+    glGetIntegerv(GL_MINOR_VERSION, &s_APIInfo.GLVersionMinor);
+    glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &s_APIInfo.MaxComputeWorkGroupInvocations);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &s_APIInfo.MaxComputeWorkGroupCount.x);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &s_APIInfo.MaxComputeWorkGroupCount.y);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &s_APIInfo.MaxComputeWorkGroupCount.z);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &s_APIInfo.MaxComputeWorkGroupSize.x);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &s_APIInfo.MaxComputeWorkGroupSize.y);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &s_APIInfo.MaxComputeWorkGroupSize.z);
+
+    BT_DLOG_INFO("=== OpenGL info ===");
+    BT_DLOG_INFO("    Version: {}.{}", s_APIInfo.GLVersionMajor, s_APIInfo.GLVersionMinor);
+    BT_DLOG_INFO("    Max WG size: (x:{}, y:{}, z:{})", s_APIInfo.MaxComputeWorkGroupSize.x, s_APIInfo.MaxComputeWorkGroupSize.y, s_APIInfo.MaxComputeWorkGroupSize.z);
+    BT_DLOG_INFO("    Max WG count: (x:{}, y:{}, z:{})", s_APIInfo.MaxComputeWorkGroupSize.x, s_APIInfo.MaxComputeWorkGroupSize.y, s_APIInfo.MaxComputeWorkGroupSize.z);
+    BT_DLOG_INFO("    Max WG invocations: {}", s_APIInfo.MaxComputeWorkGroupInvocations);
+
     glEnable(GL_DEPTH_TEST);
 }
 

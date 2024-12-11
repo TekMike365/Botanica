@@ -20,6 +20,18 @@ namespace Renderer
         MemoryBarrierShaderStorage = GL_SHADER_STORAGE_BARRIER_BIT
     };
 
+
+    struct RenderAPIInfo
+    {
+        int GLVersionMajor = 0;
+        int GLVersionMinor = 0;
+        int MaxComputeWorkGroupInvocations = 0;
+        glm::ivec3 MaxComputeWorkGroupCount = glm::ivec3(0.0f);
+        glm::ivec3 MaxComputeWorkGroupSize = glm::ivec3(0.0f);
+    };
+
+    const RenderAPIInfo &GetAPIInfo();
+
     uint8_t GetSubTypeCount(ShaderDataType type);
     uint32_t GetTypeSize(ShaderDataType type);
 
