@@ -62,15 +62,19 @@ namespace Renderer
         {
         case ShaderSourceType::Vertex:
             m_ID = glCreateShader(GL_VERTEX_SHADER);
+            BT_DLOG_INFO("Compiling shader source: Vertex");
             break;
         case ShaderSourceType::Geometry:
             m_ID = glCreateShader(GL_GEOMETRY_SHADER);
+            BT_DLOG_INFO("Compiling shader source: Geometry");
             break;
         case ShaderSourceType::Fragment:
             m_ID = glCreateShader(GL_FRAGMENT_SHADER);
+            BT_DLOG_INFO("Compiling shader source: Fragment");
             break;
         case ShaderSourceType::Compute:
             m_ID = glCreateShader(GL_COMPUTE_SHADER);
+            BT_DLOG_INFO("Compiling shader source: Compute");
             break;
         default:
             BT_ASSERT(false, "Unknown shader source type!")
@@ -94,6 +98,7 @@ namespace Renderer
         for (ShaderSource* s : sources)
             glAttachShader(m_ID, s->m_ID);
 
+        BT_DLOG_INFO("Linking shader.");
         glLinkProgram(m_ID);
         LogProgramLinkError(m_ID);
 
@@ -145,10 +150,10 @@ namespace Renderer
         case UniformType::Int2: glUniform2i(location, *(GLint*)data, *((GLint*)data + 1)); return;
         case UniformType::Int3: glUniform3i(location, *(GLint*)data, *((GLint*)data + 1), *((GLint*)data + 2)); return;
         case UniformType::Int4: glUniform4i(location, *(GLint*)data, *((GLint*)data + 1), *((GLint*)data + 2), *((GLint*)data + 3)); return;
-        case UniformType::UInt: glUniform1i(location, *(GLuint*)data); return;
-        case UniformType::UInt2: glUniform2i(location, *(GLuint*)data, *((GLuint*)data + 1)); return;
-        case UniformType::UInt3: glUniform3i(location, *(GLuint*)data, *((GLuint*)data + 1), *((GLuint*)data + 2)); return;
-        case UniformType::UInt4: glUniform4i(location, *(GLuint*)data, *((GLuint*)data + 1), *((GLuint*)data + 2), *((GLuint*)data + 3)); return;
+        case UniformType::UInt: glUniform1ui(location, *(GLuint*)data); return;
+        case UniformType::UInt2: glUniform2ui(location, *(GLuint*)data, *((GLuint*)data + 1)); return;
+        case UniformType::UInt3: glUniform3ui(location, *(GLuint*)data, *((GLuint*)data + 1), *((GLuint*)data + 2)); return;
+        case UniformType::UInt4: glUniform4ui(location, *(GLuint*)data, *((GLuint*)data + 1), *((GLuint*)data + 2), *((GLuint*)data + 3)); return;
         }
     }
 
@@ -169,7 +174,6 @@ namespace Renderer
             BT_ASSERT(false, "Unsupported Buffer Type;");
         }
 
-        // auto bufferGL = std::static_pointer_cast<Buffer>(buffer.Buffer);
         glBindBufferBase(target, location, buffer->m_ID);
     }
 

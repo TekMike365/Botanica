@@ -8,7 +8,7 @@ SHADERS_HEADER = "src/shaders/Shaders.h"
 files = [ f for f in os.listdir(SHADERS_DIR)
          if os.path.isfile(SHADERS_DIR + f) and os.path.splitext(f)[-1] == "." + SHADER_EXT ]
 
-print("Embedding...")
+print("Embedding Shaders...")
 
 out = open(SHADERS_HEADER, "w")
 out = open(SHADERS_HEADER, "a")

@@ -10,43 +10,66 @@ RenderingLayer::RenderingLayer(Camera &cam, Vector3D<uint32_t> &world)
 
 void RenderingLayer::OnAttach()
 {
-    struct Vertex
+    using namespace Renderer;
+
+    size_t voxelCount = m_World.GetElementCount();
+    size_t verticesPerVoxel = 24;
+    size_t indicesPerVoxel = 36;
+
+    m_VoxelBuffer = std::make_shared<Buffer>(voxelCount * sizeof(uint32_t), (const void *)m_World.GetData().data(), BufferUsage::StaticRead);
+
+    uint32_t indices[voxelCount * indicesPerVoxel];
+    for (int i = 0; i < voxelCount * indicesPerVoxel;)
     {
-        glm::vec3 Pos;
-        glm::vec4 Col;
-    };
+        indices[i + 0] = i + 0;
+        indices[i + 1] = i + 1;
+        indices[i + 2] = i + 2;
+        indices[i + 3] = i + 2;
+        indices[i + 4] = i + 3;
+        indices[i + 5] = i + 0;
+        i += 6;
+    }
 
-    const Vertex vertices[] = {
-        {glm::vec3(0.0f, 0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
-        {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
-        {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}};
+    auto vb = std::make_shared<Buffer>(voxelCount * sizeof(glm::vec4) * verticesPerVoxel, nullptr, BufferUsage::StaticDraw);
+    auto ib = std::make_shared<Buffer>(voxelCount * sizeof(uint32_t) * indicesPerVoxel, (const void *)indices);
+    m_VA = std::make_shared<VertexArray>(vb, ib);
 
-    const uint32_t indices[] = {0, 1, 2};
+    ShaderSource vertex(ShaderSourceType::Vertex, Vertex_glsl);
+    ShaderSource fragment(ShaderSourceType::Fragment, Fragment_glsl);
+    m_RenderShader = std::shared_ptr<Shader>(new Shader({&vertex, &fragment}));
 
-    Renderer::BufferLayout vbl({{Renderer::ShaderDataType::Float3},
-                                {Renderer::ShaderDataType::Float4}});
+    ShaderSource voxelGen(ShaderSourceType::Compute, VoxelGen_glsl);
+    m_VoxelGenCShader = std::shared_ptr<Shader>(new Shader({&voxelGen}));
 
-    Renderer::BufferLayout ibl({{Renderer::ShaderDataType::UInt}});
+    // m_VoxelBuffer->Bind(BufferType::ShaderStorage);
+    // m_VA->GetVertexBuffer()->Bind(BufferType::ShaderStorage);
+    m_VoxelGenCShader->Bind();
+    // m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
+    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VA->GetVertexBuffer().get());
+    glm::uvec3 size(m_World.GetSize());
+    //m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
 
-    std::shared_ptr<Renderer::Buffer> vb = std::make_shared<Renderer::Buffer>(sizeof(vertices), (const void *)vertices);
-    vb->SetLayout(vbl);
-    std::shared_ptr<Renderer::Buffer> ib = std::make_shared<Renderer::Buffer>(sizeof(indices), (const void *)indices);
-    ib->SetLayout(ibl);
-    m_VertexArray = std::make_shared<Renderer::VertexArray>(vb, ib);
-
-    Renderer::ShaderSource vertSrc(Renderer::ShaderSourceType::Vertex, Vertex_glsl);
-    Renderer::ShaderSource fragSrc(Renderer::ShaderSourceType::Fragment, Fragment_glsl);
-    m_Shader = std::shared_ptr<Renderer::Shader>(new Renderer::Shader({&vertSrc, &fragSrc}));
+    uint32_t groups_x = m_World.GetElementCount() / 32;
+    DispatchCompute(groups_x);
+    SetMemoryBarrier(MemoryBarrierShaderStorage);
 }
 
 void RenderingLayer::OnUpdate(Timestep dt)
 {
-    Renderer::SetClearColor(glm::vec4(0.5f, 0.7f, 0.8f, 1.0f));
-    Renderer::ClearScreen();
+    using namespace Renderer;
 
-    m_VertexArray->Bind();
-    m_Shader->Bind();
-    m_Shader->UploadUniform(Renderer::UniformType::Mat4, "uVP", (const void *)&m_Camera.GetVPMat());
+    BT_SET_DLOG_MASK(LogMaskAll & ~LogMaskTrace);
 
-    Renderer::DrawIndexed(3);
+    SetClearColor(glm::vec4(0.5f, 0.7f, 0.8f, 1.0f));
+    ClearScreen();
+
+    m_VA->Bind();
+    m_RenderShader->Bind();
+    m_RenderShader->UploadUniform(UniformType::Mat4, "uVP", &m_Camera.GetVPMat());
+
+    size_t indicesPerVoxel = 36;
+    // DrawIndexed(m_World.GetElementCount() * indicesPerVoxel, 0, true);
+    DrawIndexed(indicesPerVoxel);
+
+    BT_SET_DLOG_MASK(LogMaskAll);
 }

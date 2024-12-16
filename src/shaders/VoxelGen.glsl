@@ -1,28 +1,3 @@
-#pragma once
-
-inline const char *Vertex_glsl = R"(
-#version 430 core
-
-layout (location = 0) in vec4 aPos;
-
-uniform mat4 uVP;
-
-void main()
-{
-    gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
-})";
-
-inline const char *Fragment_glsl = R"(
-#version 430 core
-
-out vec4 fColor;
-
-void main()
-{
-    fColor = vec4(0.0, 0.0, 0.0, 1.0);
-})";
-
-inline const char *VoxelGen_glsl = R"(
 #version 430 core
 layout (local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
 
@@ -102,5 +77,4 @@ void main()
     ib_Vertices[idx + 21] = scale * (g_Vertices[2] + pos);
     ib_Vertices[idx + 22] = scale * (g_Vertices[5] + pos);
     ib_Vertices[idx + 23] = scale * (g_Vertices[6] + pos);
-})";
-
+}

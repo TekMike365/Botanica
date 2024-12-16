@@ -63,7 +63,7 @@ private:
 #ifdef BT_BUILD_DEBUG
 
 #define BT_DLOG_MASK Log::GetDebugMask()
-#define BT_SET_DLOG_MASK(x) Log::GetDebugMask(x)
+#define BT_SET_DLOG_MASK(x) Log::MaskDebug(x)
 #define BT_DLOG_TRACE(...)                  \
     if (Log::GetDebugMask() & LogMaskTrace) \
     Log::GetDebugLogger()->trace(__VA_ARGS__)
