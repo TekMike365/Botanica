@@ -42,6 +42,6 @@ namespace Renderer
     void SetMemoryBarrier(MemoryBarrier barrier);
 
     void DispatchCompute(uint32_t groups_x = 1, uint32_t groups_y = 1, uint32_t groups_z = 1);
-    void DrawIndexed(size_t count, size_t offset = 0);
+    void DrawIndexed(size_t count, size_t offset = 0, bool wireframe = false);
     void ClearScreen();
 }

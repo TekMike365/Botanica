@@ -124,9 +124,21 @@ void Renderer::DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t gr
     glDispatchCompute(groups_x, groups_y, groups_z);
 }
 
-void Renderer::DrawIndexed(size_t count, size_t offset)
+void Renderer::DrawIndexed(size_t count, size_t offset, bool wireframe)
 {
+    if (wireframe)
+    {
+        glPolygonMode(GL_FRONT, GL_LINE);
+        glPolygonMode(GL_BACK, GL_LINE);
+    }
+
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (const void *)offset);
+
+    if (wireframe)
+    {
+        glPolygonMode(GL_FRONT, GL_LINE);
+        glPolygonMode(GL_BACK, GL_LINE);
+    }
 }
 
 void Renderer::ClearScreen()
