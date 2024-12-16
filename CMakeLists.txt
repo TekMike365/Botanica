@@ -44,6 +44,12 @@ set(
     src/Layers/SimulationLayer.cpp
 )
 
+set(
+    SHADER_SOURCES
+    src/shaders/Vertex.glsl
+    src/shaders/Fragment.glsl
+)
+
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     message(STATUS "Building for Linux")
     add_compile_definitions(BT_PLATFORM_LINUX)
@@ -65,7 +71,22 @@ elseif(CMAKE_BUILD_TYPE MATCHES Release)
     add_compile_definitions(BT_BUILD_RELEASE)
 endif()
 
-add_executable(Application ${APPLICATION_SOURCES})
+
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+if (NOT Python3_FOUND)
+    message(FATAL_ERROR "couldn't find Python3. required")
+endif()
+
+message(STATUS "Pyhton: ${Python3_EXECUTABLE}")
+
+set(SHADERS_HEADER src/shaders/Shader.h)
+add_custom_command(
+    OUTPUT ${SHADERS_HEADER}
+    DEPENDS ${SHADER_SOURCES}
+    COMMAND cd ${PROJECT_SOURCE_DIR} && ${Python3_EXECUTABLE} scripts/embed_shaders.py
+)
+
+add_executable(Application ${APPLICATION_SOURCES} ${SHADERS_HEADER})
 
 target_compile_definitions(Application PRIVATE PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
 
@@ -77,7 +98,9 @@ target_include_directories(
 )
 
 find_package(OpenGL REQUIRED)
-message(STATUS "OpenGL found: ${OPENGL_FOUND}")
+if (NOT OPENGL_FOUND)
+    message(FATAL_ERROR "couldn't find OpenGL. required")
+endif()
 
 target_link_libraries(
     Application PRIVATE

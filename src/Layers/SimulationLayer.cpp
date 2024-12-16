@@ -1,6 +1,6 @@
 #include "SimulationLayer.h"
 
-SimulationLayer::SimulationLayer(Vector2D<uint32_t> &world)
+SimulationLayer::SimulationLayer(Vector3D<uint32_t> &world)
     :m_World(world)
 {
 }
