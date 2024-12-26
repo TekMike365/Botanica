@@ -1,22 +1,16 @@
 #pragma once
 
-#include <memory>
-
 #include "Layer.h"
-#include "Components/Camera.h"
-#include "Components/Vector3D.h"
-
-#include "Renderer/VertexArray.h"
-#include "Renderer/Shader.h"
+#include "Components/World.h"
 
 class SimulationLayer : public Layer
 {
 public:
-    SimulationLayer(Vector3D<uint32_t> &world);
+    SimulationLayer(World &world);
 
     virtual void OnAttach() override;
     virtual void OnUpdate(Timestep dt) override;
 
 private:
-    Vector3D<uint32_t> &m_World;
+    World &m_World;
 };

@@ -28,12 +28,12 @@ Application::Application()
     m_Camera = Camera(fovDeg, m_Window.GetAspect(), nearPlane, farPlane);
     m_Camera.transform.SetPosition(glm::vec3(2.0f, 2.0f, 8.0f));
 
-    m_World = Vector3D<uint32_t>(glm::uvec3(32, 32, 32), 0);
-    for (int x = 0; x < m_World.GetSize().x; x++)
-        for (int y = 0; y < m_World.GetSize().y; y++)
-            for (int z = 0; z < m_World.GetSize().z; z++)
+    m_World = World(glm::uvec3(32, 32, 32));
+    for (int x = 0; x < m_World.VoxelIDs.GetSize().x; x++)
+        for (int y = 0; y < m_World.VoxelIDs.GetSize().y; y++)
+            for (int z = 0; z < m_World.VoxelIDs.GetSize().z; z++)
                 if ((x == 0 && y == 0) || (y == 0 && z == 0) || (x == 0 && z == 0))
-                    m_World[glm::uvec3(x, y, z)] = 1;
+                    m_World.VoxelIDs[glm::uvec3(x, y, z)] = 1;
 
     m_LayerStack.PushLayer(new CameraController(m_Camera));
     m_LayerStack.PushLayer(new SimulationLayer(m_World));

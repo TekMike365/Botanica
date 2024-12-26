@@ -4,7 +4,7 @@
 
 #include "Layer.h"
 #include "Components/Camera.h"
-#include "Components/Vector3D.h"
+#include "Components/World.h"
 
 #include "Renderer/VertexArray.h"
 #include "Renderer/Buffer.h"
@@ -15,7 +15,7 @@
 class RenderingLayer : public Layer
 {
 public:
-    RenderingLayer(Camera &cam, Vector3D<uint32_t> &world);
+    RenderingLayer(Camera &cam, World &world);
 
     virtual void OnAttach() override;
     virtual void OnUpdate(Timestep dt) override;
@@ -37,5 +37,5 @@ private:
     std::shared_ptr<Renderer::Shader> m_VoxelRenderShader;
 
     Camera &m_Camera;
-    Vector3D<uint32_t> &m_World;
+    World &m_World;
 };
