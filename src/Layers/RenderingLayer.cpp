@@ -30,8 +30,18 @@ void RenderingLayer::OnAttach()
         i += 6;
     }
 
-    auto vb = std::make_shared<Buffer>(voxelCount * sizeof(glm::vec4) * verticesPerVoxel, nullptr, BufferUsage::StaticDraw);
-    auto ib = std::make_shared<Buffer>(voxelCount * sizeof(uint32_t) * indicesPerVoxel, (const void *)indices);
+    BufferLayout vbl({
+        { ShaderDataType::Float4 }
+    });
+    auto vb = std::make_shared<Buffer>(voxelCount * verticesPerVoxel * vbl.GetStride(), nullptr, BufferUsage::StaticDraw);
+    vb->SetLayout(vbl);
+
+    BufferLayout ibl({
+        { ShaderDataType::UInt }
+    });
+    auto ib = std::make_shared<Buffer>(voxelCount * indicesPerVoxel * ibl.GetStride(), (const void *)indices);
+    ib->SetLayout(ibl);
+
     m_VA = std::make_shared<VertexArray>(vb, ib);
 
     ShaderSource vertex(ShaderSourceType::Vertex, Vertex_glsl);
@@ -44,10 +54,10 @@ void RenderingLayer::OnAttach()
     // m_VoxelBuffer->Bind(BufferType::ShaderStorage);
     // m_VA->GetVertexBuffer()->Bind(BufferType::ShaderStorage);
     m_VoxelGenCShader->Bind();
-    // m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
+    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
     m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VA->GetVertexBuffer().get());
     glm::uvec3 size(m_World.GetSize());
-    //m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
+    // m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
 
     uint32_t groups_x = m_World.GetElementCount() / 32;
     DispatchCompute(groups_x);
@@ -69,7 +79,7 @@ void RenderingLayer::OnUpdate(Timestep dt)
 
     size_t indicesPerVoxel = 36;
     // DrawIndexed(m_World.GetElementCount() * indicesPerVoxel, 0, true);
-    DrawIndexed(indicesPerVoxel);
+    DrawIndexed(indicesPerVoxel, 0, true);
 
     BT_SET_DLOG_MASK(LogMaskAll);
 }

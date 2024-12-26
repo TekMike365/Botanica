@@ -22,4 +22,4 @@ for f in files:
 
 out.close()
 
-print("Done.")
+print("Done")
