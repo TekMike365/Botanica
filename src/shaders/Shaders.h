@@ -1,6 +1,16 @@
 #pragma once
 
-inline const char *Vertex_glsl = R"(
+inline const char *VoxelFrag_glsl = R"(
+#version 430 core
+
+out vec4 fColor;
+
+void main()
+{
+    fColor = vec4(0.0, 0.0, 0.0, 1.0);
+})";
+
+inline const char *VoxelVert_glsl = R"(
 #version 430 core
 
 layout (location = 0) in vec4 aPos;
@@ -10,16 +20,6 @@ uniform mat4 uVP;
 void main()
 {
     gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
-})";
-
-inline const char *Fragment_glsl = R"(
-#version 430 core
-
-out vec4 fColor;
-
-void main()
-{
-    fColor = vec4(0.0, 0.0, 0.0, 1.0);
 })";
 
 inline const char *VoxelGen_glsl = R"(

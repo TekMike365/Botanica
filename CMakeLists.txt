@@ -46,8 +46,8 @@ set(
 
 set(
     SHADER_SOURCES
-    src/shaders/Vertex.glsl
-    src/shaders/Fragment.glsl
+    src/shaders/VoxelVert.glsl
+    src/shaders/VoxelFrag.glsl
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")

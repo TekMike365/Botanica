@@ -42,11 +42,11 @@ void RenderingLayer::OnAttach()
     auto ib = std::make_shared<Buffer>(voxelCount * indicesPerVoxel * ibl.GetStride(), (const void *)indices);
     ib->SetLayout(ibl);
 
-    m_VA = std::make_shared<VertexArray>(vb, ib);
+    m_VoxelVA = std::make_shared<VertexArray>(vb, ib);
 
-    ShaderSource vertex(ShaderSourceType::Vertex, Vertex_glsl);
-    ShaderSource fragment(ShaderSourceType::Fragment, Fragment_glsl);
-    m_RenderShader = std::shared_ptr<Shader>(new Shader({&vertex, &fragment}));
+    ShaderSource vertex(ShaderSourceType::Vertex, VoxelVert_glsl);
+    ShaderSource fragment(ShaderSourceType::Fragment, VoxelFrag_glsl);
+    m_VoxelRenderShader = std::shared_ptr<Shader>(new Shader({&vertex, &fragment}));
 
     ShaderSource voxelGen(ShaderSourceType::Compute, VoxelGen_glsl);
     m_VoxelGenCShader = std::shared_ptr<Shader>(new Shader({&voxelGen}));
@@ -60,7 +60,7 @@ void RenderingLayer::OnUpdate(Timestep dt)
 
     m_VoxelGenCShader->Bind();
     m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
-    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VA->GetVertexBuffer().get());
+    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VoxelVA->GetVertexBuffer().get());
     glm::uvec3 size(m_World.GetSize());
     m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
 
@@ -89,9 +89,9 @@ void RenderingLayer::OnUpdate(Timestep dt)
     SetClearColor(glm::vec4(0.5f, 0.7f, 0.8f, 1.0f));
     ClearScreen();
 
-    m_VA->Bind();
-    m_RenderShader->Bind();
-    m_RenderShader->UploadUniform(UniformType::Mat4, "uVP", &m_Camera.GetVPMat());
+    m_VoxelVA->Bind();
+    m_VoxelRenderShader->Bind();
+    m_VoxelRenderShader->UploadUniform(UniformType::Mat4, "uVP", &m_Camera.GetVPMat());
 
     size_t indicesPerVoxel = 36;
     DrawIndexed(m_World.GetElementCount() * indicesPerVoxel, 0, m_DrawWireframe);
