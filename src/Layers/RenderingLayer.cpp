@@ -35,7 +35,7 @@ void RenderingLayer::OnAttach()
     }
 
     BufferLayout vbl({{ShaderDataType::Float4}});
-    auto vb = std::make_shared<Buffer>(voxelCount * verticesPerVoxel * vbl.GetStride(), nullptr, BufferUsage::StaticDraw);
+    auto vb = std::make_shared<Buffer>(voxelCount * verticesPerVoxel * vbl.GetStride(), nullptr, BufferUsage::DynamicDraw);
     vb->SetLayout(vbl);
 
     BufferLayout ibl({{ShaderDataType::UInt}});
@@ -50,17 +50,6 @@ void RenderingLayer::OnAttach()
 
     ShaderSource voxelGen(ShaderSourceType::Compute, VoxelGen_glsl);
     m_VoxelGenCShader = std::shared_ptr<Shader>(new Shader({&voxelGen}));
-
-    m_VoxelGenCShader->Bind();
-    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
-    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VA->GetVertexBuffer().get());
-    glm::uvec3 size(m_World.GetSize());
-    m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
-
-    uint32_t groups_x = m_World.GetElementCount() / 32;
-    BT_DLOG_WARN("groups_x: {}", groups_x);
-    DispatchCompute(groups_x);
-    SetMemoryBarrier(MemoryBarrierShaderStorage);
 }
 
 void RenderingLayer::OnUpdate(Timestep dt)
@@ -68,6 +57,34 @@ void RenderingLayer::OnUpdate(Timestep dt)
     using namespace Renderer;
 
     BT_SET_DLOG_MASK(LogMaskAll & ~LogMaskTrace);
+
+    m_VoxelGenCShader->Bind();
+    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
+    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VA->GetVertexBuffer().get());
+    glm::uvec3 size(m_World.GetSize());
+    m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
+
+    glm::uvec3 maxGroups = GetAPIInfo().MaxComputeWorkGroupCount;
+    uint32_t groups_x = (uint32_t)(((float)m_World.GetElementCount() + 0.5f) / 32.0f);
+    uint32_t groups_y = 1, groups_z = 1;
+    
+    if (groups_x > maxGroups.x)
+    {
+        groups_y = (uint32_t)(((float)groups_x + 0.5f) / (float)maxGroups.x);
+        groups_x = maxGroups.x;
+    }
+
+    if (groups_y > maxGroups.y)
+    {
+        groups_z = (uint32_t)(((float)groups_y + 0.5f) / (float)maxGroups.y);
+        groups_y = maxGroups.y;
+    }
+
+    if (groups_z > maxGroups.z)
+        BT_ASSERT(false, "Too much invocations. (max: {})", maxGroups.x * maxGroups.y * maxGroups.z)
+
+    DispatchCompute(groups_x, groups_y, groups_z);
+    SetMemoryBarrier(MemoryBarrierShaderStorage);
 
     SetClearColor(glm::vec4(0.5f, 0.7f, 0.8f, 1.0f));
     ClearScreen();
