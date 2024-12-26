@@ -24,8 +24,8 @@ namespace Renderer
         }
 
         GLsizei log_length = 0;
-        GLchar message[messageLength];
-        glGetShaderInfoLog(id, messageLength, &log_length, message);
+        std::vector<GLchar> message(messageLength);
+        glGetShaderInfoLog(id, messageLength, &log_length, message.data());
 
         BT_DLOG_ERROR("Information:\n{}", std::string(message));
     }
@@ -49,8 +49,8 @@ namespace Renderer
         }
 
         GLsizei log_length = 0;
-        GLchar message[messageLength];
-        glGetProgramInfoLog(id, messageLength, &log_length, message);
+        std::vector<GLchar> message(messageLength);
+        glGetProgramInfoLog(id, messageLength, &log_length, message.data());
 
         BT_DLOG_ERROR("Information:\n{}", std::string(message));
     }
@@ -186,11 +186,11 @@ namespace Renderer
         glGetProgramiv(m_ID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxNameLen);
 
         GLsizei size;
-        char name[maxNameLen];
+        std::vector<char> name(maxNameLen);
         for (int i = 0; i < count; i++)
         {
-            glGetActiveUniformName(m_ID, i, maxNameLen, &size, name);
-            m_LocationMap[name] = glGetUniformLocation(m_ID, name);
+            glGetActiveUniformName(m_ID, i, maxNameLen, &size, name.data());
+            m_LocationMap[(const char *)name.data()] = glGetUniformLocation(m_ID, name.data());
         }
     }
 
@@ -203,11 +203,11 @@ namespace Renderer
         glGetProgramiv(m_ID, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &maxNameLen);
 
         GLsizei size;
-        char name[maxNameLen];
+        std::vector<char> name(maxNameLen);
         for (int i = 0; i < count; i++)
         {
-            glGetActiveUniformBlockName(m_ID, i, maxNameLen,&size, name);
-            m_LocationMap[name] = glGetUniformBlockIndex(m_ID, name);
+            glGetActiveUniformBlockName(m_ID, i, maxNameLen,&size, name.data());
+            m_LocationMap[(const char *)name.data()] = glGetUniformBlockIndex(m_ID, name.data());
         }
     }
 
@@ -222,12 +222,12 @@ namespace Renderer
         GLsizei size;
         int32_t binding;
         GLenum props[1] = { GL_BUFFER_BINDING };
-        char name[maxNameLen];
+        std::vector<char> name(maxNameLen);
         for (int i = 0; i < count; i++)
         {
-            glGetProgramResourceName(m_ID, GL_SHADER_STORAGE_BLOCK, i, maxNameLen, &size, name);
+            glGetProgramResourceName(m_ID, GL_SHADER_STORAGE_BLOCK, i, maxNameLen, &size, name.data());
             glGetProgramResourceiv(m_ID, GL_SHADER_STORAGE_BLOCK, i, 1, props, sizeof(binding), nullptr, &binding);
-            m_LocationMap[name] = binding;
+            m_LocationMap[(const char *)name.data()] = binding;
         }
     }
 }

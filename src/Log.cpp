@@ -2,8 +2,10 @@
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#ifdef BT_BUILD_DEBUG
 std::shared_ptr<spdlog::logger> Log::s_DebugLogger;
 int Log::s_DebugLogMask = LogMaskAll;
+#endif // BT_BUILD_DEBUG
 
 void Log::Init()
 {

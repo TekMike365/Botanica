@@ -1,6 +1,6 @@
 #pragma once
 
-inline const char *VoxelFrag_glsl = R"(
+const char *VoxelFrag_glsl = R"(
 #version 430 core
 
 in vec4 vColor;
@@ -12,45 +12,7 @@ void main()
     fColor = vColor;
 })";
 
-inline const char *WorldBoundsVert_glsl = R"(
-#version 430 core
-
-layout (location = 0) in vec3 aPos;
-
-uniform mat4 uVP;
-
-void main()
-{
-    gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
-})";
-
-inline const char *VoxelVert_glsl = R"(
-#version 430 core
-
-layout (location = 0) in vec4 aPos;
-
-uniform mat4 uVP;
-
-out vec4 vColor;
-
-vec4 g_Colors[] = {
-    vec4(0.0, 0.0, 0.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 0.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(1.0, 0.0, 0.0, 1.0),
-    vec4(1.0, 0.0, 1.0, 1.0),
-    vec4(1.0, 1.0, 0.0, 1.0),
-    vec4(1.0, 1.0, 1.0, 1.0),
-};
-
-void main()
-{
-    gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
-    vColor = g_Colors[uint(aPos.w)];
-})";
-
-inline const char *VoxelGen_glsl = R"(
+const char *VoxelGen_glsl = R"(
 #version 430 core
 layout (local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
 
@@ -141,7 +103,33 @@ void main()
     ib_Vertices[vertIdx + 23] = uVoxelScale * (g_Vertices[5] + pos) + colorID;
 })";
 
-inline const char *WorldBoundsFrag_glsl = R"(
+const char *VoxelVert_glsl = R"(
+#version 430 core
+
+layout (location = 0) in vec4 aPos;
+
+uniform mat4 uVP;
+
+out vec4 vColor;
+
+vec4 g_Colors[] = {
+    vec4(0.0, 0.0, 0.0, 1.0),
+    vec4(0.0, 0.0, 1.0, 1.0),
+    vec4(0.0, 1.0, 0.0, 1.0),
+    vec4(0.0, 1.0, 1.0, 1.0),
+    vec4(1.0, 0.0, 0.0, 1.0),
+    vec4(1.0, 0.0, 1.0, 1.0),
+    vec4(1.0, 1.0, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+};
+
+void main()
+{
+    gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
+    vColor = g_Colors[uint(aPos.w)];
+})";
+
+const char *WorldBoundsFrag_glsl = R"(
 #version 430 core
 
 out vec4 fColor;
@@ -149,5 +137,17 @@ out vec4 fColor;
 void main()
 {
     fColor = vec4(0.2, 1.0, 0.4, 1.0);
+})";
+
+const char *WorldBoundsVert_glsl = R"(
+#version 430 core
+
+layout (location = 0) in vec3 aPos;
+
+uniform mat4 uVP;
+
+void main()
+{
+    gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
 })";
 

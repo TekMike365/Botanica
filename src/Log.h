@@ -78,6 +78,8 @@ private:
     Log::GetDebugLogger()->error(__VA_ARGS__)
 
 #else // BT_BUILD_DEBUG
+#define BT_DLOG_MASK
+#define BT_SET_DLOG_MASK(x)
 #define BT_DLOG_TRACE(...)
 #define BT_DLOG_INFO(...)
 #define BT_DLOG_WARN(...)

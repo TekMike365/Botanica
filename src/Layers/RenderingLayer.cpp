@@ -50,7 +50,7 @@ void RenderingLayer::OnAttach()
 
         m_VoxelBuffer = std::make_shared<Buffer>(voxelCount * sizeof(uint32_t), (const void *)m_World.VoxelIDs.GetData().data(), BufferUsage::StaticRead);
 
-        uint32_t indices[voxelCount * indicesPerVoxel];
+        std::vector<uint32_t> indices(voxelCount * indicesPerVoxel);
         for (int i = 0, j = 0; i < voxelCount * indicesPerVoxel;)
         {
             indices[i + 0] = j + 0;
@@ -68,7 +68,7 @@ void RenderingLayer::OnAttach()
         vb->SetLayout(vbl);
 
         BufferLayout ibl({{ShaderDataType::UInt}});
-        auto ib = std::make_shared<Buffer>(voxelCount * indicesPerVoxel * ibl.GetStride(), (const void *)indices);
+        auto ib = std::make_shared<Buffer>(voxelCount * indicesPerVoxel * ibl.GetStride(), (const void *)indices.data());
         ib->SetLayout(ibl);
 
         m_VoxelVA = std::make_shared<VertexArray>(vb, ib);

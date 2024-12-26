@@ -33,6 +33,7 @@ set(
     src/Application.cpp
     src/LayerStack.cpp
     src/Platform.cpp
+    src/pch.cpp
 
     src/Renderer/Renderer.cpp
     src/Renderer/Buffer.cpp

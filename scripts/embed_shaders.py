@@ -18,7 +18,7 @@ for f in files:
     print(f)
     name = os.path.splitext(f)[0]
     src = open(SHADERS_DIR + f, "r").read()
-    out.write(f"inline const char *{name}_{SHADER_EXT} = R\"(\n{src})\";\n\n")
+    out.write(f"const char *{name}_{SHADER_EXT} = R\"(\n{src})\";\n\n")
 
 out.close()
 
