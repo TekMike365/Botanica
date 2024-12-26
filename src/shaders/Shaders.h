@@ -3,11 +3,13 @@
 inline const char *VoxelFrag_glsl = R"(
 #version 430 core
 
+in vec4 vColor;
+
 out vec4 fColor;
 
 void main()
 {
-    fColor = vec4(0.0, 0.0, 0.0, 1.0);
+    fColor = vColor;
 })";
 
 inline const char *WorldBoundsVert_glsl = R"(
@@ -29,9 +31,23 @@ layout (location = 0) in vec4 aPos;
 
 uniform mat4 uVP;
 
+out vec4 vColor;
+
+vec4 g_Colors[] = {
+    vec4(0.0, 0.0, 0.0, 1.0),
+    vec4(0.0, 0.0, 1.0, 1.0),
+    vec4(0.0, 1.0, 0.0, 1.0),
+    vec4(0.0, 1.0, 1.0, 1.0),
+    vec4(1.0, 0.0, 0.0, 1.0),
+    vec4(1.0, 0.0, 1.0, 1.0),
+    vec4(1.0, 1.0, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+};
+
 void main()
 {
     gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
+    vColor = g_Colors[uint(aPos.w)];
 })";
 
 inline const char *VoxelGen_glsl = R"(
@@ -84,44 +100,45 @@ void main()
     if (vID == 0)
         return;
 
-    vec4 pos = vec4(GetGlobalPosition(idx), vID);
+    vec4 pos = vec4(GetGlobalPosition(idx), 0.0);
+    vec4 colorID = vec4(0.0, 0.0, 0.0, vID - 1);
     uint vertIdx = idx * 24;
 
     // bottom
-    ib_Vertices[vertIdx + 0] = uVoxelScale * (g_Vertices[0] + pos);
-    ib_Vertices[vertIdx + 1] = uVoxelScale * (g_Vertices[1] + pos);
-    ib_Vertices[vertIdx + 2] = uVoxelScale * (g_Vertices[2] + pos);
-    ib_Vertices[vertIdx + 3] = uVoxelScale * (g_Vertices[3] + pos);
+    ib_Vertices[vertIdx + 0]  = uVoxelScale * (g_Vertices[0] + pos) + colorID;
+    ib_Vertices[vertIdx + 1]  = uVoxelScale * (g_Vertices[1] + pos) + colorID;
+    ib_Vertices[vertIdx + 2]  = uVoxelScale * (g_Vertices[2] + pos) + colorID;
+    ib_Vertices[vertIdx + 3]  = uVoxelScale * (g_Vertices[3] + pos) + colorID;
 
     // top
-    ib_Vertices[vertIdx + 4] = uVoxelScale * (g_Vertices[4] + pos);
-    ib_Vertices[vertIdx + 5] = uVoxelScale * (g_Vertices[5] + pos);
-    ib_Vertices[vertIdx + 6] = uVoxelScale * (g_Vertices[6] + pos);
-    ib_Vertices[vertIdx + 7] = uVoxelScale * (g_Vertices[7] + pos);
+    ib_Vertices[vertIdx + 4]  = uVoxelScale * (g_Vertices[4] + pos) + colorID;
+    ib_Vertices[vertIdx + 5]  = uVoxelScale * (g_Vertices[5] + pos) + colorID;
+    ib_Vertices[vertIdx + 6]  = uVoxelScale * (g_Vertices[6] + pos) + colorID;
+    ib_Vertices[vertIdx + 7]  = uVoxelScale * (g_Vertices[7] + pos) + colorID;
 
     // front
-    ib_Vertices[vertIdx + 8]= uVoxelScale * (g_Vertices[0] + pos);
-    ib_Vertices[vertIdx + 9]= uVoxelScale * (g_Vertices[1] + pos);
-    ib_Vertices[vertIdx + 10] = uVoxelScale * (g_Vertices[5] + pos);
-    ib_Vertices[vertIdx + 11] = uVoxelScale * (g_Vertices[4] + pos);
+    ib_Vertices[vertIdx + 8]  = uVoxelScale * (g_Vertices[0] + pos) + colorID;
+    ib_Vertices[vertIdx + 9]  = uVoxelScale * (g_Vertices[1] + pos) + colorID;
+    ib_Vertices[vertIdx + 10] = uVoxelScale * (g_Vertices[5] + pos) + colorID;
+    ib_Vertices[vertIdx + 11] = uVoxelScale * (g_Vertices[4] + pos) + colorID;
 
     // back
-    ib_Vertices[vertIdx + 12] = uVoxelScale * (g_Vertices[2] + pos);
-    ib_Vertices[vertIdx + 13] = uVoxelScale * (g_Vertices[3] + pos);
-    ib_Vertices[vertIdx + 14] = uVoxelScale * (g_Vertices[7] + pos);
-    ib_Vertices[vertIdx + 15] = uVoxelScale * (g_Vertices[6] + pos);
+    ib_Vertices[vertIdx + 12] = uVoxelScale * (g_Vertices[2] + pos) + colorID;
+    ib_Vertices[vertIdx + 13] = uVoxelScale * (g_Vertices[3] + pos) + colorID;
+    ib_Vertices[vertIdx + 14] = uVoxelScale * (g_Vertices[7] + pos) + colorID;
+    ib_Vertices[vertIdx + 15] = uVoxelScale * (g_Vertices[6] + pos) + colorID;
 
     // left
-    ib_Vertices[vertIdx + 16] = uVoxelScale * (g_Vertices[0] + pos);
-    ib_Vertices[vertIdx + 17] = uVoxelScale * (g_Vertices[3] + pos);
-    ib_Vertices[vertIdx + 18] = uVoxelScale * (g_Vertices[7] + pos);
-    ib_Vertices[vertIdx + 19] = uVoxelScale * (g_Vertices[4] + pos);
+    ib_Vertices[vertIdx + 16] = uVoxelScale * (g_Vertices[0] + pos) + colorID;
+    ib_Vertices[vertIdx + 17] = uVoxelScale * (g_Vertices[3] + pos) + colorID;
+    ib_Vertices[vertIdx + 18] = uVoxelScale * (g_Vertices[7] + pos) + colorID;
+    ib_Vertices[vertIdx + 19] = uVoxelScale * (g_Vertices[4] + pos) + colorID;
 
     // right
-    ib_Vertices[vertIdx + 20] = uVoxelScale * (g_Vertices[1] + pos);
-    ib_Vertices[vertIdx + 21] = uVoxelScale * (g_Vertices[2] + pos);
-    ib_Vertices[vertIdx + 22] = uVoxelScale * (g_Vertices[6] + pos);
-    ib_Vertices[vertIdx + 23] = uVoxelScale * (g_Vertices[5] + pos);
+    ib_Vertices[vertIdx + 20] = uVoxelScale * (g_Vertices[1] + pos) + colorID;
+    ib_Vertices[vertIdx + 21] = uVoxelScale * (g_Vertices[2] + pos) + colorID;
+    ib_Vertices[vertIdx + 22] = uVoxelScale * (g_Vertices[6] + pos) + colorID;
+    ib_Vertices[vertIdx + 23] = uVoxelScale * (g_Vertices[5] + pos) + colorID;
 })";
 
 inline const char *WorldBoundsFrag_glsl = R"(
