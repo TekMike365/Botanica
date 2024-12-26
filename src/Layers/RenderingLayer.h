@@ -26,6 +26,10 @@ private:
 
 private:
     bool m_DrawWireframe = false;
+    float m_VoxelScale = 1.0f / 8.0f;
+
+    std::shared_ptr<Renderer::VertexArray> m_WorldBoundsVA;
+    std::shared_ptr<Renderer::Shader> m_WorldBoundsShader;
 
     std::shared_ptr<Renderer::Buffer> m_VoxelBuffer;
     std::shared_ptr<Renderer::VertexArray> m_VoxelVA;

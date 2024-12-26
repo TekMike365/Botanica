@@ -114,6 +114,11 @@ void Renderer::SetClearColor(glm::vec4 col)
     glClearColor(col.r, col.g, col.b, col.a);
 }
 
+void Renderer::SetLineWidth(float width)
+{
+    glLineWidth(width);
+}
+
 void Renderer::SetMemoryBarrier(MemoryBarrier barrier)
 {
     glMemoryBarrier(barrier);
@@ -139,6 +144,11 @@ void Renderer::DrawIndexed(size_t count, size_t offset, bool wireframe)
         glPolygonMode(GL_FRONT, GL_FILL);
         glPolygonMode(GL_BACK, GL_FILL);
     }
+}
+
+void Renderer::DrawLinesIndexed(size_t count, size_t offset)
+{
+    glDrawElements(GL_LINES, count, GL_UNSIGNED_INT, (const void *)offset);
 }
 
 void Renderer::ClearScreen()

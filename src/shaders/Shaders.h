@@ -10,6 +10,18 @@ void main()
     fColor = vec4(0.0, 0.0, 0.0, 1.0);
 })";
 
+inline const char *WorldBoundsVert_glsl = R"(
+#version 430 core
+
+layout (location = 0) in vec3 aPos;
+
+uniform mat4 uVP;
+
+void main()
+{
+    gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
+})";
+
 inline const char *VoxelVert_glsl = R"(
 #version 430 core
 
@@ -30,6 +42,7 @@ layout (std430, binding = 1) buffer ssboVoxels { uint ib_VoxelIDs[]; };
 layout (std430, binding = 2) buffer ssboVertices { vec4 ib_Vertices[]; };
 
 uniform uvec3 uVoxelsSize;
+uniform float uVoxelScale;
 
 uint GetGlobalInvocationIndex()
 {
@@ -71,44 +84,53 @@ void main()
     if (vID == 0)
         return;
 
-    float scale = 1.0 / 8.0;
     vec4 pos = vec4(GetGlobalPosition(idx), vID);
     uint vertIdx = idx * 24;
 
     // bottom
-    ib_Vertices[vertIdx + 0] = scale * (g_Vertices[0] + pos);
-    ib_Vertices[vertIdx + 1] = scale * (g_Vertices[1] + pos);
-    ib_Vertices[vertIdx + 2] = scale * (g_Vertices[2] + pos);
-    ib_Vertices[vertIdx + 3] = scale * (g_Vertices[3] + pos);
+    ib_Vertices[vertIdx + 0] = uVoxelScale * (g_Vertices[0] + pos);
+    ib_Vertices[vertIdx + 1] = uVoxelScale * (g_Vertices[1] + pos);
+    ib_Vertices[vertIdx + 2] = uVoxelScale * (g_Vertices[2] + pos);
+    ib_Vertices[vertIdx + 3] = uVoxelScale * (g_Vertices[3] + pos);
 
     // top
-    ib_Vertices[vertIdx + 4] = scale * (g_Vertices[4] + pos);
-    ib_Vertices[vertIdx + 5] = scale * (g_Vertices[5] + pos);
-    ib_Vertices[vertIdx + 6] = scale * (g_Vertices[6] + pos);
-    ib_Vertices[vertIdx + 7] = scale * (g_Vertices[7] + pos);
+    ib_Vertices[vertIdx + 4] = uVoxelScale * (g_Vertices[4] + pos);
+    ib_Vertices[vertIdx + 5] = uVoxelScale * (g_Vertices[5] + pos);
+    ib_Vertices[vertIdx + 6] = uVoxelScale * (g_Vertices[6] + pos);
+    ib_Vertices[vertIdx + 7] = uVoxelScale * (g_Vertices[7] + pos);
 
     // front
-    ib_Vertices[vertIdx + 8]= scale * (g_Vertices[0] + pos);
-    ib_Vertices[vertIdx + 9]= scale * (g_Vertices[1] + pos);
-    ib_Vertices[vertIdx + 10] = scale * (g_Vertices[5] + pos);
-    ib_Vertices[vertIdx + 11] = scale * (g_Vertices[4] + pos);
+    ib_Vertices[vertIdx + 8]= uVoxelScale * (g_Vertices[0] + pos);
+    ib_Vertices[vertIdx + 9]= uVoxelScale * (g_Vertices[1] + pos);
+    ib_Vertices[vertIdx + 10] = uVoxelScale * (g_Vertices[5] + pos);
+    ib_Vertices[vertIdx + 11] = uVoxelScale * (g_Vertices[4] + pos);
 
     // back
-    ib_Vertices[vertIdx + 12] = scale * (g_Vertices[2] + pos);
-    ib_Vertices[vertIdx + 13] = scale * (g_Vertices[3] + pos);
-    ib_Vertices[vertIdx + 14] = scale * (g_Vertices[7] + pos);
-    ib_Vertices[vertIdx + 15] = scale * (g_Vertices[6] + pos);
+    ib_Vertices[vertIdx + 12] = uVoxelScale * (g_Vertices[2] + pos);
+    ib_Vertices[vertIdx + 13] = uVoxelScale * (g_Vertices[3] + pos);
+    ib_Vertices[vertIdx + 14] = uVoxelScale * (g_Vertices[7] + pos);
+    ib_Vertices[vertIdx + 15] = uVoxelScale * (g_Vertices[6] + pos);
 
     // left
-    ib_Vertices[vertIdx + 16] = scale * (g_Vertices[0] + pos);
-    ib_Vertices[vertIdx + 17] = scale * (g_Vertices[3] + pos);
-    ib_Vertices[vertIdx + 18] = scale * (g_Vertices[7] + pos);
-    ib_Vertices[vertIdx + 19] = scale * (g_Vertices[4] + pos);
+    ib_Vertices[vertIdx + 16] = uVoxelScale * (g_Vertices[0] + pos);
+    ib_Vertices[vertIdx + 17] = uVoxelScale * (g_Vertices[3] + pos);
+    ib_Vertices[vertIdx + 18] = uVoxelScale * (g_Vertices[7] + pos);
+    ib_Vertices[vertIdx + 19] = uVoxelScale * (g_Vertices[4] + pos);
 
     // right
-    ib_Vertices[vertIdx + 20] = scale * (g_Vertices[1] + pos);
-    ib_Vertices[vertIdx + 21] = scale * (g_Vertices[2] + pos);
-    ib_Vertices[vertIdx + 22] = scale * (g_Vertices[6] + pos);
-    ib_Vertices[vertIdx + 23] = scale * (g_Vertices[5] + pos);
+    ib_Vertices[vertIdx + 20] = uVoxelScale * (g_Vertices[1] + pos);
+    ib_Vertices[vertIdx + 21] = uVoxelScale * (g_Vertices[2] + pos);
+    ib_Vertices[vertIdx + 22] = uVoxelScale * (g_Vertices[6] + pos);
+    ib_Vertices[vertIdx + 23] = uVoxelScale * (g_Vertices[5] + pos);
+})";
+
+inline const char *WorldBoundsFrag_glsl = R"(
+#version 430 core
+
+out vec4 fColor;
+
+void main()
+{
+    fColor = vec4(0.2, 1.0, 0.4, 1.0);
 })";
 

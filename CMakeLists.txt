@@ -48,6 +48,8 @@ set(
     SHADER_SOURCES
     src/shaders/VoxelVert.glsl
     src/shaders/VoxelFrag.glsl
+    src/shaders/WorldBoundsVert.glsl
+    src/shaders/WorldBoundsFrag.glsl
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
