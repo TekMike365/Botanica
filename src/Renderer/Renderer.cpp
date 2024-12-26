@@ -136,8 +136,8 @@ void Renderer::DrawIndexed(size_t count, size_t offset, bool wireframe)
 
     if (wireframe)
     {
-        glPolygonMode(GL_FRONT, GL_LINE);
-        glPolygonMode(GL_BACK, GL_LINE);
+        glPolygonMode(GL_FRONT, GL_FILL);
+        glPolygonMode(GL_BACK, GL_FILL);
     }
 }
 

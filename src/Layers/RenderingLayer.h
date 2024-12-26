@@ -10,6 +10,8 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/Shader.h"
 
+#include "Event/KeyboardEvent.h"
+
 class RenderingLayer : public Layer
 {
 public:
@@ -17,8 +19,14 @@ public:
 
     virtual void OnAttach() override;
     virtual void OnUpdate(Timestep dt) override;
+    virtual void OnEvent(Event &e) override;
 
 private:
+    bool OnKeyReleased(KeyReleasedEvent &e);
+
+private:
+    bool m_DrawWireframe = false;
+
     std::shared_ptr<Renderer::Buffer> m_VoxelBuffer;
     std::shared_ptr<Renderer::VertexArray> m_VA;
     std::shared_ptr<Renderer::Shader> m_VoxelGenCShader;

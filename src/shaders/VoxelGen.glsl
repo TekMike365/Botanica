@@ -31,16 +31,12 @@ vec4 g_Vertices[] = {
 
 void main()
 {
-    // if (gl_LocalInvocationIndex > uVoxelsSize.x * uVoxelsSize.y * uVoxelsSize.z) 
-    //     return;
+    if (gl_LocalInvocationIndex > uVoxelsSize.x * uVoxelsSize.y * uVoxelsSize.z) 
+        return;
 
-    // float scale = 1.0 / 8.0;
-    // vec4 pos = vec4(GetGlobalPosition(), 0.0);
-    // uint idx = gl_LocalInvocationIndex * 24;
-
-    float scale = 1.0;
-    vec4 pos = vec4(0.0, 0.0, 0.0, 0.0);
-    uint idx = 0;
+    float scale = 1.0 / 8.0;
+    vec4 pos = vec4(GetGlobalPosition(), 0.0);
+    uint idx = gl_LocalInvocationIndex * 24;
 
     // bottom
     ib_Vertices[idx + 0] = scale * (g_Vertices[0] + pos);
@@ -57,24 +53,24 @@ void main()
     // front
     ib_Vertices[idx + 8]= scale * (g_Vertices[0] + pos);
     ib_Vertices[idx + 9]= scale * (g_Vertices[1] + pos);
-    ib_Vertices[idx + 10] = scale * (g_Vertices[4] + pos);
-    ib_Vertices[idx + 11] = scale * (g_Vertices[5] + pos);
+    ib_Vertices[idx + 10] = scale * (g_Vertices[5] + pos);
+    ib_Vertices[idx + 11] = scale * (g_Vertices[4] + pos);
 
     // back
     ib_Vertices[idx + 12] = scale * (g_Vertices[2] + pos);
     ib_Vertices[idx + 13] = scale * (g_Vertices[3] + pos);
-    ib_Vertices[idx + 14] = scale * (g_Vertices[6] + pos);
-    ib_Vertices[idx + 15] = scale * (g_Vertices[7] + pos);
+    ib_Vertices[idx + 14] = scale * (g_Vertices[7] + pos);
+    ib_Vertices[idx + 15] = scale * (g_Vertices[6] + pos);
 
     // left
     ib_Vertices[idx + 16] = scale * (g_Vertices[0] + pos);
     ib_Vertices[idx + 17] = scale * (g_Vertices[3] + pos);
-    ib_Vertices[idx + 18] = scale * (g_Vertices[4] + pos);
-    ib_Vertices[idx + 19] = scale * (g_Vertices[7] + pos);
+    ib_Vertices[idx + 18] = scale * (g_Vertices[7] + pos);
+    ib_Vertices[idx + 19] = scale * (g_Vertices[4] + pos);
 
     // right
     ib_Vertices[idx + 20] = scale * (g_Vertices[1] + pos);
     ib_Vertices[idx + 21] = scale * (g_Vertices[2] + pos);
-    ib_Vertices[idx + 22] = scale * (g_Vertices[5] + pos);
-    ib_Vertices[idx + 23] = scale * (g_Vertices[6] + pos);
+    ib_Vertices[idx + 22] = scale * (g_Vertices[6] + pos);
+    ib_Vertices[idx + 23] = scale * (g_Vertices[5] + pos);
 }

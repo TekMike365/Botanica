@@ -2,6 +2,9 @@
 #include "RenderingLayer.h"
 
 #include "shaders/Shaders.h"
+#include "Input.h"
+
+#define BIND_EVENT_CALLBACK(x) std::bind(&RenderingLayer::x, this, std::placeholders::_1)
 
 RenderingLayer::RenderingLayer(Camera &cam, Vector3D<uint32_t> &world)
     : m_Camera(cam), m_World(world)
@@ -19,26 +22,23 @@ void RenderingLayer::OnAttach()
     m_VoxelBuffer = std::make_shared<Buffer>(voxelCount * sizeof(uint32_t), (const void *)m_World.GetData().data(), BufferUsage::StaticRead);
 
     uint32_t indices[voxelCount * indicesPerVoxel];
-    for (int i = 0; i < voxelCount * indicesPerVoxel;)
+    for (int i = 0, j = 0; i < voxelCount * indicesPerVoxel;)
     {
-        indices[i + 0] = i + 0;
-        indices[i + 1] = i + 1;
-        indices[i + 2] = i + 2;
-        indices[i + 3] = i + 2;
-        indices[i + 4] = i + 3;
-        indices[i + 5] = i + 0;
+        indices[i + 0] = j + 0;
+        indices[i + 1] = j + 1;
+        indices[i + 2] = j + 2;
+        indices[i + 3] = j + 2;
+        indices[i + 4] = j + 3;
+        indices[i + 5] = j + 0;
         i += 6;
+        j += 4;
     }
 
-    BufferLayout vbl({
-        { ShaderDataType::Float4 }
-    });
+    BufferLayout vbl({{ShaderDataType::Float4}});
     auto vb = std::make_shared<Buffer>(voxelCount * verticesPerVoxel * vbl.GetStride(), nullptr, BufferUsage::StaticDraw);
     vb->SetLayout(vbl);
 
-    BufferLayout ibl({
-        { ShaderDataType::UInt }
-    });
+    BufferLayout ibl({{ShaderDataType::UInt}});
     auto ib = std::make_shared<Buffer>(voxelCount * indicesPerVoxel * ibl.GetStride(), (const void *)indices);
     ib->SetLayout(ibl);
 
@@ -51,15 +51,14 @@ void RenderingLayer::OnAttach()
     ShaderSource voxelGen(ShaderSourceType::Compute, VoxelGen_glsl);
     m_VoxelGenCShader = std::shared_ptr<Shader>(new Shader({&voxelGen}));
 
-    // m_VoxelBuffer->Bind(BufferType::ShaderStorage);
-    // m_VA->GetVertexBuffer()->Bind(BufferType::ShaderStorage);
     m_VoxelGenCShader->Bind();
     m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
     m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VA->GetVertexBuffer().get());
     glm::uvec3 size(m_World.GetSize());
-    // m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
+    m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
 
     uint32_t groups_x = m_World.GetElementCount() / 32;
+    BT_DLOG_WARN("groups_x: {}", groups_x);
     DispatchCompute(groups_x);
     SetMemoryBarrier(MemoryBarrierShaderStorage);
 }
@@ -78,8 +77,25 @@ void RenderingLayer::OnUpdate(Timestep dt)
     m_RenderShader->UploadUniform(UniformType::Mat4, "uVP", &m_Camera.GetVPMat());
 
     size_t indicesPerVoxel = 36;
-    // DrawIndexed(m_World.GetElementCount() * indicesPerVoxel, 0, true);
-    DrawIndexed(indicesPerVoxel, 0, true);
+    DrawIndexed(m_World.GetElementCount() * indicesPerVoxel, 0, m_DrawWireframe);
+    // DrawIndexed(indicesPerVoxel, 0, true);
 
     BT_SET_DLOG_MASK(LogMaskAll);
+}
+
+void RenderingLayer::OnEvent(Event &e)
+{
+    EventDispatcher dispatcher(e);
+    dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_CALLBACK(OnKeyReleased));
+}
+
+bool RenderingLayer::OnKeyReleased(KeyReleasedEvent &e)
+{
+    if (e.GetKey() == GLFW_KEY_F1)
+    {
+        m_DrawWireframe = !m_DrawWireframe;
+        return true;
+    }
+
+    return false;
 }
