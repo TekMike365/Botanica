@@ -27,7 +27,7 @@ namespace Renderer
         std::vector<GLchar> message(messageLength);
         glGetShaderInfoLog(id, messageLength, &log_length, message.data());
 
-        BT_DLOG_ERROR("Information:\n{}", std::string(message));
+        BT_DLOG_ERROR("Information:\n{}", std::string(message.data()));
     }
 
     void LogProgramLinkError(uint32_t id)
@@ -52,7 +52,7 @@ namespace Renderer
         std::vector<GLchar> message(messageLength);
         glGetProgramInfoLog(id, messageLength, &log_length, message.data());
 
-        BT_DLOG_ERROR("Information:\n{}", std::string(message));
+        BT_DLOG_ERROR("Information:\n{}", std::string(message.data()));
     }
 
     ShaderSource::ShaderSource(ShaderSourceType type, const std::string &source)
