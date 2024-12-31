@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-double Platform::GetTime()
+double Platform::GetTimeSec()
 {
     return glfwGetTime();
 }

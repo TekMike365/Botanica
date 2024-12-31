@@ -3,5 +3,5 @@
 class Platform
 {
 public:
-    static double GetTime();
+    static double GetTimeSec();
 };

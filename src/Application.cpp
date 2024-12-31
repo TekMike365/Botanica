@@ -46,7 +46,7 @@ void Application::Run()
 
     while (m_Running)
     {
-        double nextTime = Platform::GetTime();
+        double nextTime = Platform::GetTimeSec();
         Timestep dt = nextTime - m_LastTime;
         m_LastTime = nextTime;
 
