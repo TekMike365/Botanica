@@ -139,6 +139,7 @@ void RenderingLayer::OnEvent(Event &e)
 {
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_CALLBACK(OnKeyReleased));
+    dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_CALLBACK(OnWindowResized));
 }
 
 bool RenderingLayer::OnKeyReleased(KeyReleasedEvent &e)
@@ -150,4 +151,13 @@ bool RenderingLayer::OnKeyReleased(KeyReleasedEvent &e)
     }
 
     return false;
+}
+
+bool RenderingLayer::OnWindowResized(WindowResizeEvent &e)
+{
+    float aspect = (float)e.GetWidth() / (float)e.GetHeight();
+    Transform camTrans = m_Camera.transform;
+    m_Camera = Camera(m_Camera.GetFovDeg(), aspect, m_Camera.GetZNear(), m_Camera.GetZFar());
+    m_Camera.transform = camTrans;
+    return true;
 }

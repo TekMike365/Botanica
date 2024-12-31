@@ -11,6 +11,7 @@
 #include "Renderer/Shader.h"
 
 #include "Event/KeyboardEvent.h"
+#include "Event/WindowEvent.h"
 
 class RenderingLayer : public Layer
 {
@@ -23,6 +24,7 @@ public:
 
 private:
     bool OnKeyReleased(KeyReleasedEvent &e);
+    bool OnWindowResized(WindowResizeEvent &e);
 
 private:
     bool m_DrawWireframe = false;

@@ -54,13 +54,13 @@ void Window::Init()
     SetVSync(true);
 
     glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window)
-                                {
+                               {
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
         WindowCloseEvent event;
         data.EventCallback(event); });
 
     glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height)
-                                {
+                              {
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
         data.Width = width;
         data.Height = height;
@@ -68,8 +68,11 @@ void Window::Init()
         WindowResizeEvent event(width, height);
         data.EventCallback(event); });
 
+    glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow *window, int width, int heigth)
+                                   { Renderer::SetViewport(0, 0, width, heigth); });
+
     glfwSetWindowFocusCallback(m_Window, [](GLFWwindow *window, int focused)
-                                {
+                               {
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
         if (focused)
@@ -84,7 +87,7 @@ void Window::Init()
         } });
 
     glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
-                        {
+                       {
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
         switch (action)
@@ -110,21 +113,21 @@ void Window::Init()
         } });
 
     glfwSetCursorPosCallback(m_Window, [](GLFWwindow *window, double xpos, double ypos)
-                                {
+                             {
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
         MouseMovedEvent event((float)xpos, (float)ypos, (float)xpos / data.Width, (float)ypos / data.Height);
         data.EventCallback(event); });
 
     glfwSetScrollCallback(m_Window, [](GLFWwindow *window, double xoffset, double yoffset)
-                            {
+                          {
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
         MouseScrolledEvent event((float)xoffset, (float)yoffset);
         data.EventCallback(event); });
 
     glfwSetMouseButtonCallback(m_Window, [](GLFWwindow *window, int button, int action, int mods)
-                                {
+                               {
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
         switch (action)
