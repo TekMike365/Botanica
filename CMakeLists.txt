@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 project(Botanica VERSION 0.1)
 set(CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED 17)
+set(CXX_EXTENSIONS OFF)
 
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/GLFW)
