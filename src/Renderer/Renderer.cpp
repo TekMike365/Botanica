@@ -124,6 +124,11 @@ void Renderer::SetMemoryBarrier(MemoryBarrier barrier)
     glMemoryBarrier(barrier);
 }
 
+void Renderer::SetViewport(int x, int y, int width, int height)
+{
+    glViewport(x, y, width, height);
+}
+
 void Renderer::DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z)
 {
     glDispatchCompute(groups_x, groups_y, groups_z);

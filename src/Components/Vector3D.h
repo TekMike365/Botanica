@@ -19,8 +19,15 @@ public:
 
     inline uint32_t GetIndex(glm::uvec3 pos) const { return pos.x + m_Size.x * (pos.y + pos.z * m_Size.y); }
 
-    inline T &operator[](glm::uvec3 pos) { return m_Data[GetIndex(pos)]; }
+    inline T &operator[](glm::uvec3 pos)
+    {
+        DataChanged = true;
+        return m_Data[GetIndex(pos)];
+    }
     inline const T &operator[](glm::uvec3 pos) const { return m_Data[GetIndex(pos)]; }
+
+public:
+    bool DataChanged = false;
 
 private:
     glm::uvec3 m_Size;

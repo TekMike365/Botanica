@@ -86,36 +86,43 @@ void RenderingLayer::OnUpdate(Timestep dt)
 {
     using namespace Renderer;
 
-    BT_SET_DLOG_MASK(LogMaskAll & ~LogMaskTrace);
+    BT_SET_DLOG_MASK(LogMaskError | LogMaskInfo);
 
-    m_VoxelGenCShader->Bind();
-    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
-    m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VoxelVA->GetVertexBuffer().get());
-    glm::uvec3 size(m_World.VoxelIDs.GetSize());
-    m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
-    m_VoxelGenCShader->UploadUniform(UniformType::Float, "uVoxelScale", &m_VoxelScale);
-
-    glm::uvec3 maxGroups = GetAPIInfo().MaxComputeWorkGroupCount;
-    uint32_t groups_x = (uint32_t)(((float)m_World.VoxelIDs.GetElementCount() + 0.5f) / 32.0f);
-    uint32_t groups_y = 1, groups_z = 1;
-
-    if (groups_x > maxGroups.x)
+    if (m_World.VoxelIDs.DataChanged)
     {
-        groups_y = (uint32_t)(((float)groups_x + 0.5f) / (float)maxGroups.x);
-        groups_x = maxGroups.x;
+        m_World.VoxelIDs.DataChanged = false;
+        size_t voxelCount = m_World.VoxelIDs.GetElementCount();
+        m_VoxelBuffer->UploadData(0, voxelCount * sizeof(uint32_t), m_World.VoxelIDs.GetData().data());
+
+        m_VoxelGenCShader->Bind();
+        m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
+        m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VoxelVA->GetVertexBuffer().get());
+        glm::uvec3 size(m_World.VoxelIDs.GetSize());
+        m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
+        m_VoxelGenCShader->UploadUniform(UniformType::Float, "uVoxelScale", &m_VoxelScale);
+
+        glm::uvec3 maxGroups = GetAPIInfo().MaxComputeWorkGroupCount;
+        uint32_t groups_x = (uint32_t)(((float)m_World.VoxelIDs.GetElementCount() + 0.5f) / 32.0f);
+        uint32_t groups_y = 1, groups_z = 1;
+
+        if (groups_x > maxGroups.x)
+        {
+            groups_y = (uint32_t)(((float)groups_x + 0.5f) / (float)maxGroups.x);
+            groups_x = maxGroups.x;
+        }
+
+        if (groups_y > maxGroups.y)
+        {
+            groups_z = (uint32_t)(((float)groups_y + 0.5f) / (float)maxGroups.y);
+            groups_y = maxGroups.y;
+        }
+
+        if (groups_z > maxGroups.z)
+            BT_ASSERT(false, "Too much invocations. (max: {})", maxGroups.x * maxGroups.y * maxGroups.z)
+
+        DispatchCompute(groups_x, groups_y, groups_z);
+        SetMemoryBarrier(MemoryBarrierShaderStorage);
     }
-
-    if (groups_y > maxGroups.y)
-    {
-        groups_z = (uint32_t)(((float)groups_y + 0.5f) / (float)maxGroups.y);
-        groups_y = maxGroups.y;
-    }
-
-    if (groups_z > maxGroups.z)
-        BT_ASSERT(false, "Too much invocations. (max: {})", maxGroups.x * maxGroups.y * maxGroups.z)
-
-    DispatchCompute(groups_x, groups_y, groups_z);
-    SetMemoryBarrier(MemoryBarrierShaderStorage);
 
     SetClearColor(glm::vec4(0.5f, 0.7f, 0.8f, 1.0f));
     ClearScreen();
@@ -139,6 +146,7 @@ void RenderingLayer::OnEvent(Event &e)
 {
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_CALLBACK(OnKeyReleased));
+    dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_CALLBACK(OnWindowResized));
 }
 
 bool RenderingLayer::OnKeyReleased(KeyReleasedEvent &e)
@@ -150,4 +158,13 @@ bool RenderingLayer::OnKeyReleased(KeyReleasedEvent &e)
     }
 
     return false;
+}
+
+bool RenderingLayer::OnWindowResized(WindowResizeEvent &e)
+{
+    float aspect = (float)e.GetWidth() / (float)e.GetHeight();
+    Transform camTrans = m_Camera.transform;
+    m_Camera = Camera(m_Camera.GetFovDeg(), aspect, m_Camera.GetZNear(), m_Camera.GetZFar());
+    m_Camera.transform = camTrans;
+    return true;
 }
