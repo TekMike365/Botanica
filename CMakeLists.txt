@@ -63,6 +63,8 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
     message(STATUS "Building for MacOS")
     add_compile_definitions(BT_PLATFORM_MACOS)
+else()
+    message(WARNING "Unknown system.")
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -73,6 +75,8 @@ elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building in Release mode")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG")
     add_compile_definitions(BT_BUILD_RELEASE)
+else()
+    message(WARNING "Building in (unknown): ${CMAKE_BUILD_TYPE}")
 endif()
 
 
