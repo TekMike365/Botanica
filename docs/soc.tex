@@ -1,26 +1,62 @@
-\documentclass[12pt,a4paper,draft]{article}
+\documentclass[12pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
 
-\usepackage[a4paper,left=3.5cm,
-                    right=2.5cm,
-                    top=2.5cm,
-                    bottom=2.5cm]{geometry}
+\usepackage[a4paper,left=35mm,
+                    right=25mm,
+                    top=25mm,
+                    bottom=25mm]{geometry}
 
 \linespread{1.25}   % 1.5 riadkovanie
 
-\title{Title}
-\author{M. Sklenka, F. Knapec, M. Beňo}
-\date{}
 
 \begin{document}
 
-\maketitle
+%
+% TODO: Title
+% [x] Presný názov školy a jej presná adresa, mesto (tiež jeho poštové
+%     smerovacie číslo).
+% [x] Stredoškolská odborná činnosť.
+% [ ] Číslo a názov súťažného odboru, do ktorého autor prácu prihlasuje.
+% [ ] Názov práce (nie dlhý, má presne vystihovať obsah práce). 
+% [x] Meno a priezvisko autora a všetkých spoluautorov.
+% [ ] Ročník štúdia.
+% [ ] Meno a priezvisko školiteľa so všetkými titulmi (ak má práca aj konzultanta
+%     tak aj meno a priezvisko konzultanta so všetkými jeho titulmi).
+% [ ] presný názov zriaďovateľa. 
+% [x] Miesto a kalendárny rok dokončenia práce.
+%
+\begin{titlepage}
+    \setlength{\parindent}{0pt}
 
-This is just a test paragraph kljaf jkl afskjkl akh fk asjdhkjs
-kajfhkajh  kjah skjhasdf  hfkjhasdfkjhlk hadsflk jhsfdlk jhadsf
-k afkjh lkj adsf  ha sdfk jafk ljkj jhakjh asdfkjfh kj aakjhkjj
+    \begin{center}
+        Gymnázium \\
+        Veľká okružná 22, 010 01 Žilina
 
-I need to have something changed so we've got a new paragraph. YEY!
+        \vspace{7cm}
+        \Huge Názov práce
+
+        \vspace{1.13cm}
+        \Large Stredoškolská odborná činnosť
+
+        \vspace{2.12cm}
+        \normalsize Č. odboru:
+    \end{center}
+
+    \vfill
+
+    \begin{minipage}{0.75\textwidth}
+        Riešiteľ: František Knapec, Michael Sklenka, Marek Beňo \par
+        Ročník štúdia:
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.2\textwidth}
+        \hfil % basically align right
+        \begin{tabular}{r@{: }c}
+            Mesto & Žilina \\
+            Rok   & 2025
+        \end{tabular}
+    \end{minipage}
+\end{titlepage}
 
 \end{document}
