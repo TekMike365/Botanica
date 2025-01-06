@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage[T1]{fontenc}
+\usepackage[slovak]{babel}
 \usepackage{mathptmx}
 
 \usepackage[a4paper,left=35mm,
@@ -9,11 +9,17 @@
 
 \linespread{1.5}   % 1.5 riadkovanie
 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt} % remove line below header
+\fancyhf{} % reset header and footer styles
+\fancyfoot[R]{\thepage}
+
 
 \begin{document}
 
 %
-% TODO: Title
+% TODO:
 % [x] Presný názov školy a jej presná adresa, mesto (tiež jeho poštové
 %     smerovacie číslo).
 % [x] Stredoškolská odborná činnosť.
@@ -46,7 +52,7 @@
     \vfill
 
     \begin{minipage}{0.75\textwidth}
-        Riešiteľ: František Knapec, Michael Sklenka, Marek Beňo \par
+        Riešitelia: František Knapec, Michael Sklenka, Marek Beňo \par
         Ročník štúdia:
     \end{minipage}
     \hfill
@@ -79,7 +85,7 @@
     \vfill
 
     \begin{minipage}{0.75\textwidth}
-        Riešiteľ: František Knapec, Michael Sklenka, Marek Beňo \par
+        Riešitelia: František Knapec, Michael Sklenka, Marek Beňo \par
         Ročník štúdia: \par
         Školiteľ:
     \end{minipage}
@@ -93,10 +99,15 @@
     \end{minipage}
 \end{titlepage}
 
+% zapocitaj strany
+\setcounter{page}{3}
 
 %
 % Čestné vyhlásenie
 %
+
+\thispagestyle{empty}
+
 \noindent
 \textbf{Čestné vyhlásenie:}
 
@@ -109,5 +120,54 @@ v žiadnej inej súťaži, ktorá je pod gestorstvom MŠMVVaŠ SR. Sme si vedom�
 ak v~nej uvedené údaje nie sú pravdivé.
 
 \newpage
+
+
+%
+% Poďakovanie (nepovinné)
+% TODO: chceme?
+%
+
+\thispagestyle{empty}
+
+\null
+\vfill
+
+\noindent
+\textbf{Poďakovanie}
+
+\noindent
+Toto je poďakovanie
+
+\vspace{8cm}
+\newpage
+
+
+%
+% [x] Obsah
+% [ ] Zoznam skratiek, značiek a symbolov (nepovinné)
+% [ ] Zoznam tabuliek, grafov a ilustrácií (nepovinné)
+%
+
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+
+
+%
+% The work :)
+%
+
+\addcontentsline{toc}{section}{Úvod}
+\section*{Úvod}
+
+\section{Problematika a prehľad literatúry}
+\section{Ciele práce}
+\section{Materiál a metodika}
+\section{Výsledky práce}
+\section{Diskusia}
+\section{Závery práce}
+\section{Zhrnutie}
+\section{Zoznam použitej literatúry}
+% Prílohy (nepovinné)
 
 \end{document}
