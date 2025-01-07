@@ -52,10 +52,10 @@ void main()
     uint vertIdx = idx * 24;
 
     // bottom
-    ib_Vertices[vertIdx + 0]  = uVoxelScale * (g_Vertices[0] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
-    ib_Vertices[vertIdx + 1]  = uVoxelScale * (g_Vertices[1] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
-    ib_Vertices[vertIdx + 2]  = uVoxelScale * (g_Vertices[2] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
-    ib_Vertices[vertIdx + 3]  = uVoxelScale * (g_Vertices[3] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 0]  = uVoxelScale * (g_Vertices[0] + pos) + colorID;
+    ib_Vertices[vertIdx + 1]  = uVoxelScale * (g_Vertices[1] + pos) + colorID;
+    ib_Vertices[vertIdx + 2]  = uVoxelScale * (g_Vertices[2] + pos) + colorID;
+    ib_Vertices[vertIdx + 3]  = uVoxelScale * (g_Vertices[3] + pos) + colorID;
 
     // top
     ib_Vertices[vertIdx + 4]  = uVoxelScale * (g_Vertices[4] + pos) + colorID;
@@ -70,20 +70,20 @@ void main()
     ib_Vertices[vertIdx + 11] = uVoxelScale * (g_Vertices[4] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
 
     // back
-    ib_Vertices[vertIdx + 12] = uVoxelScale * (g_Vertices[2] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
-    ib_Vertices[vertIdx + 13] = uVoxelScale * (g_Vertices[3] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
-    ib_Vertices[vertIdx + 14] = uVoxelScale * (g_Vertices[7] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
-    ib_Vertices[vertIdx + 15] = uVoxelScale * (g_Vertices[6] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 12] = uVoxelScale * (g_Vertices[2] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
+    ib_Vertices[vertIdx + 13] = uVoxelScale * (g_Vertices[3] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
+    ib_Vertices[vertIdx + 14] = uVoxelScale * (g_Vertices[7] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
+    ib_Vertices[vertIdx + 15] = uVoxelScale * (g_Vertices[6] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
 
     // left
-    ib_Vertices[vertIdx + 16] = uVoxelScale * (g_Vertices[0] + pos) + colorID;
-    ib_Vertices[vertIdx + 17] = uVoxelScale * (g_Vertices[3] + pos) + colorID;
-    ib_Vertices[vertIdx + 18] = uVoxelScale * (g_Vertices[7] + pos) + colorID;
-    ib_Vertices[vertIdx + 19] = uVoxelScale * (g_Vertices[4] + pos) + colorID;
+    ib_Vertices[vertIdx + 16] = uVoxelScale * (g_Vertices[0] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 17] = uVoxelScale * (g_Vertices[3] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 18] = uVoxelScale * (g_Vertices[7] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 19] = uVoxelScale * (g_Vertices[4] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
 
     // right
-    ib_Vertices[vertIdx + 20] = uVoxelScale * (g_Vertices[1] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
-    ib_Vertices[vertIdx + 21] = uVoxelScale * (g_Vertices[2] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
-    ib_Vertices[vertIdx + 22] = uVoxelScale * (g_Vertices[6] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
-    ib_Vertices[vertIdx + 23] = uVoxelScale * (g_Vertices[5] + pos) + colorID + vec4(0.0, 0.0, 0.0, 1.0);
+    ib_Vertices[vertIdx + 20] = uVoxelScale * (g_Vertices[1] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 21] = uVoxelScale * (g_Vertices[2] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 22] = uVoxelScale * (g_Vertices[6] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
+    ib_Vertices[vertIdx + 23] = uVoxelScale * (g_Vertices[5] + pos) + colorID + vec4(0.0, 0.0, 0.0, 2.0);
 }
