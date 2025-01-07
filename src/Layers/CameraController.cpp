@@ -60,17 +60,14 @@ void CameraController::OnUpdate(Timestep dt)
 
         float angularSpeed = 3.141592f * 100.0f;
 
-        float pitchAngleRad = mouseDir.y * angularSpeed * dt.GetSeconds();
-        glm::quat pitch(cos(pitchAngleRad / 2.0f), camRightXZ * (float)sin(pitchAngleRad / 2.0f));
-        m_Camera.transform.Rotate(pitch);
+        m_YawRad += mouseDir.x * angularSpeed * dt.GetSeconds();
+        m_PitchRad += mouseDir.y * angularSpeed * dt.GetSeconds();
+        m_PitchRad = Clamp(m_PitchRad, glm::radians(-89.0f), glm::radians(89.0f));
 
-        float yawAngleRad = mouseDir.x * angularSpeed * dt.GetSeconds();
-        glm::quat yaw(cos(yawAngleRad / 2.0f), glm::vec3(0.0f, 1.0f, 0.0f) * (float)sin(yawAngleRad / 2.0f));
-        m_Camera.transform.Rotate(yaw);
+        glm::quat yaw((float)cos(m_YawRad / 2.0f), (float)sin(m_YawRad / 2.0f) * glm::vec3(0.0f, 1.0f, 0.0f));
+        m_Camera.transform.SetRotation(yaw);
 
-        glm::vec3 camRotation = m_Camera.transform.GetEulerRotation();
-        camRotation.x = Clamp(camRotation.x, glm::radians(-89.0f), glm::radians(89.0f));
-        camRotation.z = Clamp(camRotation.z, glm::radians(-89.0f), glm::radians(89.0f));
-        m_Camera.transform.SetRotation(camRotation);
+        glm::quat pitch((float)cos(m_PitchRad / 2.0f), (float)sin(m_PitchRad / 2.0f) * m_Camera.transform.GetRightVector());
+        m_Camera.transform.SetRotation(pitch * yaw);
     }
 }

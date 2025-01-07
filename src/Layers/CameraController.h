@@ -14,4 +14,7 @@ public:
 private:
     Camera &m_Camera;
     glm::vec2 m_LastMousePos;
+
+    float m_YawRad = 0;
+    float m_PitchRad = 0;
 };
