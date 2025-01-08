@@ -11,6 +11,8 @@ public:
     Vector3D() = default;
     Vector3D(glm::uvec3 size, const T &allocator)
         : m_Size(size), m_Data(GetElementCount(), allocator) {}
+    Vector3D(glm::uvec3 size)
+        : m_Size(size), m_Data(GetElementCount(), 0) {}
     ~Vector3D() = default;
 
     inline glm::uvec3 GetSize() const { return m_Size; }

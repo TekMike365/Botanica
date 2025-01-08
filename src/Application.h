@@ -21,7 +21,7 @@ public:
 
     inline const Window &GetWindow() const { return m_Window; }
 
-    static const Application &Get() { return *s_Instance; }
+    static Application &Get() { return *s_Instance; }
 
 private:
     void OnEvent(Event &e);
