@@ -7,6 +7,7 @@ SimulationLayer::SimulationLayer(World &world)
 
 void SimulationLayer::OnAttach()
 {
+    Generate();
     for (int X = 0; X < x; X++)
     {
         for (int Z = 0; Z < z; Z++)
