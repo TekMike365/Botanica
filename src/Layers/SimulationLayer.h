@@ -12,5 +12,11 @@ public:
     virtual void OnUpdate(Timestep dt) override;
 
 private:
+    void GenerateTerrain();
+
+private:
     World &m_World;
+
+    const float m_HeightScalar = 16.0;
+    const int m_WaterLevel = 6;
 };
