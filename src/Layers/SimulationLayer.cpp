@@ -15,6 +15,25 @@ void SimulationLayer::OnAttach()
 
 void SimulationLayer::OnUpdate(Timestep dt)
 {
+    if (m_Timer < 1.0f / m_TPS)
+    {
+        m_Timer += dt.GetSeconds();
+        return;
+    }
+    m_Timer = 0;
+    // BT_DLOG_TRACE("Tick!");
+
+    // Simulation loop
+    m_World->ResetResources();
+    for (auto it = m_Plants.begin(); it != m_Plants.end();)
+    {
+        it->Mine();
+        it->Grow();
+        if (!it->IsAlive())
+            m_Plants.erase(it);
+        else
+            it++;
+    }
 }
 
 void SimulationLayer::PlantAPlant(glm::uvec2 xzPos)
@@ -27,7 +46,7 @@ void SimulationLayer::PlantAPlant(glm::uvec2 xzPos)
             continue;
 
         m_Plants.emplace_back(m_World, pos);
-        if (!m_Plants.end()->IsAlive())
+        if (!(--m_Plants.end())->IsAlive())
             m_Plants.erase(--m_Plants.end());
 
         return;

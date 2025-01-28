@@ -22,8 +22,13 @@ class Plant
 public:
     Plant(std::shared_ptr<World> world, glm::uvec3 pos);
     Plant(std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna);
+    ~Plant();
 
-    bool IsAlive() const { return m_IsAlive; }
+    void Mine();
+    void Grow();
+
+    bool IsAlive() const;
+    inline uint32_t GetSize() const { return m_RootPositions.size() + m_StemPositions.size() + m_LeafPositions.size() + m_FruitPositions.size(); }
 
 private:
     void Init();
@@ -40,10 +45,10 @@ private:
     glm::uvec3 m_Pos;
     PlantDNA m_DNA;
 
-    bool m_IsAlive = false;
-
     std::vector<glm::uvec3> m_RootPositions;
     std::vector<glm::uvec3> m_LeafPositions;
     std::vector<glm::uvec3> m_StemPositions;
     std::vector<glm::uvec3> m_FruitPositions;
+
+    SoilResources m_SoilResources;
 };

@@ -19,7 +19,9 @@ private:
 private:
     std::shared_ptr<World> m_World;
     std::vector<Plant> m_Plants;
+    float m_Timer = 0;
 
     const float m_HeightScalar = 16.0;
     const int m_WaterLevel = 6;
+    const int m_TPS = 1;
 };

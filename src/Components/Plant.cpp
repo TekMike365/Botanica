@@ -34,6 +34,34 @@ Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna)
     Init();
 }
 
+Plant::~Plant()
+{
+    for (const auto &p : m_FruitPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+    for (const auto &p : m_LeafPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+    for (const auto &p : m_StemPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+    for (const auto &p : m_RootPositions)
+        m_World->SetVoxel(p, VoxelTypeSoil);
+}
+
+void Plant::Mine()
+{
+}
+
+void Plant::Grow()
+{
+}
+
+bool Plant::IsAlive() const
+{
+    if (m_RootPositions.size() == 0 || m_LeafPositions.size() == 0 || m_StemPositions.size() == 0)
+        return false;
+
+    return true;
+}
+
 void Plant::Init()
 {
     glm::uvec3 rootPos(m_Pos);
@@ -44,7 +72,6 @@ void Plant::Init()
         m_World->GetVoxel(stemPos) != VoxelTypeAir ||
         m_World->GetVoxel(leafPos) != VoxelTypeAir)
     {
-        m_IsAlive = false;
         return;
     }
 
@@ -56,23 +83,22 @@ void Plant::Init()
     m_World->SetVoxel(rootPos, VoxelTypeRoot);
     m_World->SetVoxel(stemPos, VoxelTypeStem);
     m_World->SetVoxel(leafPos, VoxelTypeLeaf);
-    m_IsAlive = true;
 }
 
 void Plant::Mutate()
 {
     srand(time(NULL));
     int rng = rand() % (m_DNA.GrowthChoice.size() + m_DNA.LeafGrowAction.size() + m_DNA.RootGrowAction.size());
-    switch(rng % 3)
+    switch (rng % 3)
     {
-        case 1:
-            m_DNA.GrowthChoice[rng % m_DNA.GrowthChoice.size()] = rand() % m_DNA.MAX_VALUE;
-            return;
-        case 2:
-            m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % m_DNA.MAX_VALUE;
-            return;
-        case 3:
-            m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % m_DNA.MAX_VALUE;
-            return;
+    case 1:
+        m_DNA.GrowthChoice[rng % m_DNA.GrowthChoice.size()] = rand() % m_DNA.MAX_VALUE;
+        return;
+    case 2:
+        m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % m_DNA.MAX_VALUE;
+        return;
+    case 3:
+        m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % m_DNA.MAX_VALUE;
+        return;
     }
 }
