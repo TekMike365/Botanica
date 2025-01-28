@@ -49,9 +49,9 @@ private:
     inline int GetRemainingWaterCapacity() const { return WATER_STORAGE_MPLR * m_StemPositions.size() - m_Water; }
     inline int GetRemainingLightCapacity() const { return LIGHT_STORAGE_MPLR * m_StemPositions.size() - m_Light; }
     inline SoilResources GetRemainingSoilResourcesCapacity() const { return {
-        .Potassium = SOIL_STORAGE_MPLR.Potassium * m_StemPositions.size() - m_SoilResources.Potassium,
-        .Phosphorus = SOIL_STORAGE_MPLR.Phosphorus * m_StemPositions.size() - m_SoilResources.Phosphorus,
-        .Nitrogen = SOIL_STORAGE_MPLR.Nitrogen * m_StemPositions.size() - m_SoilResources.Nitrogen}; }
+        .Potassium = SOIL_STORAGE_MPLR.Potassium * (int)m_StemPositions.size() - m_SoilResources.Potassium,
+        .Phosphorus = SOIL_STORAGE_MPLR.Phosphorus * (int)m_StemPositions.size() - m_SoilResources.Phosphorus,
+        .Nitrogen = SOIL_STORAGE_MPLR.Nitrogen * (int)m_StemPositions.size() - m_SoilResources.Nitrogen}; }
 
     inline int GetWaterBonus() const { return m_SoilResources.Potassium / GetSize() * POTASSIUM_BONUS_CONSTANT; }
     inline int GetLightBonus() const { return m_SoilResources.Phosphorus / GetSize() * PHOSPHORUS_BONUS_CONSTANT; }
@@ -71,31 +71,30 @@ private:
     int m_Water;
     int m_Light;
 
-    const SoilResources SOIL_STORAGE_MPLR = {
+    static constexpr SoilResources SOIL_STORAGE_MPLR = {
         .Potassium = 20,
         .Phosphorus = 20,
         .Nitrogen = 20,
     };
-    const int WATER_STORAGE_MPLR = 20;
-    const int LIGHT_STORAGE_MPLR = 20;
+    const static int WATER_STORAGE_MPLR = 20;
+    const static int LIGHT_STORAGE_MPLR = 20;
 
-    const float WATER_MINE_MPLR = 1.0f;
-    const float LIGHT_MINE_MPLR = 1.0f;
-    const float SOIL_MINE_MPLR = 1.0f;
+    static constexpr float WATER_MINE_MPLR = 1.0f;
+    static constexpr float LIGHT_MINE_MPLR = 1.0f;
+    static constexpr float SOIL_MINE_MPLR = 1.0f;
 
-    const float POTASSIUM_BONUS_CONSTANT = 2.0f;
-    const float PHOSPHORUS_BONUS_CONSTANT = 2.0f;
-    const float NITROGEN_BONUS_CONSTANT = 2.0f;
+    static constexpr float POTASSIUM_BONUS_CONSTANT = 2.0f;
+    static constexpr float PHOSPHORUS_BONUS_CONSTANT = 2.0f;
+    static constexpr float NITROGEN_BONUS_CONSTANT = 2.0f;
 
-    const int PLANT_PART_WATER_COST = 10;
-    const int PLANT_PART_LIGHT_COST = 10;
+    const static int PLANT_PART_WATER_COST = 10;
+    const static int PLANT_PART_LIGHT_COST = 10;
 
+    static constexpr float WATER_SURVIVE_COST_MPLR = 1.5f;
+    static constexpr float LIGHT_SURVIVE_COST_MPLR = 1.5f;
+    static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 1.5f;
+    static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 1.5f;
+    static constexpr float NITROGEN_SURVIVE_COST_MPLR = 1.5f;
 
-    const float WATER_SURVIVE_COST_MPLR = 1.5f;
-    const float LIGHT_SURVIVE_COST_MPLR = 1.5f;
-    const float POTASSIUM_SURVIVE_COST_MPLR = 1.5f;
-    const float PHOSPHORUS_SURVIVE_COST_MPLR = 1.5f;
-    const float NITROGEN_SURVIVE_COST_MPLR = 1.5f;
-
-    const float START_RESOURCES_MPLR = 0.75f;
+    static constexpr float START_RESOURCES_MPLR = 0.75f;
 };

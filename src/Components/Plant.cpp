@@ -184,9 +184,9 @@ void Plant::MineSoil(glm::uvec3 pos)
                 {
                     SoilResources capacity = GetRemainingSoilResourcesCapacity();
                     SoilResources max = {
-                        .Potassium = SOIL_MINE_MPLR * GetSoilBonus(),
-                        .Phosphorus = SOIL_MINE_MPLR * GetSoilBonus(),
-                        .Nitrogen = SOIL_MINE_MPLR * GetSoilBonus(),
+                        .Potassium = (int)(SOIL_MINE_MPLR * GetSoilBonus()),
+                        .Phosphorus = (int)(SOIL_MINE_MPLR * GetSoilBonus()),
+                        .Nitrogen = (int)(SOIL_MINE_MPLR * GetSoilBonus()),
                     };
                     SoilResources toMine = {
                         .Potassium = max.Potassium <= capacity.Potassium ? max.Potassium : capacity.Potassium,

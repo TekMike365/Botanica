@@ -21,7 +21,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
         return;
     }
     m_Timer = 0;
-    // BT_DLOG_TRACE("Tick!");
+    BT_DLOG_TRACE("Tick!");
 
     // Simulation loop
     m_World->ResetResources();
@@ -31,6 +31,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
         plant->Grow();
         if (!plant->IsAlive())
         {
+            BT_DLOG_WARN("Plant died.");
             m_Plants.erase(plant);
             continue;
         }
