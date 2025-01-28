@@ -10,9 +10,9 @@ struct PlantDNA
     // one per grow action (Root, Leaf, Stem, Fruit)
     std::array<int, 4> GrowthChoice;
     // one per cell in 3D (26 cells around a center one)
-    std::array<int, 26> RootGrowAction;
+    std::array<int, 27> RootGrowAction;
     // one per cell in 3D (26 cells around a center one)
-    std::array<int, 26> LeafGrowAction;
+    std::array<int, 27> LeafGrowAction;
 
     static inline int MAX_VALUE = 100;
 };
@@ -25,6 +25,7 @@ public:
     ~Plant();
 
     void Mine();
+    void Reproduce();
     void Grow();
 
     bool IsAlive() const;
@@ -32,16 +33,17 @@ public:
 
 private:
     void Init();
-    bool Seed(glm::uvec2 xzPos);
     void Mutate();
 
     void MineSoil(glm::uvec3 pos);
     void MineAir(glm::uvec3 pos);
 
-    void GrowRoot(glm::uvec3 origin);
-    void GrowLeaf(glm::uvec3 origin);
-    void GrowStem(glm::uvec3 origin);
-    void GrowFruit(glm::uvec3 origin);
+    bool Seed(glm::uvec2 xzPos);
+
+    void GrowRoot();
+    void GrowLeaf();
+    void GrowStem();
+    void GrowFruit();
 
     inline int GetRemainingWaterCapacity() const { return WATER_STORAGE_MPLR * m_StemPositions.size() - m_Water; }
     inline int GetRemainingLightCapacity() const { return LIGHT_STORAGE_MPLR * m_StemPositions.size() - m_Light; }
@@ -83,4 +85,7 @@ private:
     const float POTASSIUM_BONUS_CONSTANT = 2.0f;
     const float PHOSPHORUS_BONUS_CONSTANT = 2.0f;
     const float NITROGEN_BONUS_CONSTANT = 2.0f;
+
+    const int PLANT_PART_WATER_COST = 10;
+    const int PLANT_PART_LIGHT_COST = 10;
 };
