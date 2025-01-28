@@ -48,6 +48,10 @@ Plant::~Plant()
 
 void Plant::Mine()
 {
+    for (auto p : m_RootPositions)
+        MineSoil(p);
+    for (auto p : m_LeafPositions)
+        MineAir(p);
 }
 
 void Plant::Grow()
