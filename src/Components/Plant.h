@@ -25,7 +25,7 @@ public:
     ~Plant();
 
     void Mine();
-    void Reproduce();
+    std::vector<Plant> Reproduce();
     void Grow();
     void Survive();
 
@@ -39,7 +39,7 @@ private:
     void MineSoil(glm::uvec3 pos);
     void MineAir(glm::uvec3 pos);
 
-    bool Seed(glm::uvec2 xzPos);
+    Plant Seed(glm::uvec2 xzPos);
 
     void GrowRoot();
     void GrowLeaf();
@@ -97,4 +97,5 @@ private:
     const float PHOSPHORUS_SURVIVE_COST_MPLR = 1.5f;
     const float NITROGEN_SURVIVE_COST_MPLR = 1.5f;
 
+    const float START_RESOURCES_MPLR = 0.75f;
 };

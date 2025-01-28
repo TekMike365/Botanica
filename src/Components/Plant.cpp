@@ -53,8 +53,29 @@ void Plant::Mine()
         MineAir(p);
 }
 
-void Plant::Reproduce()
+std::vector<Plant> Plant::Reproduce()
 {
+    std::vector<Plant> newPlants;
+    for (auto it = m_FruitPositions.begin(); it != m_FruitPositions.end();)
+    {
+        bool inc = 1;
+        for (int tries = 10; tries > 0; tries--)
+        {
+            glm::uvec2 xzPos(
+                rand() % m_World->GetSize().x,
+                rand() % m_World->GetSize().z);
+
+            Plant plant = Seed(xzPos);
+            if (!plant.IsAlive())
+                continue;
+            
+            m_FruitPositions.erase(it);
+            newPlants.emplace_back(plant);
+            inc = 0;
+            break;
+        }
+        it += inc;
+    }
 }
 
 void Plant::Grow()
@@ -113,6 +134,14 @@ void Plant::Init()
     m_World->SetVoxel(rootPos, VoxelTypeRoot);
     m_World->SetVoxel(stemPos, VoxelTypeStem);
     m_World->SetVoxel(leafPos, VoxelTypeLeaf);
+
+    // :DDDD
+    m_Water = START_RESOURCES_MPLR * GetRemainingWaterCapacity();
+    m_Light = START_RESOURCES_MPLR * GetRemainingLightCapacity();
+    SoilResources soilCap = GetRemainingSoilResourcesCapacity();
+    soilCap.Potassium *= START_RESOURCES_MPLR;
+    soilCap.Phosphorus *= START_RESOURCES_MPLR;
+    soilCap.Nitrogen *= START_RESOURCES_MPLR;
 }
 
 void Plant::Mutate()
@@ -195,9 +224,19 @@ void Plant::MineAir(glm::uvec3 pos)
             }
 }
 
-bool Plant::Seed(glm::uvec2 xzPos)
+Plant Plant::Seed(glm::uvec2 xzPos)
 {
-    return false;
+    uint32_t y = m_World->GetSize().y;
+    for (; y > 0, y-- ;)
+    {
+        glm::uvec3 pos(xzPos.x, y, xzPos.y);
+        if (m_World->GetVoxel(pos) != VoxelTypeSoil)
+            continue;
+
+        return Plant(m_World, pos);
+    }
+
+    return Plant(m_World, glm::uvec3((uint32_t)-1, (uint32_t)-1, (uint32_t)-1));
 }
 
 void Plant::GrowRoot()
@@ -313,7 +352,7 @@ void Plant::GrowStem()
 void Plant::GrowFruit()
 {
     int i = rand() % m_LeafPositions.size();
-    auto it = m_LeafPositions.begin() + i;
+    auto pos = m_LeafPositions.begin() + i;
     // Check resources
     const int phosphorusCost = 7;
     const int nitrogenCost = 7;
@@ -334,8 +373,8 @@ void Plant::GrowFruit()
     m_SoilResources.Potassium -= potassiumCost;
 
     // Grow
-    glm::uvec3 voxPos = *it;
-    m_LeafPositions.erase(it);
+    glm::uvec3 voxPos = *pos;
+    m_LeafPositions.erase(pos);
     m_FruitPositions.emplace_back(voxPos);
     m_World->SetVoxel(voxPos, VoxelTypeFruit);
 }
