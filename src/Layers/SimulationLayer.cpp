@@ -16,7 +16,6 @@ void SimulationLayer::OnAttach()
             {
                 if (std::dynamic_pointer_cast<Soil>(enviroment[glm::uvec3(X,Y,Z)]))
                 {
-                    //asi  treba std::iota na enviroment
                     m_World.VoxelIDs[glm::uvec3(X,Y,Z)] = enviroment[glm::uvec3(Z,Y,Z)]->type;
                 }
             }
