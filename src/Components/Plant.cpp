@@ -76,6 +76,7 @@ std::vector<Plant> Plant::Reproduce()
         }
         it += inc;
     }
+    return newPlants;
 }
 
 void Plant::Grow()
