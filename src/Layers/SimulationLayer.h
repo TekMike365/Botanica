@@ -21,7 +21,7 @@ private:
     std::vector<Plant> m_Plants;
     float m_Timer = 0;
 
-    const float m_HeightScalar = 16.0;
-    const int m_WaterLevel = 6;
-    const int m_TPS = 1;
+    const float HEIGHT_SCALAR = 16.0;
+    const int WATER_LEVEL = 6;
+    const int TPS = 1;
 };

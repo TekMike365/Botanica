@@ -102,3 +102,44 @@ void Plant::Mutate()
         return;
     }
 }
+
+void Plant::MineSoil(glm::uvec3 pos)
+{
+    glm::uvec3 area(3, 3, 3);
+    for (int x = -area.x / 2; x < area.x / 2; x++)
+        for (int y = -area.y / 2; y < area.y / 2; y++)
+            for (int z = -area.z / 2; z < area.z / 2; z++)
+            {
+                glm::uvec3 p(x + pos.x, y + pos.x, z + pos.x);
+
+                switch (m_World->GetVoxel(p))
+                {
+                case VoxelTypeWater:
+                {
+                    int max = WATER_MINE_MPLR * GetWaterBonus();
+                    int mine = max <= GetRemainingWaterCapacity() ? max : GetRemainingWaterCapacity();
+                    m_Water += mine;
+                    return;
+                }
+                case VoxelTypeSoil:
+                {
+                    SoilResources capacity = GetRemainingSoilResourcesCapacity();
+                    SoilResources max = {
+                        .Potassium = SOIL_MINE_MPLR * GetSoilBonus(),
+                        .Phosphorus = SOIL_MINE_MPLR * GetSoilBonus(),
+                        .Nitrogen = SOIL_MINE_MPLR * GetSoilBonus(),
+                    };
+                    SoilResources toMine = {
+                        .Potassium = max.Potassium <= capacity.Potassium ? max.Potassium : capacity.Potassium,
+                        .Phosphorus = max.Phosphorus <= capacity.Phosphorus ? max.Phosphorus : capacity.Phosphorus,
+                        .Nitrogen = max.Nitrogen <= capacity.Nitrogen ? max.Nitrogen : capacity.Nitrogen,
+                    };
+                    SoilResources mined = m_World->MineSoilResources(p, toMine);
+                    m_SoilResources.Potassium += mined.Potassium;
+                    m_SoilResources.Phosphorus += mined.Phosphorus;
+                    m_SoilResources.Nitrogen += mined.Nitrogen;
+                    return;
+                }
+                }
+            }
+}

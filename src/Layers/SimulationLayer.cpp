@@ -15,7 +15,7 @@ void SimulationLayer::OnAttach()
 
 void SimulationLayer::OnUpdate(Timestep dt)
 {
-    if (m_Timer < 1.0f / m_TPS)
+    if (m_Timer < 1.0f / TPS)
     {
         m_Timer += dt.GetSeconds();
         return;
@@ -91,13 +91,13 @@ void SimulationLayer::GenerateTerrain()
 
                 float dotProduct = glm::dot(corner, randAngle);
 
-                float normalizedHeight = ((dotProduct + 1.0f) / 2.0f) * m_HeightScalar;
+                float normalizedHeight = ((dotProduct + 1.0f) / 2.0f) * HEIGHT_SCALAR;
 
                 height += normalizedHeight;
             }
 
             int finalHeight = (int)(height / 4.0f);
-            for (int y = finalHeight; y < m_WaterLevel; y++)
+            for (int y = finalHeight; y < WATER_LEVEL; y++)
                 m_World->SetVoxel(glm::uvec3(x, y, z), VoxelTypeWater);
             for (int y = 0; y < finalHeight; y++)
                 m_World->SetVoxel(glm::uvec3(x, y, z), VoxelTypeSoil);

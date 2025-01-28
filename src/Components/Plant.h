@@ -35,10 +35,25 @@ private:
     bool Seed(glm::uvec2 xzPos);
     void Mutate();
 
+    void MineSoil(glm::uvec3 pos);
+    void MineWater(glm::uvec3 pos);
+    void MineLight(glm::uvec3 pos);
+
     void GrowRoot(glm::uvec3 origin);
     void GrowLeaf(glm::uvec3 origin);
     void GrowStem(glm::uvec3 origin);
     void GrowFruit(glm::uvec3 origin);
+
+    inline int GetRemainingWaterCapacity() const { return WATER_STORAGE_MPLR * m_StemPositions.size() - m_Water; }
+    inline int GetRemainingLightCapacity() const { return LIGHT_STORAGE_MPLR * m_StemPositions.size() - m_Light; }
+    inline SoilResources GetRemainingSoilResourcesCapacity() const { return {
+        .Potassium = SOIL_STORAGE_MPLR.Potassium * m_StemPositions.size() - m_SoilResources.Potassium,
+        .Phosphorus = SOIL_STORAGE_MPLR.Phosphorus * m_StemPositions.size() - m_SoilResources.Phosphorus,
+        .Nitrogen = SOIL_STORAGE_MPLR.Nitrogen * m_StemPositions.size() - m_SoilResources.Nitrogen}; }
+
+    inline int GetWaterBonus() const { return m_SoilResources.Potassium / GetSize() * POTASSIUM_BONUS_CONSTANT; }
+    inline int GetLightBonus() const { return m_SoilResources.Phosphorus / GetSize() * PHOSPHORUS_BONUS_CONSTANT; }
+    inline int GetSoilBonus() const { return m_SoilResources.Nitrogen / GetSize() * NITROGEN_BONUS_CONSTANT; }
 
 private:
     std::shared_ptr<World> m_World;
@@ -51,4 +66,22 @@ private:
     std::vector<glm::uvec3> m_FruitPositions;
 
     SoilResources m_SoilResources;
+    int m_Water;
+    int m_Light;
+
+    const SoilResources SOIL_STORAGE_MPLR = {
+        .Potassium = 20,
+        .Phosphorus = 20,
+        .Nitrogen = 20,
+    };
+    const int WATER_STORAGE_MPLR = 20;
+    const int LIGHT_STORAGE_MPLR = 20;
+
+    const float WATER_MINE_MPLR = 1.0f;
+    const float LIGHT_MINE_MPLR = 1.0f;
+    const float SOIL_MINE_MPLR = 1.0f;
+
+    const float POTASSIUM_BONUS_CONSTANT = 2.0f;
+    const float PHOSPHORUS_BONUS_CONSTANT = 2.0f;
+    const float NITROGEN_BONUS_CONSTANT = 2.0f;
 };

@@ -15,7 +15,7 @@ public:
 
     inline glm::uvec3 GetSize() const { return m_Size; }
     inline uint32_t GetElementCount() const { return m_Size.x * m_Size.y * m_Size.z; }
-    inline const std::vector<T> &GetData() const { return m_Data; }
+    inline std::vector<T> &GetData() const { return m_Data; }
 
     inline uint32_t GetIndex(glm::uvec3 pos) const { return pos.x + m_Size.x * (pos.y + pos.z * m_Size.y); }
 
