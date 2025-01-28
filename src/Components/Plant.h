@@ -13,6 +13,8 @@ struct PlantDNA
     std::array<int, 26> RootGrowAction;
     // one per cell in 3D (26 cells around a center one)
     std::array<int, 26> LeafGrowAction;
+
+    static inline int MAX_VALUE = 100;
 };
 
 class Plant
@@ -21,13 +23,12 @@ public:
     Plant(std::shared_ptr<World> world, glm::uvec3 pos);
     Plant(std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna);
 
-    void Mutate();
-
     bool IsAlive() const { return m_IsAlive; }
 
 private:
     void Init();
     bool Seed(glm::uvec2 xzPos);
+    void Mutate();
 
     void GrowRoot(glm::uvec3 origin);
     void GrowLeaf(glm::uvec3 origin);
