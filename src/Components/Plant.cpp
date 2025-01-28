@@ -5,6 +5,27 @@ Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos)
     : m_World(world), m_Pos(pos)
 {
     // TODO: initialize DNA
+    srand(time(NULL));
+    
+    std::array<int, 4> growthChoice;
+    for (int &i : growthChoice)
+        i = rand() % 100;
+
+    std::array<int, 26> leafGrowAction;
+    for (int &i : leafGrowAction)
+        i = rand() % 100;
+
+
+    std::array<int, 26> rootGrowAction;
+    for (int &i : rootGrowAction)
+        i = rand() % 100;
+
+    m_DNA = {
+        .GrowthChoice = growthChoice,
+        .RootGrowAction = rootGrowAction,
+        .LeafGrowAction = leafGrowAction,
+    };
+
     Init();
 }
 
