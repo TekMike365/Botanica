@@ -27,6 +27,7 @@ public:
     void Mine();
     void Reproduce();
     void Grow();
+    void Survive();
 
     bool IsAlive() const;
     inline uint32_t GetSize() const { return m_RootPositions.size() + m_StemPositions.size() + m_LeafPositions.size() + m_FruitPositions.size(); }
@@ -88,4 +89,12 @@ private:
 
     const int PLANT_PART_WATER_COST = 10;
     const int PLANT_PART_LIGHT_COST = 10;
+
+
+    const float WATER_SURVIVE_COST_MPLR = 1.5f;
+    const float LIGHT_SURVIVE_COST_MPLR = 1.5f;
+    const float POTASSIUM_SURVIVE_COST_MPLR = 1.5f;
+    const float PHOSPHORUS_SURVIVE_COST_MPLR = 1.5f;
+    const float NITROGEN_SURVIVE_COST_MPLR = 1.5f;
+
 };

@@ -71,12 +71,25 @@ void Plant::Grow()
         GrowFruit();
 }
 
+void Plant::Survive()
+{
+    m_Water -= WATER_SURVIVE_COST_MPLR * GetSize();
+    m_Light -= LIGHT_SURVIVE_COST_MPLR * GetSize();
+    m_SoilResources.Nitrogen -= NITROGEN_SURVIVE_COST_MPLR * GetSize();
+    m_SoilResources.Phosphorus -= PHOSPHORUS_SURVIVE_COST_MPLR * GetSize();
+    m_SoilResources.Potassium -= POTASSIUM_SURVIVE_COST_MPLR * GetSize();
+}
+
 bool Plant::IsAlive() const
 {
     if (m_RootPositions.size() == 0 || m_LeafPositions.size() == 0 || m_StemPositions.size() == 0)
         return false;
 
-    return true;
+    return m_Water >= WATER_SURVIVE_COST_MPLR * GetSize() &&
+           m_Light >= LIGHT_SURVIVE_COST_MPLR * GetSize() &&
+           m_SoilResources.Nitrogen >= NITROGEN_SURVIVE_COST_MPLR * GetSize() &&
+           m_SoilResources.Phosphorus >= PHOSPHORUS_SURVIVE_COST_MPLR * GetSize() &&
+           m_SoilResources.Potassium >= POTASSIUM_SURVIVE_COST_MPLR * GetSize();
 }
 
 void Plant::Init()

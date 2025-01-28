@@ -25,14 +25,17 @@ void SimulationLayer::OnUpdate(Timestep dt)
 
     // Simulation loop
     m_World->ResetResources();
-    for (auto it = m_Plants.begin(); it != m_Plants.end();)
+    for (auto plant = m_Plants.begin(); plant != m_Plants.end();)
     {
-        it->Mine();
-        it->Grow();
-        if (!it->IsAlive())
-            m_Plants.erase(it);
-        else
-            it++;
+        plant->Mine();
+        plant->Grow();
+        if (!plant->IsAlive())
+        {
+            m_Plants.erase(plant);
+            continue;
+        }
+        plant->Survive();
+        plant++;
     }
 }
 
