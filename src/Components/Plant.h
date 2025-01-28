@@ -36,8 +36,7 @@ private:
     void Mutate();
 
     void MineSoil(glm::uvec3 pos);
-    void MineWater(glm::uvec3 pos);
-    void MineLight(glm::uvec3 pos);
+    void MineAir(glm::uvec3 pos);
 
     void GrowRoot(glm::uvec3 origin);
     void GrowLeaf(glm::uvec3 origin);

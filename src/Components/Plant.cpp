@@ -110,16 +110,16 @@ void Plant::MineSoil(glm::uvec3 pos)
         for (int y = -area.y / 2; y < area.y / 2; y++)
             for (int z = -area.z / 2; z < area.z / 2; z++)
             {
-                glm::uvec3 p(x + pos.x, y + pos.x, z + pos.x);
+                glm::uvec3 voxPos(x + pos.x, y + pos.x, z + pos.x);
 
-                switch (m_World->GetVoxel(p))
+                switch (m_World->GetVoxel(voxPos))
                 {
                 case VoxelTypeWater:
                 {
                     int max = WATER_MINE_MPLR * GetWaterBonus();
                     int mine = max <= GetRemainingWaterCapacity() ? max : GetRemainingWaterCapacity();
                     m_Water += mine;
-                    return;
+                    continue;
                 }
                 case VoxelTypeSoil:
                 {
@@ -134,11 +134,32 @@ void Plant::MineSoil(glm::uvec3 pos)
                         .Phosphorus = max.Phosphorus <= capacity.Phosphorus ? max.Phosphorus : capacity.Phosphorus,
                         .Nitrogen = max.Nitrogen <= capacity.Nitrogen ? max.Nitrogen : capacity.Nitrogen,
                     };
-                    SoilResources mined = m_World->MineSoilResources(p, toMine);
+                    SoilResources mined = m_World->MineSoilResources(voxPos, toMine);
                     m_SoilResources.Potassium += mined.Potassium;
                     m_SoilResources.Phosphorus += mined.Phosphorus;
                     m_SoilResources.Nitrogen += mined.Nitrogen;
-                    return;
+                    continue;
+                }
+                }
+            }
+}
+
+void Plant::MineAir(glm::uvec3 pos)
+{
+    glm::uvec3 area(3, 3, 3);
+    for (int x = -area.x / 2; x < area.x / 2; x++)
+        for (int y = 1; y < area.y + 1; y++)
+            for (int z = -area.z / 2; z < area.z / 2; z++)
+            {
+                glm::uvec3 voxPos(x + pos.x, y + pos.x, z + pos.x);
+                switch (m_World->GetVoxel(voxPos))
+                {
+                case VoxelTypeAir:
+                {
+                    int max = LIGHT_MINE_MPLR * GetLightBonus();
+                    int mine = max <= GetRemainingLightCapacity() ? max : GetRemainingLightCapacity();
+                    m_Light += mine;
+                    continue;
                 }
                 }
             }
