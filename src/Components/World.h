@@ -25,8 +25,10 @@ public:
     World(glm::uvec3 size)
         : m_Size(size), m_VoxelIDs(size, 0) {}
 
-    inline void SetVoxel(glm::uvec3 pos, uint32_t voxelType) { m_VoxelIDs[pos] = voxelType; }
     inline glm::uvec3 GetSize() const { return m_Size; }
+
+    inline void SetVoxel(glm::uvec3 pos, uint32_t voxelType) { m_VoxelIDs[pos] = voxelType; }
+    inline uint32_t GetVoxel(glm::uvec3 pos) const { return m_VoxelIDs[pos]; }
 
 private:
     glm::uvec3 m_Size;

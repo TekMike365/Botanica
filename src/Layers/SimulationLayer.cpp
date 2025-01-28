@@ -1,6 +1,6 @@
 #include "SimulationLayer.h"
 
-SimulationLayer::SimulationLayer(World &world)
+SimulationLayer::SimulationLayer(std::shared_ptr<World> world)
     :m_World(world)
 {
 }
@@ -8,10 +8,30 @@ SimulationLayer::SimulationLayer(World &world)
 void SimulationLayer::OnAttach()
 {
     GenerateTerrain();
+
+    // Spawn Plants
+    PlantAPlant(glm::uvec2(m_World->GetSize().x / 2, m_World->GetSize().z / 2));
 }
 
 void SimulationLayer::OnUpdate(Timestep dt)
 {
+}
+
+void SimulationLayer::PlantAPlant(glm::uvec2 xzPos)
+{
+    uint32_t y = m_World->GetSize().y;
+    for (; y > 0, y-- ;)
+    {
+        glm::uvec3 pos(xzPos.x, y, xzPos.y);
+        if (m_World->GetVoxel(pos) != VoxelTypeSoil)
+            continue;
+
+        m_Plants.emplace_back(m_World, pos);
+        if (!m_Plants.end()->IsAlive())
+            m_Plants.erase(--m_Plants.end());
+
+        return;
+    }
 }
 
 void SimulationLayer::GenerateTerrain()
@@ -31,17 +51,17 @@ void SimulationLayer::GenerateTerrain()
 
     const float PI = 3.141592f;
 
-    for (int x = 0; x < m_World.GetSize().x; x++)
+    for (int x = 0; x < m_World->GetSize().x; x++)
     {
-        for (int z = 0; z < m_World.GetSize().z; z++)
+        for (int z = 0; z < m_World->GetSize().z; z++)
         {
             float height = 0.0f;
 
             glm::vec2 corners[] = {
                 glm::vec2(x + 0.5f, z + 0.5f),
-                glm::vec2(m_World.GetSize().x - x - 0.5f, z + 0.5f),
-                glm::vec2(x + 0.5f, m_World.GetSize().z - z - 0.5f),
-                glm::vec2(m_World.GetSize().x - x - 0.5f, m_World.GetSize().z - z - 0.5f)};
+                glm::vec2(m_World->GetSize().x - x - 0.5f, z + 0.5f),
+                glm::vec2(x + 0.5f, m_World->GetSize().z - z - 0.5f),
+                glm::vec2(m_World->GetSize().x - x - 0.5f, m_World->GetSize().z - z - 0.5f)};
 
             for (int i = 0; i < 4; i++)
             {
@@ -59,9 +79,9 @@ void SimulationLayer::GenerateTerrain()
 
             int finalHeight = (int)(height / 4.0f);
             for (int y = finalHeight; y < m_WaterLevel; y++)
-                m_World.SetVoxel(glm::uvec3(x, y, z), VoxelTypeWater);
+                m_World->SetVoxel(glm::uvec3(x, y, z), VoxelTypeWater);
             for (int y = 0; y < finalHeight; y++)
-                m_World.SetVoxel(glm::uvec3(x, y, z), VoxelTypeSoil);
+                m_World->SetVoxel(glm::uvec3(x, y, z), VoxelTypeSoil);
         }
     }
 }

@@ -6,7 +6,7 @@
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&RenderingLayer::x, this, std::placeholders::_1)
 
-RenderingLayer::RenderingLayer(Camera &cam, World &world)
+RenderingLayer::RenderingLayer(Camera &cam, std::shared_ptr<World> world)
     : m_Camera(cam), m_World(world)
 {
 }
@@ -18,14 +18,14 @@ void RenderingLayer::OnAttach()
     {
         glm::vec3 vertices[] = {
             m_VoxelScale * (glm::vec3(0.0f, 0.0f, 0.0f) - glm::vec3(0.5f, 0.5f, 0.5f)),
-            m_VoxelScale * (glm::vec3(m_World.m_VoxelIDs.GetSize().x, 0.0f, 0.0f) - glm::vec3(0.5f, 0.5f, 0.5f)),
-            m_VoxelScale * (glm::vec3(m_World.m_VoxelIDs.GetSize().x, 0.0f, m_World.m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f)),
-            m_VoxelScale * (glm::vec3(0.0f, 0.0f, m_World.m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f)),
+            m_VoxelScale * (glm::vec3(m_World->m_VoxelIDs.GetSize().x, 0.0f, 0.0f) - glm::vec3(0.5f, 0.5f, 0.5f)),
+            m_VoxelScale * (glm::vec3(m_World->m_VoxelIDs.GetSize().x, 0.0f, m_World->m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f)),
+            m_VoxelScale * (glm::vec3(0.0f, 0.0f, m_World->m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f)),
 
-            m_VoxelScale * (glm::vec3(0.0f, m_World.m_VoxelIDs.GetSize().y, 0.0f) - glm::vec3(0.5f, 0.5f, 0.5f)),
-            m_VoxelScale * (glm::vec3(m_World.m_VoxelIDs.GetSize().x, m_World.m_VoxelIDs.GetSize().y, 0.0f) - glm::vec3(0.5f, 0.5f, 0.5f)),
-            m_VoxelScale * (glm::vec3(m_World.m_VoxelIDs.GetSize().x, m_World.m_VoxelIDs.GetSize().y, m_World.m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f)),
-            m_VoxelScale * (glm::vec3(0.0f, m_World.m_VoxelIDs.GetSize().y, m_World.m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f))};
+            m_VoxelScale * (glm::vec3(0.0f, m_World->m_VoxelIDs.GetSize().y, 0.0f) - glm::vec3(0.5f, 0.5f, 0.5f)),
+            m_VoxelScale * (glm::vec3(m_World->m_VoxelIDs.GetSize().x, m_World->m_VoxelIDs.GetSize().y, 0.0f) - glm::vec3(0.5f, 0.5f, 0.5f)),
+            m_VoxelScale * (glm::vec3(m_World->m_VoxelIDs.GetSize().x, m_World->m_VoxelIDs.GetSize().y, m_World->m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f)),
+            m_VoxelScale * (glm::vec3(0.0f, m_World->m_VoxelIDs.GetSize().y, m_World->m_VoxelIDs.GetSize().z) - glm::vec3(0.5f, 0.5f, 0.5f))};
         uint32_t indices[] = {0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
 
         BufferLayout vbl({{ShaderDataType::Float3}});
@@ -44,11 +44,11 @@ void RenderingLayer::OnAttach()
     }
 
     {
-        size_t voxelCount = m_World.m_VoxelIDs.GetElementCount();
+        size_t voxelCount = m_World->m_VoxelIDs.GetElementCount();
         size_t verticesPerVoxel = 24;
         size_t indicesPerVoxel = 36;
 
-        m_VoxelBuffer = std::make_shared<Buffer>(voxelCount * sizeof(uint32_t), (const void *)m_World.m_VoxelIDs.GetData().data(), BufferUsage::StaticRead);
+        m_VoxelBuffer = std::make_shared<Buffer>(voxelCount * sizeof(uint32_t), (const void *)m_World->m_VoxelIDs.GetData().data(), BufferUsage::StaticRead);
 
         std::vector<uint32_t> indices(voxelCount * indicesPerVoxel);
         for (int i = 0, j = 0; i < voxelCount * indicesPerVoxel;)
@@ -88,21 +88,21 @@ void RenderingLayer::OnUpdate(Timestep dt)
 
     BT_SET_DLOG_MASK(LogMaskError | LogMaskInfo);
 
-    if (m_World.m_VoxelIDs.DataChanged)
+    if (m_World->m_VoxelIDs.DataChanged)
     {
-        m_World.m_VoxelIDs.DataChanged = false;
-        size_t voxelCount = m_World.m_VoxelIDs.GetElementCount();
-        m_VoxelBuffer->UploadData(0, voxelCount * sizeof(uint32_t), m_World.m_VoxelIDs.GetData().data());
+        m_World->m_VoxelIDs.DataChanged = false;
+        size_t voxelCount = m_World->m_VoxelIDs.GetElementCount();
+        m_VoxelBuffer->UploadData(0, voxelCount * sizeof(uint32_t), m_World->m_VoxelIDs.GetData().data());
 
         m_VoxelGenCShader->Bind();
         m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVoxels", m_VoxelBuffer.get());
         m_VoxelGenCShader->UploadBuffer(BufferType::ShaderStorage, "ssboVertices", m_VoxelVA->GetVertexBuffer().get());
-        glm::uvec3 size(m_World.m_VoxelIDs.GetSize());
+        glm::uvec3 size(m_World->m_VoxelIDs.GetSize());
         m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
         m_VoxelGenCShader->UploadUniform(UniformType::Float, "uVoxelScale", &m_VoxelScale);
 
         glm::uvec3 maxGroups = GetAPIInfo().MaxComputeWorkGroupCount;
-        uint32_t groups_x = (uint32_t)(((float)m_World.m_VoxelIDs.GetElementCount() + 0.5f) / 32.0f);
+        uint32_t groups_x = (uint32_t)(((float)m_World->m_VoxelIDs.GetElementCount() + 0.5f) / 32.0f);
         uint32_t groups_y = 1, groups_z = 1;
 
         if (groups_x > maxGroups.x)
@@ -132,7 +132,7 @@ void RenderingLayer::OnUpdate(Timestep dt)
     m_VoxelRenderShader->UploadUniform(UniformType::Mat4, "uVP", &m_Camera.GetVPMat());
 
     size_t indicesPerVoxel = 36;
-    DrawIndexed(m_World.m_VoxelIDs.GetElementCount() * indicesPerVoxel, 0, m_DrawWireframe);
+    DrawIndexed(m_World->m_VoxelIDs.GetElementCount() * indicesPerVoxel, 0, m_DrawWireframe);
 
     m_WorldBoundsVA->Bind();
     m_WorldBoundsShader->Bind();

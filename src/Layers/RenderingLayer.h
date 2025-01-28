@@ -16,7 +16,7 @@
 class RenderingLayer : public Layer
 {
 public:
-    RenderingLayer(Camera &cam, World &world);
+    RenderingLayer(Camera &cam, std::shared_ptr<World> world);
 
     virtual void OnAttach() override;
     virtual void OnUpdate(Timestep dt) override;
@@ -39,5 +39,5 @@ private:
     std::shared_ptr<Renderer::Shader> m_VoxelRenderShader;
 
     Camera &m_Camera;
-    World &m_World;
+    std::shared_ptr<World> m_World;
 };
