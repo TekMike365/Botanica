@@ -1,7 +1,9 @@
 #include "SimulationLayer.h"
 
+#define BIND_EVENT_CALLBACK(x) std::bind(&SimulationLayer::x, this, std::placeholders::_1)
+
 SimulationLayer::SimulationLayer(std::shared_ptr<World> world)
-    :m_World(world)
+    : m_World(world)
 {
 }
 
@@ -10,11 +12,16 @@ void SimulationLayer::OnAttach()
     GenerateTerrain();
 
     // Spawn Plants
-    PlantAPlant(glm::uvec2(m_World->GetSize().x / 2, m_World->GetSize().z / 2));
+    PlantAPlant(glm::uvec2(m_World->GetSize().x / 2 - 3, m_World->GetSize().z / 2));
+
+    Log::Warn("Paused (F3): {}", m_Paused);
 }
 
 void SimulationLayer::OnUpdate(Timestep dt)
 {
+    if (m_Paused)
+        return;
+
     if (m_Timer < 1.0f / TPS)
     {
         m_Timer += dt.GetSeconds();
@@ -40,10 +47,29 @@ void SimulationLayer::OnUpdate(Timestep dt)
     }
 }
 
+void SimulationLayer::OnEvent(Event &e)
+{
+    EventDispatcher dispatcher(e);
+    dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_CALLBACK(OnKeyReleased));
+}
+
+bool SimulationLayer::OnKeyReleased(KeyReleasedEvent &e)
+{
+    switch (e.GetKey())
+    {
+    case GLFW_KEY_F3:
+        m_Paused = !m_Paused;
+        Log::Warn("Paused (F3): {}", m_Paused);
+        return true;
+    }
+
+    return false;
+}
+
 void SimulationLayer::PlantAPlant(glm::uvec2 xzPos)
 {
     uint32_t y = m_World->GetSize().y;
-    for (; y > 0, y-- ;)
+    for (; y > 0, y--;)
     {
         glm::uvec3 pos(xzPos.x, y, xzPos.y);
         if (m_World->GetVoxel(pos) != VoxelTypeSoil)

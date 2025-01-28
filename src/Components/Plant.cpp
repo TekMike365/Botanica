@@ -140,9 +140,11 @@ void Plant::Init()
     m_Water = START_RESOURCES_MPLR * GetRemainingWaterCapacity();
     m_Light = START_RESOURCES_MPLR * GetRemainingLightCapacity();
     SoilResources soilCap = GetRemainingSoilResourcesCapacity();
-    soilCap.Potassium *= START_RESOURCES_MPLR;
-    soilCap.Phosphorus *= START_RESOURCES_MPLR;
-    soilCap.Nitrogen *= START_RESOURCES_MPLR;
+    m_SoilResources = {
+        .Potassium = (int)(START_RESOURCES_MPLR * soilCap.Potassium),
+        .Phosphorus = (int)(START_RESOURCES_MPLR * soilCap.Phosphorus),
+        .Nitrogen = (int)(START_RESOURCES_MPLR * soilCap.Nitrogen),
+    };
 }
 
 void Plant::Mutate()

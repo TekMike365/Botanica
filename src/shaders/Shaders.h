@@ -116,7 +116,11 @@ void main()
 
     uint vID = ib_VoxelIDs[idx];
     if (vID == 0)
+    {
+        for (int i = 0; i < 24; i++)
+            ib_Vertices[vertIdx + i] = vec4(0.0, 0.0, 0.0, 0.0);
         return;
+    }
 
     // 2 - water, 6 - soil
     if (uDrawEnvironment == 0 && (vID == 2 || vID == 6))
