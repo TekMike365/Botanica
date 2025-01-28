@@ -100,6 +100,7 @@ void RenderingLayer::OnUpdate(Timestep dt)
         glm::uvec3 size(m_World->m_VoxelIDs.GetSize());
         m_VoxelGenCShader->UploadUniform(UniformType::UInt3, "uVoxelsSize", (const void *)&size);
         m_VoxelGenCShader->UploadUniform(UniformType::Float, "uVoxelScale", &m_VoxelScale);
+        m_VoxelGenCShader->UploadUniform(UniformType::Int, "uDrawEnvironment", &m_DrawEnvironment);
 
         glm::uvec3 maxGroups = GetAPIInfo().MaxComputeWorkGroupCount;
         uint32_t groups_x = (uint32_t)(((float)m_World->m_VoxelIDs.GetElementCount() + 0.5f) / 32.0f);
@@ -151,9 +152,14 @@ void RenderingLayer::OnEvent(Event &e)
 
 bool RenderingLayer::OnKeyReleased(KeyReleasedEvent &e)
 {
-    if (e.GetKey() == GLFW_KEY_F1)
+    switch (e.GetKey())
     {
+    case GLFW_KEY_F1:
         m_DrawWireframe = !m_DrawWireframe;
+        return true;
+    case GLFW_KEY_F2:
+        m_DrawEnvironment = m_DrawEnvironment == 1 ? 0 : 1;
+        m_World->m_VoxelIDs.DataChanged = true; // recompute voxels
         return true;
     }
 

@@ -6,6 +6,7 @@ layout (std430, binding = 2) buffer ssboVertices { vec4 ib_Vertices[]; };
 
 uniform uvec3 uVoxelsSize;
 uniform float uVoxelScale;
+uniform int uDrawEnvironment;
 
 uint GetGlobalInvocationIndex()
 {
@@ -39,6 +40,7 @@ vec4 g_Vertices[] = {
 void main()
 {
     uint idx = GetGlobalInvocationIndex();
+    uint vertIdx = idx * 24;
 
     if (idx > uVoxelsSize.x * uVoxelsSize.y * uVoxelsSize.z) 
         return;
@@ -47,9 +49,16 @@ void main()
     if (vID == 0)
         return;
 
+    // 2 - water, 6 - soil
+    if (uDrawEnvironment == 0 && (vID == 2 || vID == 6))
+    {
+        for (int i = 0; i < 24; i++)
+            ib_Vertices[vertIdx + i] = vec4(0.0, 0.0, 0.0, 0.0);
+        return;
+    }
+
     vec4 pos = vec4(GetGlobalPosition(idx), 0.0);
     vec4 colorID = vec4(0.0, 0.0, 0.0, (vID - 1) * 3);
-    uint vertIdx = idx * 24;
 
     // bottom
     ib_Vertices[vertIdx + 0]  = uVoxelScale * (g_Vertices[0] + pos) + colorID;

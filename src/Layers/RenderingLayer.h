@@ -28,6 +28,7 @@ private:
 
 private:
     bool m_DrawWireframe = false;
+    int m_DrawEnvironment = 1;
     float m_VoxelScale = 1.0f / 8.0f;
 
     std::shared_ptr<Renderer::VertexArray> m_WorldBoundsVA;
