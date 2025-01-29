@@ -2,6 +2,13 @@
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&SimulationLayer::x, this, std::placeholders::_1)
 
+uint32_t PCGHash(uint32_t seed)
+{
+    uint32_t state = seed * 747796405u + 2891336453u;
+    uint32_t word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+    return (word >> 22u) ^ word;
+}
+
 SimulationLayer::SimulationLayer(std::shared_ptr<World> world)
     : m_World(world)
 {
@@ -12,7 +19,15 @@ void SimulationLayer::OnAttach()
     GenerateTerrain();
 
     // Spawn Plants
-    PlantAPlant(glm::uvec2(m_World->GetSize().x / 2 - 3, m_World->GetSize().z / 2));
+    for (int numPlants = 10; numPlants > 0; numPlants--)
+    {
+        int x = PCGHash(101 * numPlants + time(NULL)) % m_World->GetSize().x;
+        int z = PCGHash(103 * numPlants + time(NULL)) % m_World->GetSize().z;
+        m_World->SetVoxel(glm::uvec3(x, m_World->GetSize().y - 1, z), VoxelTypeFruit);
+        PlantAPlant(glm::uvec2(x, z));
+    }
+
+    BT_DLOG_TRACE("Planted {} plants.", m_Plants.size());
 
     Log::Warn("Paused (F3): {}", m_Paused);
 }
