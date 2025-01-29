@@ -49,6 +49,7 @@ void RenderingLayer::OnAttach()
         size_t indicesPerVoxel = 36;
 
         m_VoxelBuffer = std::make_shared<Buffer>(BufferType::ShaderStorage, voxelCount * sizeof(uint32_t), (const void *)m_World->m_VoxelIDs.GetData().data(), BufferUsage::StaticRead);
+        m_CounterBuffer = std::make_shared<Buffer>(BufferType::ShaderStorage, sizeof(m_FaceCount));
 
         std::vector<uint32_t> indices(voxelCount * indicesPerVoxel);
         for (int i = 0, j = 0; i < voxelCount * indicesPerVoxel;)
@@ -94,7 +95,11 @@ void RenderingLayer::OnUpdate(Timestep dt)
         size_t voxelCount = m_World->m_VoxelIDs.GetElementCount();
         m_VoxelBuffer->UploadData(0, voxelCount * sizeof(uint32_t), m_World->m_VoxelIDs.GetData().data());
 
+        m_FaceCount = 0;
+        m_CounterBuffer->UploadData(0, sizeof(m_FaceCount), (const void *)&m_FaceCount);
+
         m_VoxelGenCShader->Bind();
+        m_VoxelGenCShader->UploadBuffer("ssboCounter", m_CounterBuffer.get());
         m_VoxelGenCShader->UploadBuffer("ssboVoxels", m_VoxelBuffer.get());
         m_VoxelGenCShader->UploadBuffer("ssboVertices", m_VoxelVA->GetVertexBuffer().get(), BufferType::ShaderStorage);
         glm::uvec3 size(m_World->m_VoxelIDs.GetSize());
@@ -123,6 +128,8 @@ void RenderingLayer::OnUpdate(Timestep dt)
 
         DispatchCompute(groups_x, groups_y, groups_z);
         SetMemoryBarrier(MemoryBarrierShaderStorage);
+
+        m_CounterBuffer->GetData(0, sizeof(m_FaceCount), (void *)&m_FaceCount);
     }
 
     SetClearColor(glm::vec4(0.5f, 0.7f, 0.8f, 1.0f));
@@ -132,8 +139,8 @@ void RenderingLayer::OnUpdate(Timestep dt)
     m_VoxelRenderShader->Bind();
     m_VoxelRenderShader->UploadUniform(UniformType::Mat4, "uVP", &m_Camera.GetVPMat());
 
-    size_t indicesPerVoxel = 36;
-    DrawIndexed(m_World->m_VoxelIDs.GetElementCount() * indicesPerVoxel, 0, m_DrawWireframe);
+    size_t indicesPerFace = 6;
+    DrawIndexed(m_FaceCount * indicesPerFace, 0, m_DrawWireframe);
 
     m_WorldBoundsVA->Bind();
     m_WorldBoundsShader->Bind();

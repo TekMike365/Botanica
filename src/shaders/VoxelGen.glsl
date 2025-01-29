@@ -1,6 +1,8 @@
 #version 430 core
 layout (local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
 
+
+layout (std430, binding = 0) buffer ssboCounter { uint ib_Counter[]; };
 layout (std430, binding = 1) buffer ssboVoxels { uint ib_VoxelIDs[]; };
 layout (std430, binding = 2) buffer ssboVertices { vec4 ib_Vertices[]; };
 
@@ -40,29 +42,24 @@ vec4 g_Vertices[] = {
 void main()
 {
     uint idx = GetGlobalInvocationIndex();
-    uint vertIdx = idx * 24;
-
+    
     if (idx > uVoxelsSize.x * uVoxelsSize.y * uVoxelsSize.z) 
         return;
 
     uint vID = ib_VoxelIDs[idx];
     if (vID == 0)
-    {
-        for (int i = 0; i < 24; i++)
-            ib_Vertices[vertIdx + i] = vec4(0.0, 0.0, 0.0, 0.0);
         return;
-    }
 
     // 2 - water, 6 - soil
     if (uDrawEnvironment == 0 && (vID == 2 || vID == 6))
-    {
-        for (int i = 0; i < 24; i++)
-            ib_Vertices[vertIdx + i] = vec4(0.0, 0.0, 0.0, 0.0);
         return;
-    }
 
     vec4 pos = vec4(GetGlobalPosition(idx), 0.0);
     vec4 colorID = vec4(0.0, 0.0, 0.0, (vID - 1) * 3);
+
+    uint faceCount = 6;
+    uint faceID = atomicAdd(ib_Counter[0], faceCount);
+    uint vertIdx = faceID * 4;
 
     // bottom
     ib_Vertices[vertIdx + 0]  = uVoxelScale * (g_Vertices[0] + pos) + colorID;
