@@ -30,6 +30,7 @@ public:
     void Survive();
 
     bool IsAlive() const;
+    glm::uvec3 GetPosition() const { return m_Pos; }
     inline uint32_t GetSize() const { return m_RootPositions.size() + m_StemPositions.size() + m_LeafPositions.size() + m_FruitPositions.size(); }
 
 private:
