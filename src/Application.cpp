@@ -28,7 +28,7 @@ Application::Application()
     m_Camera = Camera(fovDeg, m_Window.GetAspect(), nearPlane, farPlane);
     m_Camera.transform.SetPosition(glm::vec3(2.0f, 2.0f, 8.0f));
 
-    m_World = World(glm::uvec3(32, 32, 32));
+    m_World = std::make_shared<World>(glm::uvec3(32, 32, 32));
 
     m_LayerStack.PushLayer(new CameraController(m_Camera));
     m_LayerStack.PushLayer(new SimulationLayer(m_World));

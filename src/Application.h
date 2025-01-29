@@ -34,7 +34,7 @@ private:
     double m_LastTime = 0;
 
     Camera m_Camera;
-    World m_World;
+    std::shared_ptr<World> m_World;
  
     static Application *s_Instance;
 };
