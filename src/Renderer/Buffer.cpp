@@ -5,33 +5,49 @@
 
 namespace Renderer
 {
-    GLenum GetGLTarget(BufferType type) {
+    GLenum GetGLTarget(BufferType type)
+    {
         switch (type)
         {
-        case BufferType::None: return GL_SHADER_STORAGE_BUFFER;
-        case BufferType::Vertex: return GL_ARRAY_BUFFER;
-        case BufferType::Index: return GL_ELEMENT_ARRAY_BUFFER;
-        case BufferType::ShaderStorage: return GL_SHADER_STORAGE_BUFFER;
-        case BufferType::Uniform: return GL_UNIFORM_BUFFER;
+        case BufferType::None:
+            return GL_SHADER_STORAGE_BUFFER;
+        case BufferType::Vertex:
+            return GL_ARRAY_BUFFER;
+        case BufferType::Index:
+            return GL_ELEMENT_ARRAY_BUFFER;
+        case BufferType::ShaderStorage:
+            return GL_SHADER_STORAGE_BUFFER;
+        case BufferType::Uniform:
+            return GL_UNIFORM_BUFFER;
         }
         BT_ASSERT(false, "Invalid shader type!");
         return 0;
     }
 
-    GLenum GetGLUsage(BufferUsage usage) {
+    GLenum GetGLUsage(BufferUsage usage)
+    {
         switch (usage)
         {
-        case BufferUsage::StreamDraw: return GL_STREAM_DRAW;
-        case BufferUsage::StreamRead: return GL_STREAM_READ;
-        case BufferUsage::StreamCopy: return GL_STREAM_COPY;
+        case BufferUsage::StreamDraw:
+            return GL_STREAM_DRAW;
+        case BufferUsage::StreamRead:
+            return GL_STREAM_READ;
+        case BufferUsage::StreamCopy:
+            return GL_STREAM_COPY;
 
-        case BufferUsage::StaticDraw: return GL_STATIC_DRAW;
-        case BufferUsage::StaticRead: return GL_STATIC_READ;
-        case BufferUsage::StaticCopy: return GL_STATIC_COPY;
+        case BufferUsage::StaticDraw:
+            return GL_STATIC_DRAW;
+        case BufferUsage::StaticRead:
+            return GL_STATIC_READ;
+        case BufferUsage::StaticCopy:
+            return GL_STATIC_COPY;
 
-        case BufferUsage::DynamicDraw: return GL_DYNAMIC_DRAW;
-        case BufferUsage::DynamicRead: return GL_DYNAMIC_READ;
-        case BufferUsage::DynamicCopy: return GL_DYNAMIC_COPY;
+        case BufferUsage::DynamicDraw:
+            return GL_DYNAMIC_DRAW;
+        case BufferUsage::DynamicRead:
+            return GL_DYNAMIC_READ;
+        case BufferUsage::DynamicCopy:
+            return GL_DYNAMIC_COPY;
         }
         BT_ASSERT(false, "Invalid shader usage!");
         return 0;
@@ -64,7 +80,14 @@ namespace Renderer
     void Buffer::UploadData(size_t start, size_t size, const void *data) const
     {
         Bind();
-        glBufferSubData(GetGLTarget(BufferType::ShaderStorage), start, size, data);
+        glBufferSubData(GetGLTarget(m_Type), start, size, data);
+        Unbind();
+    }
+
+    void Buffer::GetData(size_t start, size_t size, void *data) const
+    {
+        Bind();
+        glGetBufferSubData(GetGLTarget(m_Type), start, size, data);
         Unbind();
     }
 }

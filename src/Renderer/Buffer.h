@@ -79,6 +79,7 @@ namespace Renderer
         void Unbind() const;
 
         void UploadData(size_t start, size_t size, const void *data) const;
+        void GetData(size_t start, size_t size, void *data) const;
 
         inline uint32_t GetID() const { return m_ID; }
         inline BufferUsage GetUsage() const { return m_Usage; }
