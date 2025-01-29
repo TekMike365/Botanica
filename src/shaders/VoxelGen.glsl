@@ -37,7 +37,14 @@ bool IsAirAtPos(uvec3 pos)
     }
 
     uint idx = pos.x + uVoxelsSize.x * (pos.y + pos.z * uVoxelsSize.y);
-    return ib_VoxelIDs[idx] == 0;
+    uint vID = ib_VoxelIDs[idx];
+
+    if (uDrawEnvironment == 0)
+    {
+        return vID == 0 || vID == 2 || vID == 6;
+    }
+
+    return vID == 0;
 }
 
 vec4 g_Vertices[] = {
