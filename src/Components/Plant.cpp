@@ -260,8 +260,8 @@ void Plant::GrowRoot()
                 continue;
 
             // Check resources
-            const int nitrogenCost = 10;
-            const int potassiumCost = 10;
+            const int nitrogenCost = 5;
+            const int potassiumCost = 5;
             if (m_Water < PLANT_PART_WATER_COST ||
                 m_Light < PLANT_PART_LIGHT_COST ||
                 m_SoilResources.Nitrogen < nitrogenCost ||
@@ -301,7 +301,7 @@ void Plant::GrowLeaf()
                 continue;
 
             // Check resources
-            const int phosphorusCost = 10;
+            const int phosphorusCost = 5;
             if (m_Water < PLANT_PART_WATER_COST ||
                 m_Light < PLANT_PART_LIGHT_COST ||
                 m_SoilResources.Phosphorus < phosphorusCost)

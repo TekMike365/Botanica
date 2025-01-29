@@ -26,6 +26,7 @@ private:
     std::vector<Plant> m_Plants;
     float m_Timer = 0;
     bool m_Paused = true;
+    bool m_Step = false;
 
     const float HEIGHT_SCALAR = 16.0;
     const int WATER_LEVEL = 6;

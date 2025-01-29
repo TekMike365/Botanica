@@ -19,15 +19,17 @@ void SimulationLayer::OnAttach()
 
 void SimulationLayer::OnUpdate(Timestep dt)
 {
-    if (m_Paused)
+    if (m_Paused && !m_Step)
         return;
 
-    if (m_Timer < 1.0f / TPS)
-    {
-        m_Timer += dt.GetSeconds();
-        return;
-    }
+    if (!m_Step)
+        if (m_Timer < 1.0f / TPS)
+        {
+            m_Timer += dt.GetSeconds();
+            return;
+        }
     m_Timer = 0;
+    m_Step = false;
     BT_DLOG_TRACE("Tick!");
 
     // Simulation loop
@@ -60,6 +62,9 @@ bool SimulationLayer::OnKeyReleased(KeyReleasedEvent &e)
     case GLFW_KEY_F3:
         m_Paused = !m_Paused;
         Log::Warn("Paused (F3): {}", m_Paused);
+        return true;
+    case GLFW_KEY_F4:
+        m_Step = true;
         return true;
     }
 
