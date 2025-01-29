@@ -68,23 +68,26 @@ namespace Renderer
 
     class Buffer
     {
-        friend class Shader;
     public:
-        Buffer(size_t size, const void *data = nullptr, BufferUsage usage = BufferUsage::StaticDraw);
+        Buffer(BufferType type, size_t size, const void *data = nullptr, BufferUsage usage = BufferUsage::StaticDraw);
         ~Buffer();
 
         inline void SetLayout(const BufferLayout &layout) { m_Layout = layout; }
         inline const BufferLayout &GetLayout() const { return m_Layout; }
 
-        void Bind(BufferType type) const;
-        void Unbind(BufferType type) const;
+        void Bind() const;
+        void Unbind() const;
 
         void UploadData(size_t start, size_t size, const void *data) const;
 
         inline uint32_t GetID() const { return m_ID; }
+        inline BufferUsage GetUsage() const { return m_Usage; }
+        inline BufferType GetType() const { return m_Type; }
 
     private:
         uint32_t m_ID;
         BufferLayout m_Layout;
+        const BufferUsage m_Usage;
+        const BufferType m_Type;
     };
 }

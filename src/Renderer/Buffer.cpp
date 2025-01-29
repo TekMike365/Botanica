@@ -37,33 +37,34 @@ namespace Renderer
         return 0;
     }
 
-    Buffer::Buffer(size_t size, const void *data, BufferUsage usage)
+    Buffer::Buffer(BufferType type, size_t size, const void *data, BufferUsage usage)
+        : m_Type(type), m_Usage(usage)
     {
         glGenBuffers(1, &m_ID);
-        Bind(BufferType::ShaderStorage);
-        glBufferData(GetGLTarget(BufferType::ShaderStorage), size, data, GetGLUsage(usage));
-        Unbind(BufferType::ShaderStorage);
+        Bind();
+        glBufferData(GetGLTarget(m_Type), size, data, GetGLUsage(usage));
+        Unbind();
     }
 
     Buffer::~Buffer()
     {
         glDeleteBuffers(1, &m_ID);
     }
-    
-    void Buffer::Bind(BufferType type) const
+
+    void Buffer::Bind() const
     {
-        glBindBuffer(GetGLTarget(type), m_ID);
+        glBindBuffer(GetGLTarget(m_Type), m_ID);
     }
-    
-    void Buffer::Unbind(BufferType type) const
+
+    void Buffer::Unbind() const
     {
-        glBindBuffer(GetGLTarget(type), 0);
+        glBindBuffer(GetGLTarget(m_Type), 0);
     }
-    
+
     void Buffer::UploadData(size_t start, size_t size, const void *data) const
     {
-        Bind(BufferType::ShaderStorage);
+        Bind();
         glBufferSubData(GetGLTarget(BufferType::ShaderStorage), start, size, data);
-        Unbind(BufferType::ShaderStorage);
+        Unbind();
     }
 }
