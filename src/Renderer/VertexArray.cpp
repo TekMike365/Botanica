@@ -32,8 +32,8 @@ namespace Renderer
     {
         glGenVertexArrays(1, &m_ID);
         Bind();
-        m_VertexBuffer->Bind(BufferType::Vertex);
-        m_IndexBuffer->Bind(BufferType::Index);
+        m_VertexBuffer->Bind();
+        m_IndexBuffer->Bind();
 
         uint32_t stride = vb->GetLayout().GetStride();
         uint32_t index = 0;
@@ -44,8 +44,8 @@ namespace Renderer
             index++;
         }
 
-        m_VertexBuffer->Unbind(BufferType::Vertex);
-        m_IndexBuffer->Unbind(BufferType::Index);
+        m_VertexBuffer->Unbind();
+        m_IndexBuffer->Unbind();
         Unbind();
     }
 
@@ -57,12 +57,12 @@ namespace Renderer
     void VertexArray::Bind() const
     {
         glBindVertexArray(m_ID);
-        m_IndexBuffer->Bind(BufferType::Index);
+        m_IndexBuffer->Bind();
     }
 
     void VertexArray::Unbind() const
     {
-        m_IndexBuffer->Unbind(BufferType::Index);
+        m_IndexBuffer->Unbind();
         glBindVertexArray(0);
     }
 }

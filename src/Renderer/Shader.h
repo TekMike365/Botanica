@@ -53,7 +53,7 @@ namespace Renderer
         void Unbind() const;
 
         void UploadUniform(UniformType type, const std::string &name, const void *data, size_t count = 1);
-        void UploadBuffer(BufferType type, const std::string &name, Buffer *buffer);
+        void UploadBuffer(const std::string &name, Buffer *buffer, BufferType type = BufferType::None);
 
     private:
         void StashUniformLocations();
