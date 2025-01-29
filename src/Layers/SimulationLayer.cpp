@@ -27,7 +27,7 @@ void SimulationLayer::OnAttach()
         PlantAPlant(glm::uvec2(x, z));
     }
 
-    BT_DLOG_TRACE("Planted {} plants.", m_Plants.size());
+    BT_DLOG_TRACE("Population: {}", m_Plants.size());
 
     Log::Warn("Paused (F3): {}", m_Paused);
 }
@@ -62,6 +62,8 @@ void SimulationLayer::OnUpdate(Timestep dt)
         plant->Survive();
         plant++;
     }
+
+    BT_DLOG_TRACE("Population: {}", m_Plants.size());
 }
 
 void SimulationLayer::OnEvent(Event &e)

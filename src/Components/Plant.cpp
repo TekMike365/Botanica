@@ -1,6 +1,15 @@
 #include "pch.h"
 #include "Plant.h"
 
+int Clamp(int val, int min, int max)
+{
+    if (val >= max)
+        return max;
+    if (val <= min)
+        return min;
+    return val;
+}
+
 Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos)
     : m_World(world), m_Pos(pos)
 {
@@ -68,7 +77,7 @@ std::vector<Plant> Plant::Reproduce()
             Plant plant = Seed(xzPos);
             if (!plant.IsAlive())
                 continue;
-            
+
             m_FruitPositions.erase(it);
             newPlants.emplace_back(plant);
             inc = 0;
@@ -230,7 +239,7 @@ void Plant::MineAir(glm::uvec3 pos)
 Plant Plant::Seed(glm::uvec2 xzPos)
 {
     uint32_t y = m_World->GetSize().y;
-    for (; y > 0, y-- ;)
+    for (; y > 0, y--;)
     {
         glm::uvec3 pos(xzPos.x, y, xzPos.y);
         if (m_World->GetVoxel(pos) != VoxelTypeSoil)
@@ -251,10 +260,10 @@ void Plant::GrowRoot()
         {
             int gene = m_DNA.RootGrowAction[i];
 
-            uint32_t x = i / (3 * 3);
-            uint32_t y = (i / 3) % 3;
-            uint32_t z = i % 3;
-            glm::uvec3 voxPos(x + p.x, y + p.y, z + p.z);
+            int x = Clamp(i / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x);
+            int y = Clamp((i / 3) % 3 - 1 + p.y, 0, m_World->GetSize().x);
+            int z = Clamp(i % 3 - 1 + p.z, 0, m_World->GetSize().x);
+            glm::uvec3 voxPos(x, y, z);
 
             if (m_World->GetVoxel(voxPos) != VoxelTypeSoil || rng > gene)
                 continue;
@@ -292,10 +301,10 @@ void Plant::GrowLeaf()
         {
             int gene = m_DNA.LeafGrowAction[i];
 
-            uint32_t x = i / (3 * 3);
-            uint32_t y = (i / 3) % 3;
-            uint32_t z = i % 3;
-            glm::uvec3 voxPos(x + p.x, y + p.y, z + p.z);
+            int x = Clamp(i / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x);
+            int y = Clamp((i / 3) % 3 - 1 + p.y, 0, m_World->GetSize().x);
+            int z = Clamp(i % 3 - 1 + p.z, 0, m_World->GetSize().x);
+            glm::uvec3 voxPos(x, y, z);
 
             if (m_World->GetVoxel(voxPos) != VoxelTypeAir || rng > gene)
                 continue;
