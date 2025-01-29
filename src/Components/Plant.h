@@ -69,8 +69,8 @@ private:
     std::vector<glm::uvec3> m_FruitPositions;
 
     SoilResources m_SoilResources;
-    int m_Water;
-    int m_Light;
+    int m_Water = 0;
+    int m_Light = 0;
 
     static constexpr SoilResources SOIL_STORAGE_MPLR = {
         .Potassium = 20,
