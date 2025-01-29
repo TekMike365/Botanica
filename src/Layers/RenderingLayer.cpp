@@ -65,7 +65,7 @@ void RenderingLayer::OnAttach()
         }
 
         BufferLayout vbl({{ShaderDataType::Float4}});
-        auto vb = std::make_shared<Buffer>(BufferType::Vertex, voxelCount * verticesPerVoxel * vbl.GetStride(), nullptr, BufferUsage::DynamicDraw);
+        auto vb = std::make_shared<Buffer>(BufferType::Vertex, (voxelCount / 2 + 1) * verticesPerVoxel * vbl.GetStride(), nullptr, BufferUsage::DynamicDraw);
         vb->SetLayout(vbl);
 
         BufferLayout ibl({{ShaderDataType::UInt}});
