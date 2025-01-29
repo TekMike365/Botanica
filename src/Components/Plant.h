@@ -79,22 +79,22 @@ private:
     const static int WATER_STORAGE_MPLR = 20;
     const static int LIGHT_STORAGE_MPLR = 20;
 
-    static constexpr float WATER_MINE_MPLR = 1.5f;
-    static constexpr float LIGHT_MINE_MPLR = 1.5f;
-    static constexpr float SOIL_MINE_MPLR = 1.5f;
+    static constexpr float WATER_MINE_MPLR = 1.7f;
+    static constexpr float LIGHT_MINE_MPLR = 1.7f;
+    static constexpr float SOIL_MINE_MPLR = 1.7f;
 
     static constexpr float POTASSIUM_BONUS_CONSTANT = 2.0f;
     static constexpr float PHOSPHORUS_BONUS_CONSTANT = 2.0f;
     static constexpr float NITROGEN_BONUS_CONSTANT = 2.0f;
 
-    const static int PLANT_PART_WATER_COST = 5;
-    const static int PLANT_PART_LIGHT_COST = 5;
+    const static int PLANT_PART_WATER_COST = 2;
+    const static int PLANT_PART_LIGHT_COST = 2;
 
-    static constexpr float WATER_SURVIVE_COST_MPLR = 1.5f;
-    static constexpr float LIGHT_SURVIVE_COST_MPLR = 1.5f;
-    static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 1.5f;
-    static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 1.5f;
-    static constexpr float NITROGEN_SURVIVE_COST_MPLR = 1.5f;
+    static constexpr float WATER_SURVIVE_COST_MPLR = 1.0f;
+    static constexpr float LIGHT_SURVIVE_COST_MPLR = 1.0f;
+    static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 0.5f;
+    static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 0.5f;
+    static constexpr float NITROGEN_SURVIVE_COST_MPLR = 0.5f;
 
     static constexpr float START_RESOURCES_MPLR = 0.75f;
 };
