@@ -22,12 +22,12 @@ class Plant
 public:
     Plant(std::shared_ptr<World> world, glm::uvec3 pos);
     Plant(std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna);
-    ~Plant();
 
     void Mine();
     std::vector<Plant> Reproduce();
     void Grow();
     void Survive();
+    void Die();
 
     bool IsAlive() const;
     glm::uvec3 GetPosition() const { return m_Pos; }

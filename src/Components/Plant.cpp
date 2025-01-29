@@ -42,18 +42,6 @@ Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna)
     Init();
 }
 
-Plant::~Plant()
-{
-    for (const auto &p : m_FruitPositions)
-        m_World->SetVoxel(p, VoxelTypeAir);
-    for (const auto &p : m_LeafPositions)
-        m_World->SetVoxel(p, VoxelTypeAir);
-    for (const auto &p : m_StemPositions)
-        m_World->SetVoxel(p, VoxelTypeAir);
-    for (const auto &p : m_RootPositions)
-        m_World->SetVoxel(p, VoxelTypeSoil);
-}
-
 void Plant::Mine()
 {
     for (auto p : m_RootPositions)
@@ -109,6 +97,18 @@ void Plant::Survive()
     m_SoilResources.Nitrogen -= NITROGEN_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Phosphorus -= PHOSPHORUS_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Potassium -= POTASSIUM_SURVIVE_COST_MPLR * GetSize();
+}
+
+void Plant::Die()
+{
+    for (const auto &p : m_FruitPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+    for (const auto &p : m_LeafPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+    for (const auto &p : m_StemPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+    for (const auto &p : m_RootPositions)
+        m_World->SetVoxel(p, VoxelTypeSoil);
 }
 
 bool Plant::IsAlive() const
