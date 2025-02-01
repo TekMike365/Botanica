@@ -99,9 +99,13 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
         it += inc;
     }
 
-    Log::SimInfo("[pid: {}] Plant has reproduced.", m_ID);
-    LogPosVector(m_FruitPositions, "Plant Fruit positions");
-    LogPosVector(m_LeafPositions, "Plant Leaf positions");
+    if (newPlants.size() > 0)
+    {
+        Log::SimInfo("[pid: {}] Plant has reproduced.", m_ID);
+        LogPosVector(m_FruitPositions, "Plant Fruit positions");
+        LogPosVector(m_LeafPositions, "Plant Leaf positions");
+    }
+
     return newPlants;
 }
 
