@@ -58,6 +58,13 @@ void SimulationLayer::OnUpdate(Timestep dt)
         {
             plant->Die();
             m_Plants.erase(plant);
+
+            if (m_Plants.size() == 0)
+            {
+                m_Paused = true;
+                Log::Warn("Paused (F3): {}", m_Paused);
+            }
+
             continue;
         }
         plant->Survive();
