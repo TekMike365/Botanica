@@ -19,7 +19,7 @@ void SimulationLayer::OnAttach()
     {
         int x = PCGHash(101 * numPlants + time(NULL)) % m_World->GetSize().x;
         int z = PCGHash(103 * numPlants + time(NULL)) % m_World->GetSize().z;
-        m_World->SetVoxel(glm::uvec3(x, m_World->GetSize().y - 1, z), VoxelTypeFruit);
+        // m_World->SetVoxel(glm::uvec3(x, m_World->GetSize().y - 1, z), VoxelTypeFruit);
         PlantAPlant(glm::uvec2(x, z));
     }
 

@@ -136,6 +136,7 @@ void Plant::Survive()
     m_SoilResources.Nitrogen -= NITROGEN_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Phosphorus -= PHOSPHORUS_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Potassium -= POTASSIUM_SURVIVE_COST_MPLR * GetSize();
+    Log::SimInfo("[pid: {}] Plant survived one more Tick!", m_ID);
     LogPlantResources();
 }
 
@@ -212,6 +213,10 @@ void Plant::Init()
     m_World->SetVoxel(rootPos, VoxelTypeRoot);
     m_World->SetVoxel(stemPos, VoxelTypeStem);
     m_World->SetVoxel(leafPos, VoxelTypeLeaf);
+
+    LogPosVector(m_RootPositions, "Plant Root positions");
+    LogPosVector(m_LeafPositions, "Plant Leaf positions");
+    LogPosVector(m_StemPositions, "Plant Stem positions");
 
     // :DDDD
     m_Water = START_RESOURCES_MPLR * GetRemainingWaterCapacity();
@@ -319,6 +324,7 @@ void Plant::MineSoil(glm::uvec3 pos)
                 }
             }
 
+    Log::SimInfo("[pid: {}] Plant mined soil.", m_ID);
     LogPlantResources();
 }
 
@@ -347,6 +353,7 @@ void Plant::MineAir(glm::uvec3 pos)
                 }
             }
 
+    Log::SimInfo("[pid: {}] Plant mined air.", m_ID);
     LogPlantResources();
 }
 
@@ -370,11 +377,10 @@ void Plant::GrowRoot()
     for (auto p : m_RootPositions)
     {
         int idx = WeightedChoice<std::array<int, m_DNA.ROOT_GROW_ACTION_LEN>::const_iterator>(m_DNA.RootGrowAction.begin(), m_DNA.RootGrowAction.end());
-
-        int x = Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x);
-        int y = Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().x);
-        int z = Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().x);
-        glm::uvec3 voxPos(x, y, z);
+        glm::uvec3 voxPos(
+            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x),
+            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y),
+            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z));
 
         if (m_World->GetVoxel(voxPos) != VoxelTypeSoil)
             continue;
@@ -409,11 +415,10 @@ void Plant::GrowLeaf()
     for (auto p : m_LeafPositions)
     {
         int idx = WeightedChoice<std::array<int, m_DNA.LEAF_GROW_ACTION_LEN>::const_iterator>(m_DNA.LeafGrowAction.begin(), m_DNA.LeafGrowAction.end());
-
-        int x = Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x);
-        int y = Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().x);
-        int z = Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().x);
-        glm::uvec3 voxPos(x, y, z);
+        glm::uvec3 voxPos(
+            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x),
+            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y),
+            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z));
 
         if (m_World->GetVoxel(voxPos) != VoxelTypeAir)
             continue;
@@ -436,7 +441,6 @@ void Plant::GrowLeaf()
 
         Log::SimInfo("[pid: {}] Plant has grown.", m_ID);
         LogPosVector(m_LeafPositions, "Plant Leaf positions");
-
         LogPlantResources();
         return;
     }
@@ -461,7 +465,7 @@ void Plant::GrowStem()
     m_SoilResources.Potassium -= STEM_POTASSIUM_COST;
 
     // Move leaves
-    
+
     for (auto &p : m_LeafPositions)
         m_World->SetVoxel(p, VoxelTypeAir);
 
@@ -479,7 +483,6 @@ void Plant::GrowStem()
 
     Log::SimInfo("[pid: {}] Plant has grown.", m_ID);
     LogPosVector(m_StemPositions, "Plant Stem positions");
-
     LogPlantResources();
 }
 
