@@ -19,7 +19,7 @@ void SimulationLayer::OnAttach()
     GenerateTerrain();
 
     // Spawn Plants
-    for (int numPlants = 10; numPlants > 0; numPlants--)
+    for (int numPlants = 20; numPlants > 0; numPlants--)
     {
         int x = PCGHash(101 * numPlants + time(NULL)) % m_World->GetSize().x;
         int z = PCGHash(103 * numPlants + time(NULL)) % m_World->GetSize().z;
@@ -27,7 +27,7 @@ void SimulationLayer::OnAttach()
         PlantAPlant(glm::uvec2(x, z));
     }
 
-    BT_DLOG_TRACE("Population: {}", m_Plants.size());
+    BT_DLOG_TRACE("Starting Population: {}", m_Plants.size());
 
     Log::Warn("Paused (F3): {}", m_Paused);
 }
@@ -45,6 +45,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
         }
     m_Timer = 0;
     m_Step = false;
+    m_TickCounter++;
     BT_DLOG_TRACE("Tick!");
 
     // Simulation loop
@@ -64,7 +65,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
         plant++;
     }
 
-    BT_DLOG_TRACE("Population: {}", m_Plants.size());
+    BT_DLOG_TRACE("({}) Population: {}", m_TickCounter, m_Plants.size());
 }
 
 void SimulationLayer::OnEvent(Event &e)
@@ -112,9 +113,9 @@ void SimulationLayer::PlantAPlant(glm::uvec2 xzPos)
 
 void SimulationLayer::GenerateTerrain()
 {
-    // uint32_t seed = time(NULL);
+    uint32_t seed = time(NULL);
     // uint32_t seed = 1736689503; // m_WaterLevel = 6
-    uint32_t seed = 1736689759; // m_WaterLevel = 6
+    // uint32_t seed = 1736689759; // m_WaterLevel = 6
     Log::Info("Seed: {}", seed);
     srand(seed);
 
