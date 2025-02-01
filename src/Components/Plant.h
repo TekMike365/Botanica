@@ -15,6 +15,7 @@ struct PlantDNA
     std::array<int, 27> LeafGrowAction;
 
     static inline int MAX_VALUE = 100;
+    static inline int MIN_VALUE = 20;
 };
 
 class Plant

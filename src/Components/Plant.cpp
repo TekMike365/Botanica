@@ -17,15 +17,15 @@ Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos)
 
     std::array<int, 4> growthChoice;
     for (int &i : growthChoice)
-        i = rand() % m_DNA.MAX_VALUE;
+        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
 
     std::array<int, 27> leafGrowAction;
     for (int &i : leafGrowAction)
-        i = rand() % m_DNA.MAX_VALUE;
+        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
 
     std::array<int, 27> rootGrowAction;
     for (int &i : rootGrowAction)
-        i = rand() % m_DNA.MAX_VALUE;
+        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
 
     m_DNA = {
         .GrowthChoice = growthChoice,
@@ -163,13 +163,13 @@ void Plant::Mutate()
     switch (rng % 3)
     {
     case 1:
-        m_DNA.GrowthChoice[rng % m_DNA.GrowthChoice.size()] = rand() % m_DNA.MAX_VALUE;
+        m_DNA.GrowthChoice[rng % m_DNA.GrowthChoice.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
         return;
     case 2:
-        m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % m_DNA.MAX_VALUE;
+        m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
         return;
     case 3:
-        m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % m_DNA.MAX_VALUE;
+        m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
         return;
     }
 }
