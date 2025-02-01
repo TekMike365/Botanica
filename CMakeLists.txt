@@ -95,8 +95,9 @@ add_custom_command(
     DEPENDS ${SHADER_SOURCES}
     COMMAND cd ${PROJECT_SOURCE_DIR} && ${Python3_EXECUTABLE} scripts/embed_shaders.py
 )
+add_custom_target(EmbedShaders DEPENDS ${SHADERS_HEADER})
 
-add_executable(Application ${APPLICATION_SOURCES} ${SHADERS_HEADER})
+add_executable(Application ${APPLICATION_SOURCES})
 
 target_compile_definitions(Application PRIVATE PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
 
