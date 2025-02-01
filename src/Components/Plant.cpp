@@ -53,6 +53,7 @@ Plant::Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos)
     };
 
     BT_DLOG_INFO("[pid: {}] Created new plant.", m_ID);
+    BT_DLOG_INFO("[pid: {}]     Position: [{}, {}, {}]", m_ID, m_Pos.x, m_Pos.y, m_Pos.z);
     LogDNA();
 
     Init();
@@ -95,6 +96,9 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
         }
         it += inc;
     }
+
+    BT_DLOG_INFO("[pid: {}] Plant has reproduced.", m_ID);
+    LogPosVector(m_FruitPositions, "Plant Fruit positions:");
     return newPlants;
 }
 
@@ -125,6 +129,7 @@ void Plant::Survive()
     m_SoilResources.Nitrogen -= NITROGEN_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Phosphorus -= PHOSPHORUS_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Potassium -= POTASSIUM_SURVIVE_COST_MPLR * GetSize();
+    LogPlantResources();
 }
 
 void Plant::Die()
@@ -210,6 +215,8 @@ void Plant::Init()
         .Phosphorus = (int)(START_RESOURCES_MPLR * soilCap.Phosphorus),
         .Nitrogen = (int)(START_RESOURCES_MPLR * soilCap.Nitrogen),
     };
+
+    LogPlantResources();
 }
 
 void Plant::Mutate()
@@ -300,6 +307,8 @@ void Plant::MineSoil(glm::uvec3 pos)
                 }
                 }
             }
+
+    LogPlantResources();
 }
 
 void Plant::MineAir(glm::uvec3 pos)
@@ -321,6 +330,8 @@ void Plant::MineAir(glm::uvec3 pos)
                 }
                 }
             }
+
+    LogPlantResources();
 }
 
 Plant Plant::Seed(glm::uvec2 xzPos, int id)
@@ -371,6 +382,10 @@ void Plant::GrowRoot()
         // Grow
         m_RootPositions.emplace_back(voxPos);
         m_World->SetVoxel(voxPos, VoxelTypeRoot);
+
+        BT_DLOG_INFO("[pid: {}] Plant has grown.", m_ID);
+        LogPosVector(m_RootPositions, "Plant Root positions:");
+        LogPlantResources();
         return;
     }
 }
@@ -405,6 +420,11 @@ void Plant::GrowLeaf()
         // Grow
         m_LeafPositions.emplace_back(voxPos);
         m_World->SetVoxel(voxPos, VoxelTypeLeaf);
+
+        BT_DLOG_INFO("[pid: {}] Plant has grown.", m_ID);
+        LogPosVector(m_LeafPositions, "Plant Leaf positions:");
+
+        LogPlantResources();
         return;
     }
 }
@@ -443,6 +463,11 @@ void Plant::GrowStem()
 
     m_StemPositions.emplace_back(pos);
     m_World->SetVoxel(pos, VoxelTypeStem);
+
+    BT_DLOG_INFO("[pid: {}] Plant has grown.", m_ID);
+    LogPosVector(m_StemPositions, "Plant Stem positions:");
+
+    LogPlantResources();
 }
 
 void Plant::GrowFruit()
@@ -473,4 +498,8 @@ void Plant::GrowFruit()
     m_LeafPositions.erase(pos);
     m_FruitPositions.emplace_back(voxPos);
     m_World->SetVoxel(voxPos, VoxelTypeFruit);
+
+    BT_DLOG_INFO("[pid: {}] Plant has grown.", m_ID);
+    LogPosVector(m_FruitPositions, "Plant Fruit positions:");
+    LogPlantResources();
 }
