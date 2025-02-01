@@ -89,6 +89,8 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
             if (!plant.IsAlive())
                 continue;
 
+            m_World->SetVoxel(*it, VoxelTypeLeaf);
+            m_LeafPositions.emplace_back(*it);
             m_FruitPositions.erase(it);
             newPlants.emplace_back(plant);
             inc = 0;
@@ -99,6 +101,7 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
 
     Log::SimInfo("[pid: {}] Plant has reproduced.", m_ID);
     LogPosVector(m_FruitPositions, "Plant Fruit positions");
+    LogPosVector(m_LeafPositions, "Plant Leaf positions");
     return newPlants;
 }
 
