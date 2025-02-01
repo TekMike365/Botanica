@@ -87,6 +87,7 @@ private:
     static constexpr float WATER_MINE_MPLR = 1.7f;
     static constexpr float LIGHT_MINE_MPLR = 1.7f;
     static constexpr float SOIL_MINE_MPLR = 1.7f;
+    static constexpr float SOIL_WATER_MPLR = 0.8;
 
     static constexpr float POTASSIUM_BONUS_CONSTANT = 2.0f;
     static constexpr float PHOSPHORUS_BONUS_CONSTANT = 2.0f;

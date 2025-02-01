@@ -216,6 +216,12 @@ void Plant::MineSoil(glm::uvec3 pos)
                 }
                 case VoxelTypeSoil:
                 {
+                    {
+                        int max = SOIL_WATER_MPLR * GetWaterBonus();
+                        int mine = max <= GetRemainingWaterCapacity() ? max : GetRemainingWaterCapacity();
+                        m_Water += mine;
+                    }
+
                     SoilResources capacity = GetRemainingSoilResourcesCapacity();
                     SoilResources max = {
                         .Potassium = (int)(SOIL_MINE_MPLR * GetSoilBonus()),
