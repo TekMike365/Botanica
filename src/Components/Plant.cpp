@@ -92,7 +92,7 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
             m_World->SetVoxel(*it, VoxelTypeLeaf);
             m_LeafPositions.emplace_back(*it);
             m_FruitPositions.erase(it);
-            newPlants.emplace_back(plant);
+            newPlants.emplace_back(plant).Mutate();
             inc = 0;
             break;
         }
