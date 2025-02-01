@@ -364,20 +364,18 @@ void Plant::GrowRoot()
             continue;
 
         // Check resources
-        const int nitrogenCost = 5;
-        const int potassiumCost = 5;
         if (m_Water < PLANT_PART_WATER_COST ||
             m_Light < PLANT_PART_LIGHT_COST ||
-            m_SoilResources.Nitrogen < nitrogenCost ||
-            m_SoilResources.Potassium < potassiumCost)
+            m_SoilResources.Nitrogen < ROOT_NITROGEN_COST ||
+            m_SoilResources.Potassium < ROOT_POTASSIUM_COST)
 
             continue; // Ain't enough
 
         // pay for it
         m_Water -= PLANT_PART_WATER_COST;
         m_Light -= PLANT_PART_LIGHT_COST;
-        m_SoilResources.Nitrogen -= nitrogenCost;
-        m_SoilResources.Potassium -= potassiumCost;
+        m_SoilResources.Nitrogen -= ROOT_NITROGEN_COST;
+        m_SoilResources.Potassium -= ROOT_POTASSIUM_COST;
 
         // Grow
         m_RootPositions.emplace_back(voxPos);
@@ -405,17 +403,16 @@ void Plant::GrowLeaf()
             continue;
 
         // Check resources
-        const int phosphorusCost = 5;
         if (m_Water < PLANT_PART_WATER_COST ||
             m_Light < PLANT_PART_LIGHT_COST ||
-            m_SoilResources.Phosphorus < phosphorusCost)
+            m_SoilResources.Phosphorus < LEAF_PHOSPHORUS_COST)
 
             continue; // Ain't enough
 
         // pay for it
         m_Water -= PLANT_PART_WATER_COST;
         m_Light -= PLANT_PART_LIGHT_COST;
-        m_SoilResources.Phosphorus -= phosphorusCost;
+        m_SoilResources.Phosphorus -= LEAF_PHOSPHORUS_COST;
 
         // Grow
         m_LeafPositions.emplace_back(voxPos);
@@ -432,23 +429,20 @@ void Plant::GrowLeaf()
 void Plant::GrowStem()
 {
     // Check resources
-    const int phosphorusCost = 5;
-    const int nitrogenCost = 5;
-    const int potassiumCost = 5;
     if (m_Water < PLANT_PART_WATER_COST ||
         m_Light < PLANT_PART_LIGHT_COST ||
-        m_SoilResources.Phosphorus < phosphorusCost ||
-        m_SoilResources.Nitrogen < nitrogenCost ||
-        m_SoilResources.Potassium < potassiumCost)
+        m_SoilResources.Phosphorus < STEM_PHOSPHORUS_COST ||
+        m_SoilResources.Nitrogen < STEM_NITROGEN_COST ||
+        m_SoilResources.Potassium < STEM_POTASSIUM_COST)
 
         return;
 
     // pay for it
     m_Water -= PLANT_PART_WATER_COST;
     m_Light -= PLANT_PART_LIGHT_COST;
-    m_SoilResources.Phosphorus -= phosphorusCost;
-    m_SoilResources.Nitrogen -= nitrogenCost;
-    m_SoilResources.Potassium -= potassiumCost;
+    m_SoilResources.Phosphorus -= STEM_PHOSPHORUS_COST;
+    m_SoilResources.Nitrogen -= STEM_NITROGEN_COST;
+    m_SoilResources.Potassium -= STEM_POTASSIUM_COST;
 
     // Move leaves
     for (auto &p : m_LeafPositions)
@@ -475,23 +469,20 @@ void Plant::GrowFruit()
     int i = rand() % m_LeafPositions.size();
     auto pos = m_LeafPositions.begin() + i;
     // Check resources
-    const int phosphorusCost = 7;
-    const int nitrogenCost = 7;
-    const int potassiumCost = 7;
     if (m_Water < PLANT_PART_WATER_COST ||
         m_Light < PLANT_PART_LIGHT_COST ||
-        m_SoilResources.Phosphorus < phosphorusCost ||
-        m_SoilResources.Nitrogen < nitrogenCost ||
-        m_SoilResources.Potassium < potassiumCost)
+        m_SoilResources.Phosphorus < FRUIT_PHOSPHORUS_COST ||
+        m_SoilResources.Nitrogen < FRUIT_NITROGEN_COST ||
+        m_SoilResources.Potassium < FRUIT_POTASSIUM_COST)
 
         return;
 
     // pay for it
     m_Water -= PLANT_PART_WATER_COST;
     m_Light -= PLANT_PART_LIGHT_COST;
-    m_SoilResources.Phosphorus -= phosphorusCost;
-    m_SoilResources.Nitrogen -= nitrogenCost;
-    m_SoilResources.Potassium -= potassiumCost;
+    m_SoilResources.Phosphorus -= FRUIT_PHOSPHORUS_COST;
+    m_SoilResources.Nitrogen -= FRUIT_NITROGEN_COST;
+    m_SoilResources.Potassium -= FRUIT_POTASSIUM_COST;
 
     // Grow
     glm::uvec3 voxPos = *pos;

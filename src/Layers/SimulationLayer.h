@@ -21,6 +21,8 @@ private:
     void PlantAPlant(glm::uvec2 xzPos);
     void GenerateTerrain();
 
+    void LogConfig() const;
+
 private:
     std::shared_ptr<World> m_World;
     std::vector<Plant> m_Plants;
@@ -29,7 +31,9 @@ private:
     bool m_Step = false;
     int m_TickCounter = 0;
     int m_NextID = 0;
+    uint32_t m_WorldSeed = 0;
 
+    const int SPAWN_PLANT_COUNT = 20;
     const float HEIGHT_SCALAR = 16.0;
     const int WATER_LEVEL = 6;
     const int TPS = 1;
