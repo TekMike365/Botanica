@@ -138,11 +138,37 @@ bool Plant::IsAlive() const
     if (m_RootPositions.size() == 0 || m_LeafPositions.size() == 0 || m_StemPositions.size() == 0)
         return false;
 
-    return m_Water >= WATER_SURVIVE_COST_MPLR * GetSize() &&
-           m_Light >= LIGHT_SURVIVE_COST_MPLR * GetSize() &&
-           m_SoilResources.Nitrogen >= NITROGEN_SURVIVE_COST_MPLR * GetSize() &&
-           m_SoilResources.Phosphorus >= PHOSPHORUS_SURVIVE_COST_MPLR * GetSize() &&
-           m_SoilResources.Potassium >= POTASSIUM_SURVIVE_COST_MPLR * GetSize();
+    if (m_Water < WATER_SURVIVE_COST_MPLR * GetSize())
+    {
+        BT_DLOG_TRACE("Plant ain't got enough Water: {}/{}", m_Water, WATER_SURVIVE_COST_MPLR * GetSize());
+        return false;
+    }
+
+    if (m_Light < LIGHT_SURVIVE_COST_MPLR * GetSize())
+    {
+        BT_DLOG_TRACE("Plant ain't got enough Light: {}/{}", m_Light, LIGHT_SURVIVE_COST_MPLR * GetSize());
+        return false;
+    }
+
+    if (m_SoilResources.Nitrogen < NITROGEN_SURVIVE_COST_MPLR * GetSize())
+    {
+        BT_DLOG_TRACE("Plant ain't got enough Nitrogen: {}/{}", m_SoilResources.Nitrogen, NITROGEN_SURVIVE_COST_MPLR * GetSize());
+        return false;
+    }
+
+    if (m_SoilResources.Phosphorus < PHOSPHORUS_SURVIVE_COST_MPLR * GetSize())
+    {
+        BT_DLOG_TRACE("Plant ain't got enough Phosphorus: {}/{}", m_SoilResources.Phosphorus, PHOSPHORUS_SURVIVE_COST_MPLR * GetSize());
+        return false;
+    }
+
+    if (m_SoilResources.Potassium < POTASSIUM_SURVIVE_COST_MPLR * GetSize())
+    {
+        BT_DLOG_TRACE("Plant ain't got enough Potassium: {}/{}", m_SoilResources.Potassium, POTASSIUM_SURVIVE_COST_MPLR * GetSize());
+        return false;
+    }
+
+    return true;
 }
 
 void Plant::Init()
