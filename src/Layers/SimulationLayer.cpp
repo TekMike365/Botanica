@@ -70,6 +70,8 @@ void SimulationLayer::OnUpdate(Timestep dt)
             continue;
         }
         plant->Survive();
+        auto plants = plant->Reproduce(m_NextID);
+        m_Plants.insert(m_Plants.end(), plants.begin(), plants.end());
         plant++;
     }
 
