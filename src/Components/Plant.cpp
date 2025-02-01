@@ -17,7 +17,7 @@ int WeightedChoice(Iter begin, Iter end)
     for (Iter it = begin; it != end; it++)
         sum += *it;
 
-    int rng = rand() % sum;
+    int rng = (int)(PCGHash(211 * time(NULL)) % sum);
 
     int idx = 0;
     for (Iter it = begin; rng > *it && it != end; it++, idx++)
@@ -32,19 +32,19 @@ Plant::Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos)
     srand(time(NULL));
 
     std::array<int, m_DNA.GROWTH_CHOICE_LEN> growthChoice{
-        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_ROOT_GROW_CHOICE_VAL) + m_DNA.MIN_ROOT_GROW_CHOICE_VAL,
-        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_STEM_GROW_CHOICE_VAL) + m_DNA.MIN_STEM_GROW_CHOICE_VAL,
-        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_LEAF_GROW_CHOICE_VAL) + m_DNA.MIN_LEAF_GROW_CHOICE_VAL,
-        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_FRUIT_GROW_CHOICE_VAL) + m_DNA.MIN_FRUIT_GROW_CHOICE_VAL,
+        (int)(PCGHash(101 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_ROOT_GROW_CHOICE_VAL)) + m_DNA.MIN_ROOT_GROW_CHOICE_VAL,
+        (int)(PCGHash(103 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_STEM_GROW_CHOICE_VAL)) + m_DNA.MIN_STEM_GROW_CHOICE_VAL,
+        (int)(PCGHash(107 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_LEAF_GROW_CHOICE_VAL)) + m_DNA.MIN_LEAF_GROW_CHOICE_VAL,
+        (int)(PCGHash(109 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_FRUIT_GROW_CHOICE_VAL)) + m_DNA.MIN_FRUIT_GROW_CHOICE_VAL,
     };
 
     std::array<int, m_DNA.LEAF_GROW_ACTION_LEN> leafGrowAction;
     for (int &i : leafGrowAction)
-        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
+        i = (int)(PCGHash(i + 113 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE)) + m_DNA.MIN_GROW_ACTION_VALUE;
 
     std::array<int, m_DNA.ROOT_GROW_ACTION_LEN> rootGrowAction;
     for (int &i : rootGrowAction)
-        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
+        i = int(PCGHash(i + 127 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE)) + m_DNA.MIN_GROW_ACTION_VALUE;
 
     m_DNA = {
         .GrowthChoice = growthChoice,
@@ -82,30 +82,37 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
         for (int tries = 10; tries > 0; tries--)
         {
             glm::uvec2 xzPos(
-                rand() % m_World->GetSize().x,
-                rand() % m_World->GetSize().z);
+                PCGHash(101 * m_ID * time(NULL)) % m_World->GetSize().x,
+                PCGHash(103 * m_ID * time(NULL)) % m_World->GetSize().z);
 
             Plant plant = Seed(xzPos, nextID++);
             if (!plant.IsAlive())
                 continue;
 
+            m_World->SetVoxel(*it, VoxelTypeLeaf);
+            m_LeafPositions.emplace_back(*it);
             m_FruitPositions.erase(it);
-            newPlants.emplace_back(plant);
+            newPlants.emplace_back(plant).Mutate();
             inc = 0;
             break;
         }
         it += inc;
     }
 
-    Log::SimInfo("[pid: {}] Plant has reproduced.", m_ID);
-    LogPosVector(m_FruitPositions, "Plant Fruit positions:");
+    if (newPlants.size() > 0)
+    {
+        Log::SimInfo("[pid: {}] Plant has reproduced.", m_ID);
+        LogPosVector(m_FruitPositions, "Plant Fruit positions");
+        LogPosVector(m_LeafPositions, "Plant Leaf positions");
+    }
+
     return newPlants;
 }
 
 void Plant::Grow()
 {
     int idx = WeightedChoice<std::array<int, m_DNA.GROWTH_CHOICE_LEN>::const_iterator>(m_DNA.GrowthChoice.begin(), m_DNA.GrowthChoice.end());
-    switch (idx - 1)
+    switch (idx)
     {
     case 0:
         GrowRoot();
@@ -129,6 +136,7 @@ void Plant::Survive()
     m_SoilResources.Nitrogen -= NITROGEN_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Phosphorus -= PHOSPHORUS_SURVIVE_COST_MPLR * GetSize();
     m_SoilResources.Potassium -= POTASSIUM_SURVIVE_COST_MPLR * GetSize();
+    Log::SimInfo("[pid: {}] Plant survived one more Tick!", m_ID);
     LogPlantResources();
 }
 
@@ -206,6 +214,10 @@ void Plant::Init()
     m_World->SetVoxel(stemPos, VoxelTypeStem);
     m_World->SetVoxel(leafPos, VoxelTypeLeaf);
 
+    LogPosVector(m_RootPositions, "Plant Root positions");
+    LogPosVector(m_LeafPositions, "Plant Leaf positions");
+    LogPosVector(m_StemPositions, "Plant Stem positions");
+
     // :DDDD
     m_Water = START_RESOURCES_MPLR * GetRemainingWaterCapacity();
     m_Light = START_RESOURCES_MPLR * GetRemainingLightCapacity();
@@ -222,40 +234,40 @@ void Plant::Init()
 void Plant::Mutate()
 {
     srand(time(NULL));
-    int rng = rand() % (m_DNA.GrowthChoice.size() + m_DNA.LeafGrowAction.size() + m_DNA.RootGrowAction.size());
+    int rng = (int)(PCGHash(227 * m_ID * time(NULL)) % (m_DNA.GrowthChoice.size() + m_DNA.LeafGrowAction.size() + m_DNA.RootGrowAction.size()));
     switch (rng % 3)
     {
     case 1:
         switch (rng % m_DNA.GrowthChoice.size())
         {
         case 0:
-            m_DNA.GrowthChoice[0] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_ROOT_GROW_CHOICE_VAL) + m_DNA.MIN_ROOT_GROW_CHOICE_VAL;
+            m_DNA.GrowthChoice[0] = (int)(PCGHash(101 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_ROOT_GROW_CHOICE_VAL)) + m_DNA.MIN_ROOT_GROW_CHOICE_VAL;
             Log::SimInfo("[pid: {}] Plant Mutated.", m_ID);
             LogDNA();
             return;
         case 1:
-            m_DNA.GrowthChoice[1] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_STEM_GROW_CHOICE_VAL) + m_DNA.MIN_STEM_GROW_CHOICE_VAL;
+            m_DNA.GrowthChoice[1] = (int)(PCGHash(103 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_STEM_GROW_CHOICE_VAL)) + m_DNA.MIN_STEM_GROW_CHOICE_VAL;
             Log::SimInfo("[pid: {}] Plant Mutated.", m_ID);
             LogDNA();
             return;
         case 2:
-            m_DNA.GrowthChoice[2] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_LEAF_GROW_CHOICE_VAL) + m_DNA.MIN_LEAF_GROW_CHOICE_VAL;
+            m_DNA.GrowthChoice[2] = (int)(PCGHash(107 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_LEAF_GROW_CHOICE_VAL)) + m_DNA.MIN_LEAF_GROW_CHOICE_VAL;
             Log::SimInfo("[pid: {}] Plant Mutated.", m_ID);
             LogDNA();
             return;
         case 3:
-            m_DNA.GrowthChoice[3] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_FRUIT_GROW_CHOICE_VAL) + m_DNA.MIN_FRUIT_GROW_CHOICE_VAL;
+            m_DNA.GrowthChoice[3] = (int)(PCGHash(109 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_FRUIT_GROW_CHOICE_VAL)) + m_DNA.MIN_FRUIT_GROW_CHOICE_VAL;
             Log::SimInfo("[pid: {}] Plant Mutated.", m_ID);
             LogDNA();
             return;
         }
     case 2:
-        m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
+        m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = (int)(PCGHash(113 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE)) + m_DNA.MIN_GROW_ACTION_VALUE;
         Log::SimInfo("[pid: {}] Plant Mutated.", m_ID);
         LogDNA();
         return;
     case 3:
-        m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
+        m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = (int)(PCGHash(127 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE)) + m_DNA.MIN_GROW_ACTION_VALUE;
         Log::SimInfo("[pid: {}] Plant Mutated.", m_ID);
         LogDNA();
         return;
@@ -265,11 +277,15 @@ void Plant::Mutate()
 void Plant::MineSoil(glm::uvec3 pos)
 {
     glm::uvec3 area(3, 3, 3);
-    for (int x = -area.x / 2; x < area.x / 2; x++)
-        for (int y = -area.y / 2; y < area.y / 2; y++)
-            for (int z = -area.z / 2; z < area.z / 2; z++)
+    glm::ivec3 offset(-1, -1, -1);
+    for (int x = 0; x < area.x; x++)
+        for (int y = 0; y < area.y; y++)
+            for (int z = 0; z < area.z; z++)
             {
-                glm::uvec3 voxPos(x + pos.x, y + pos.x, z + pos.x);
+                glm::uvec3 voxPos(
+                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x),
+                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y),
+                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z));
 
                 switch (m_World->GetVoxel(voxPos))
                 {
@@ -308,17 +324,23 @@ void Plant::MineSoil(glm::uvec3 pos)
                 }
             }
 
+    Log::SimInfo("[pid: {}] Plant mined soil.", m_ID);
     LogPlantResources();
 }
 
 void Plant::MineAir(glm::uvec3 pos)
 {
-    glm::uvec3 area(3, 3, 3);
-    for (int x = -area.x / 2; x < area.x / 2; x++)
-        for (int y = 1; y < area.y + 1; y++)
-            for (int z = -area.z / 2; z < area.z / 2; z++)
+    glm::uvec3 area(3, 1, 3);
+    glm::ivec3 offset(-1, 1, -1);
+    for (int x = 0; x < area.x; x++)
+        for (int y = 0; y < area.y; y++)
+            for (int z = 0; z < area.z; z++)
             {
-                glm::uvec3 voxPos(x + pos.x, y + pos.x, z + pos.x);
+                glm::uvec3 voxPos(
+                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x),
+                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y),
+                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z));
+
                 switch (m_World->GetVoxel(voxPos))
                 {
                 case VoxelTypeAir:
@@ -331,6 +353,7 @@ void Plant::MineAir(glm::uvec3 pos)
                 }
             }
 
+    Log::SimInfo("[pid: {}] Plant mined air.", m_ID);
     LogPlantResources();
 }
 
@@ -354,11 +377,10 @@ void Plant::GrowRoot()
     for (auto p : m_RootPositions)
     {
         int idx = WeightedChoice<std::array<int, m_DNA.ROOT_GROW_ACTION_LEN>::const_iterator>(m_DNA.RootGrowAction.begin(), m_DNA.RootGrowAction.end());
-
-        int x = Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x);
-        int y = Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().x);
-        int z = Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().x);
-        glm::uvec3 voxPos(x, y, z);
+        glm::uvec3 voxPos(
+            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x),
+            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y),
+            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z));
 
         if (m_World->GetVoxel(voxPos) != VoxelTypeSoil)
             continue;
@@ -382,7 +404,7 @@ void Plant::GrowRoot()
         m_World->SetVoxel(voxPos, VoxelTypeRoot);
 
         Log::SimInfo("[pid: {}] Plant has grown.", m_ID);
-        LogPosVector(m_RootPositions, "Plant Root positions:");
+        LogPosVector(m_RootPositions, "Plant Root positions");
         LogPlantResources();
         return;
     }
@@ -393,11 +415,10 @@ void Plant::GrowLeaf()
     for (auto p : m_LeafPositions)
     {
         int idx = WeightedChoice<std::array<int, m_DNA.LEAF_GROW_ACTION_LEN>::const_iterator>(m_DNA.LeafGrowAction.begin(), m_DNA.LeafGrowAction.end());
-
-        int x = Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x);
-        int y = Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().x);
-        int z = Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().x);
-        glm::uvec3 voxPos(x, y, z);
+        glm::uvec3 voxPos(
+            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x),
+            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y),
+            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z));
 
         if (m_World->GetVoxel(voxPos) != VoxelTypeAir)
             continue;
@@ -419,8 +440,7 @@ void Plant::GrowLeaf()
         m_World->SetVoxel(voxPos, VoxelTypeLeaf);
 
         Log::SimInfo("[pid: {}] Plant has grown.", m_ID);
-        LogPosVector(m_LeafPositions, "Plant Leaf positions:");
-
+        LogPosVector(m_LeafPositions, "Plant Leaf positions");
         LogPlantResources();
         return;
     }
@@ -444,12 +464,21 @@ void Plant::GrowStem()
     m_SoilResources.Nitrogen -= STEM_NITROGEN_COST;
     m_SoilResources.Potassium -= STEM_POTASSIUM_COST;
 
-    // Move leaves
+    // Move leaves && fruit
+    for (auto &p : m_LeafPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+    for (auto &p : m_FruitPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+
     for (auto &p : m_LeafPositions)
     {
-        m_World->SetVoxel(p, VoxelTypeAir);
         p.y += 1;
         m_World->SetVoxel(p, VoxelTypeLeaf);
+    }
+    for (auto &p : m_FruitPositions)
+    {
+        p.y += 1;
+        m_World->SetVoxel(p, VoxelTypeFruit);
     }
 
     glm::uvec3 pos = m_StemPositions.back();
@@ -459,14 +488,16 @@ void Plant::GrowStem()
     m_World->SetVoxel(pos, VoxelTypeStem);
 
     Log::SimInfo("[pid: {}] Plant has grown.", m_ID);
-    LogPosVector(m_StemPositions, "Plant Stem positions:");
-
+    LogPosVector(m_StemPositions, "Plant Stem positions");
     LogPlantResources();
 }
 
 void Plant::GrowFruit()
 {
-    int i = rand() % m_LeafPositions.size();
+    if (m_LeafPositions.size() == 0)
+        return;
+
+    int i = (int)(PCGHash(101 * m_ID * time(NULL)) % m_LeafPositions.size());
     auto pos = m_LeafPositions.begin() + i;
     // Check resources
     if (m_Water < PLANT_PART_WATER_COST ||
@@ -491,6 +522,6 @@ void Plant::GrowFruit()
     m_World->SetVoxel(voxPos, VoxelTypeFruit);
 
     Log::SimInfo("[pid: {}] Plant has grown.", m_ID);
-    LogPosVector(m_FruitPositions, "Plant Fruit positions:");
+    LogPosVector(m_FruitPositions, "Plant Fruit positions");
     LogPlantResources();
 }

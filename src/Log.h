@@ -1,6 +1,7 @@
 #pragma once
 
 #include <spdlog/spdlog.h>
+#include <spdlog/async.h>
 
 #include "Utils.h"
 
@@ -17,6 +18,7 @@ enum LogMask
 class Log
 {
     using PLogger = std::shared_ptr<spdlog::logger>;
+    using PAsyncLogger = std::shared_ptr<spdlog::async_logger>;
 
 public:
     static void Init();
@@ -77,7 +79,7 @@ public:
 
 private:
     static PLogger s_Logger;
-    static PLogger s_SimLogger;
+    static PAsyncLogger s_SimLogger;
 #ifdef BT_BUILD_DEBUG
     static PLogger s_DebugLogger;
     static int s_DebugLogMask;
