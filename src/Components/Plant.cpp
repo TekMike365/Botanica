@@ -31,17 +31,20 @@ Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos)
 {
     srand(time(NULL));
 
-    std::array<int, m_DNA.GROWTH_CHOICE_LEN> growthChoice;
-    for (int &i : growthChoice)
-        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
+    std::array<int, m_DNA.GROWTH_CHOICE_LEN> growthChoice{
+        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_ROOT_GROW_CHOICE_VAL) + m_DNA.MIN_ROOT_GROW_CHOICE_VAL,
+        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_STEM_GROW_CHOICE_VAL) + m_DNA.MIN_STEM_GROW_CHOICE_VAL,
+        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_LEAF_GROW_CHOICE_VAL) + m_DNA.MIN_LEAF_GROW_CHOICE_VAL,
+        rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_FRUIT_GROW_CHOICE_VAL) + m_DNA.MIN_FRUIT_GROW_CHOICE_VAL,
+    };
 
     std::array<int, m_DNA.LEAF_GROW_ACTION_LEN> leafGrowAction;
     for (int &i : leafGrowAction)
-        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
+        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
 
     std::array<int, m_DNA.ROOT_GROW_ACTION_LEN> rootGrowAction;
     for (int &i : rootGrowAction)
-        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
+        i = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
 
     m_DNA = {
         .GrowthChoice = growthChoice,
@@ -211,13 +214,26 @@ void Plant::Mutate()
     switch (rng % 3)
     {
     case 1:
-        m_DNA.GrowthChoice[rng % m_DNA.GrowthChoice.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
-        return;
+        switch (rng % m_DNA.GrowthChoice.size())
+        {
+        case 0:
+            m_DNA.GrowthChoice[0] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_ROOT_GROW_CHOICE_VAL) + m_DNA.MIN_ROOT_GROW_CHOICE_VAL;
+            return;
+        case 1:
+            m_DNA.GrowthChoice[1] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_STEM_GROW_CHOICE_VAL) + m_DNA.MIN_STEM_GROW_CHOICE_VAL;
+            return;
+        case 2:
+            m_DNA.GrowthChoice[2] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_LEAF_GROW_CHOICE_VAL) + m_DNA.MIN_LEAF_GROW_CHOICE_VAL;
+            return;
+        case 3:
+            m_DNA.GrowthChoice[3] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_FRUIT_GROW_CHOICE_VAL) + m_DNA.MIN_FRUIT_GROW_CHOICE_VAL;
+            return;
+        }
     case 2:
-        m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
+        m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
         return;
     case 3:
-        m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_VALUE) + m_DNA.MIN_VALUE;
+        m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
         return;
     }
 }

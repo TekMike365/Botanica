@@ -18,7 +18,11 @@ struct PlantDNA
     std::array<int, ROOT_GROW_ACTION_LEN> LeafGrowAction;
 
     static const int MAX_VALUE = 100;
-    static const int MIN_VALUE = 20;
+    static const int MIN_GROW_ACTION_VALUE = 10;
+    static const int MIN_ROOT_GROW_CHOICE_VAL = 30;
+    static const int MIN_STEM_GROW_CHOICE_VAL = 10;
+    static const int MIN_LEAF_GROW_CHOICE_VAL = 10;
+    static const int MIN_FRUIT_GROW_CHOICE_VAL = 10;
 };
 
 class Plant
@@ -96,8 +100,8 @@ private:
     const static int PLANT_PART_WATER_COST = 2;
     const static int PLANT_PART_LIGHT_COST = 2;
 
-    static constexpr float WATER_SURVIVE_COST_MPLR = 1.0f;
-    static constexpr float LIGHT_SURVIVE_COST_MPLR = 1.0f;
+    static constexpr float WATER_SURVIVE_COST_MPLR = 0.7f;
+    static constexpr float LIGHT_SURVIVE_COST_MPLR = 0.6f;
     static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 0.5f;
     static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 0.5f;
     static constexpr float NITROGEN_SURVIVE_COST_MPLR = 0.5f;
