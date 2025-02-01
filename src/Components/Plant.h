@@ -67,6 +67,22 @@ private:
     inline int GetLightBonus() const { return m_SoilResources.Phosphorus / GetSize() * PHOSPHORUS_BONUS_CONSTANT; }
     inline int GetSoilBonus() const { return m_SoilResources.Nitrogen / GetSize() * NITROGEN_BONUS_CONSTANT; }
 
+    inline void LogDNA() const
+    {
+        BT_DLOG_TRACE("[pid: {}] DNA:", m_ID);
+        BT_DLOG_TRACE("[pid: {}]    GrowChoice:", m_ID);
+        BT_DLOG_TRACE("[pid: {}]        RootGA: {}", m_ID, m_DNA.GrowthChoice[0]);
+        BT_DLOG_TRACE("[pid: {}]        StemGA: {}", m_ID, m_DNA.GrowthChoice[1]);
+        BT_DLOG_TRACE("[pid: {}]        LeafGA: {}", m_ID, m_DNA.GrowthChoice[2]);
+        BT_DLOG_TRACE("[pid: {}]        FruitGA: {}", m_ID, m_DNA.GrowthChoice[3]);
+        BT_DLOG_TRACE("[pid: {}]    RootGrowAction:", m_ID);
+        for (int i = 0; i < m_DNA.ROOT_GROW_ACTION_LEN; i++)
+            BT_DLOG_TRACE("[pid: {}]        {}: {}", m_ID, i, m_DNA.RootGrowAction[i]);
+        BT_DLOG_TRACE("[pid: {}]    LeafGrowAction:", m_ID);
+        for (int i = 0; i < m_DNA.LEAF_GROW_ACTION_LEN; i++)
+            BT_DLOG_TRACE("[pid: {}]        {}: {}", m_ID, i, m_DNA.LeafGrowAction[i]);
+    }
+
 private:
     std::shared_ptr<World> m_World;
     glm::uvec3 m_Pos;

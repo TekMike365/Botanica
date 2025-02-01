@@ -52,6 +52,9 @@ Plant::Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos)
         .LeafGrowAction = leafGrowAction,
     };
 
+    BT_DLOG_INFO("[pid: {}] Created new plant.", m_ID);
+    LogDNA();
+
     Init();
 }
 
@@ -144,31 +147,31 @@ bool Plant::IsAlive() const
 
     if (m_Water < WATER_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Water: {}/{}", m_ID, m_Water, WATER_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_INFO("[pid: {}] Plant ain't got enough Water: {}/{}", m_ID, m_Water, WATER_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_Light < LIGHT_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Light: {}/{}", m_ID, m_Light, LIGHT_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_INFO("[pid: {}] Plant ain't got enough Light: {}/{}", m_ID, m_Light, LIGHT_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_SoilResources.Nitrogen < NITROGEN_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Nitrogen: {}/{}", m_ID, m_SoilResources.Nitrogen, NITROGEN_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_INFO("[pid: {}] Plant ain't got enough Nitrogen: {}/{}", m_ID, m_SoilResources.Nitrogen, NITROGEN_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_SoilResources.Phosphorus < PHOSPHORUS_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Phosphorus: {}/{}", m_ID, m_SoilResources.Phosphorus, PHOSPHORUS_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_INFO("[pid: {}] Plant ain't got enough Phosphorus: {}/{}", m_ID, m_SoilResources.Phosphorus, PHOSPHORUS_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_SoilResources.Potassium < POTASSIUM_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Potassium: {}/{}", m_ID, m_SoilResources.Potassium, POTASSIUM_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_INFO("[pid: {}] Plant ain't got enough Potassium: {}/{}", m_ID, m_SoilResources.Potassium, POTASSIUM_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
@@ -220,22 +223,34 @@ void Plant::Mutate()
         {
         case 0:
             m_DNA.GrowthChoice[0] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_ROOT_GROW_CHOICE_VAL) + m_DNA.MIN_ROOT_GROW_CHOICE_VAL;
+            BT_DLOG_INFO("[pid: {}] Plant Mutated.", m_ID);
+            LogDNA();
             return;
         case 1:
             m_DNA.GrowthChoice[1] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_STEM_GROW_CHOICE_VAL) + m_DNA.MIN_STEM_GROW_CHOICE_VAL;
+            BT_DLOG_INFO("[pid: {}] Plant Mutated.", m_ID);
+            LogDNA();
             return;
         case 2:
             m_DNA.GrowthChoice[2] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_LEAF_GROW_CHOICE_VAL) + m_DNA.MIN_LEAF_GROW_CHOICE_VAL;
+            BT_DLOG_INFO("[pid: {}] Plant Mutated.", m_ID);
+            LogDNA();
             return;
         case 3:
             m_DNA.GrowthChoice[3] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_FRUIT_GROW_CHOICE_VAL) + m_DNA.MIN_FRUIT_GROW_CHOICE_VAL;
+            BT_DLOG_INFO("[pid: {}] Plant Mutated.", m_ID);
+            LogDNA();
             return;
         }
     case 2:
         m_DNA.LeafGrowAction[rng % m_DNA.LeafGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
+        BT_DLOG_INFO("[pid: {}] Plant Mutated.", m_ID);
+        LogDNA();
         return;
     case 3:
         m_DNA.RootGrowAction[rng % m_DNA.RootGrowAction.size()] = rand() % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE) + m_DNA.MIN_GROW_ACTION_VALUE;
+        BT_DLOG_INFO("[pid: {}] Plant Mutated.", m_ID);
+        LogDNA();
         return;
     }
 }
