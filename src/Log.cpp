@@ -1,18 +1,40 @@
 #include "Log.h"
 
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <iomanip>
 
-namespace Botanica
+#ifdef BT_BUILD_DEBUG
+std::shared_ptr<spdlog::logger> Log::s_DebugLogger;
+int Log::s_DebugLogMask = LogMaskAll;
+#endif // BT_BUILD_DEBUG
+std::shared_ptr<spdlog::logger> Log::s_Logger;
+std::shared_ptr<spdlog::logger> Log::s_SimLogger;
+
+void Log::Init()
 {
-    std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
+    spdlog::set_pattern("%^[%H:%M:%S-%e] %n: %v%$");
 
-    void Log::Init()
-    {
-        spdlog::set_pattern("%^[%T] %n: %v%$");
+#ifdef BT_BUILD_DEBUG
+    s_DebugLogger = spdlog::stdout_color_mt("DEBUG");
+    s_DebugLogger->set_level(spdlog::level::trace);
+#endif // BT_BUILD_DEBUG
+    s_Logger = spdlog::stdout_color_mt("LOG");
+    s_Logger->set_level(spdlog::level::trace);
 
-        s_CoreLogger = spdlog::stdout_color_mt("CORE");
-        s_CoreLogger->set_level(spdlog::level::trace);
+    // GetTime
+    time_t t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+    std::stringstream ss;
+    ss << "logs/sim_" << std::put_time(&tm, "%d-%m-%Y_%H-%M-%S") << ".log";
+    std::string logfile = ss.str();
 
-        BT_CORE_INFO("Initialized logger.");
-    }
+    Log::Info("Simulation log will be saved to: {}", logfile);
+
+    std::vector<spdlog::sink_ptr> sinks;
+    sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());
+    sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfile));
+    s_SimLogger = std::make_shared<spdlog::logger>("SIM", begin(sinks), end(sinks));
+    s_SimLogger->set_level(spdlog::level::trace);
 }
