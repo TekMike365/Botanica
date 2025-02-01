@@ -351,8 +351,13 @@ void Plant::GrowStem()
     m_SoilResources.Nitrogen -= nitrogenCost;
     m_SoilResources.Potassium -= potassiumCost;
 
+    // Move leaves
     for (auto &p : m_LeafPositions)
+    {
+        m_World->SetVoxel(p, VoxelTypeAir);
         p.y += 1;
+        m_World->SetVoxel(p, VoxelTypeLeaf);
+    }
 
     glm::uvec3 pos = m_StemPositions.back();
     pos.y += 1;
