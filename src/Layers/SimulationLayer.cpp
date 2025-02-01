@@ -1,13 +1,7 @@
+#include "pch.h"
 #include "SimulationLayer.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&SimulationLayer::x, this, std::placeholders::_1)
-
-uint32_t PCGHash(uint32_t seed)
-{
-    uint32_t state = seed * 747796405u + 2891336453u;
-    uint32_t word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
-    return (word >> 22u) ^ word;
-}
 
 SimulationLayer::SimulationLayer(std::shared_ptr<World> world)
     : m_World(world)
@@ -25,7 +19,7 @@ void SimulationLayer::OnAttach()
     {
         int x = PCGHash(101 * numPlants + time(NULL)) % m_World->GetSize().x;
         int z = PCGHash(103 * numPlants + time(NULL)) % m_World->GetSize().z;
-        m_World->SetVoxel(glm::uvec3(x, m_World->GetSize().y - 1, z), VoxelTypeFruit);
+        // m_World->SetVoxel(glm::uvec3(x, m_World->GetSize().y - 1, z), VoxelTypeFruit);
         PlantAPlant(glm::uvec2(x, z));
     }
 
@@ -52,14 +46,23 @@ void SimulationLayer::OnUpdate(Timestep dt)
 
     // Simulation loop
     m_World->ResetResources();
-    for (auto plant = m_Plants.begin(); plant != m_Plants.end();)
+    for (int i = 0; i < m_Plants.size();)
     {
+        auto plant = m_Plants.begin() + i;
+
+        {
+            auto plants = plant->Reproduce(m_NextID);
+            m_Plants.insert(m_Plants.end(), plants.begin(), plants.end());
+            // In case the iterator changes
+            plant = m_Plants.begin() + i;
+        }
+
         plant->Mine();
         plant->Grow();
         if (!plant->IsAlive())
         {
             plant->Die();
-            m_Plants.erase(plant);
+            plant = m_Plants.erase(plant);
 
             if (m_Plants.size() == 0)
             {
@@ -70,7 +73,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
             continue;
         }
         plant->Survive();
-        plant++;
+        i++;
     }
 
     Log::SimInfo("({}) Population: {}", m_TickCounter, m_Plants.size());
