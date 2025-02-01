@@ -56,7 +56,6 @@ void SimulationLayer::OnUpdate(Timestep dt)
         plant->Grow();
         if (!plant->IsAlive())
         {
-            BT_DLOG_WARN("Plant died.");
             plant->Die();
             m_Plants.erase(plant);
             continue;
@@ -99,7 +98,7 @@ void SimulationLayer::PlantAPlant(glm::uvec2 xzPos)
         if (m_World->GetVoxel(pos) != VoxelTypeSoil)
             continue;
 
-        m_Plants.emplace_back(m_World, pos);
+        m_Plants.emplace_back(m_NextID++, m_World, pos);
         auto plant = --m_Plants.end();
         if (!plant->IsAlive())
         {

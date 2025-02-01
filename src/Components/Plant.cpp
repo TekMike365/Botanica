@@ -26,8 +26,8 @@ int WeightedChoice(Iter begin, Iter end)
     return idx;
 }
 
-Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos)
-    : m_World(world), m_Pos(pos)
+Plant::Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos)
+    : m_ID(id), m_World(world), m_Pos(pos)
 {
     srand(time(NULL));
 
@@ -55,8 +55,8 @@ Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos)
     Init();
 }
 
-Plant::Plant(std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna)
-    : m_World(world), m_Pos(pos), m_DNA(dna)
+Plant::Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna)
+    : m_ID(id), m_World(world), m_Pos(pos), m_DNA(dna)
 {
     Init();
 }
@@ -69,7 +69,7 @@ void Plant::Mine()
         MineAir(p);
 }
 
-std::vector<Plant> Plant::Reproduce()
+std::vector<Plant> Plant::Reproduce(int &nextID)
 {
     std::vector<Plant> newPlants;
     for (auto it = m_FruitPositions.begin(); it != m_FruitPositions.end();)
@@ -81,7 +81,7 @@ std::vector<Plant> Plant::Reproduce()
                 rand() % m_World->GetSize().x,
                 rand() % m_World->GetSize().z);
 
-            Plant plant = Seed(xzPos);
+            Plant plant = Seed(xzPos, nextID++);
             if (!plant.IsAlive())
                 continue;
 
@@ -134,6 +134,7 @@ void Plant::Die()
         m_World->SetVoxel(p, VoxelTypeAir);
     for (const auto &p : m_RootPositions)
         m_World->SetVoxel(p, VoxelTypeSoil);
+    BT_DLOG_WARN("[pid: {}] Plant died.", m_ID);
 }
 
 bool Plant::IsAlive() const
@@ -143,31 +144,31 @@ bool Plant::IsAlive() const
 
     if (m_Water < WATER_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("Plant ain't got enough Water: {}/{}", m_Water, WATER_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Water: {}/{}", m_ID, m_Water, WATER_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_Light < LIGHT_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("Plant ain't got enough Light: {}/{}", m_Light, LIGHT_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Light: {}/{}", m_ID, m_Light, LIGHT_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_SoilResources.Nitrogen < NITROGEN_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("Plant ain't got enough Nitrogen: {}/{}", m_SoilResources.Nitrogen, NITROGEN_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Nitrogen: {}/{}", m_ID, m_SoilResources.Nitrogen, NITROGEN_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_SoilResources.Phosphorus < PHOSPHORUS_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("Plant ain't got enough Phosphorus: {}/{}", m_SoilResources.Phosphorus, PHOSPHORUS_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Phosphorus: {}/{}", m_ID, m_SoilResources.Phosphorus, PHOSPHORUS_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
     if (m_SoilResources.Potassium < POTASSIUM_SURVIVE_COST_MPLR * GetSize())
     {
-        BT_DLOG_TRACE("Plant ain't got enough Potassium: {}/{}", m_SoilResources.Potassium, POTASSIUM_SURVIVE_COST_MPLR * GetSize());
+        BT_DLOG_TRACE("[pid: {}] Plant ain't got enough Potassium: {}/{}", m_ID, m_SoilResources.Potassium, POTASSIUM_SURVIVE_COST_MPLR * GetSize());
         return false;
     }
 
@@ -184,6 +185,7 @@ void Plant::Init()
         m_World->GetVoxel(stemPos) != VoxelTypeAir ||
         m_World->GetVoxel(leafPos) != VoxelTypeAir)
     {
+        BT_DLOG_WARN("[pid: {}] Plant wasn't able to spawn.", m_ID);
         return;
     }
 
@@ -306,7 +308,7 @@ void Plant::MineAir(glm::uvec3 pos)
             }
 }
 
-Plant Plant::Seed(glm::uvec2 xzPos)
+Plant Plant::Seed(glm::uvec2 xzPos, int id)
 {
     uint32_t y = m_World->GetSize().y;
     for (; y > 0, y--;)
@@ -315,10 +317,10 @@ Plant Plant::Seed(glm::uvec2 xzPos)
         if (m_World->GetVoxel(pos) != VoxelTypeSoil)
             continue;
 
-        return Plant(m_World, pos);
+        return Plant(id, m_World, pos);
     }
 
-    return Plant(m_World, glm::uvec3((uint32_t)-1, (uint32_t)-1, (uint32_t)-1));
+    return Plant(id, m_World, glm::uvec3((uint32_t)-1, (uint32_t)-1, (uint32_t)-1));
 }
 
 void Plant::GrowRoot()

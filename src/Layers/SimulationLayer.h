@@ -28,6 +28,7 @@ private:
     bool m_Paused = true;
     bool m_Step = false;
     int m_TickCounter = 0;
+    int m_NextID = 0;
 
     const float HEIGHT_SCALAR = 16.0;
     const int WATER_LEVEL = 6;

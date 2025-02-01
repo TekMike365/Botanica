@@ -28,11 +28,11 @@ struct PlantDNA
 class Plant
 {
 public:
-    Plant(std::shared_ptr<World> world, glm::uvec3 pos);
-    Plant(std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna);
+    Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos);
+    Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos, const PlantDNA &dna);
 
     void Mine();
-    std::vector<Plant> Reproduce();
+    std::vector<Plant> Reproduce(int &nextID);
     void Grow();
     void Survive();
     void Die();
@@ -40,6 +40,7 @@ public:
     bool IsAlive() const;
     glm::uvec3 GetPosition() const { return m_Pos; }
     inline uint32_t GetSize() const { return m_RootPositions.size() + m_StemPositions.size() + m_LeafPositions.size() + m_FruitPositions.size(); }
+    inline int GetID() const { return m_ID; }
 
 private:
     void Init();
@@ -48,7 +49,7 @@ private:
     void MineSoil(glm::uvec3 pos);
     void MineAir(glm::uvec3 pos);
 
-    Plant Seed(glm::uvec2 xzPos);
+    Plant Seed(glm::uvec2 xzPos, int id);
 
     void GrowRoot();
     void GrowLeaf();
@@ -70,6 +71,7 @@ private:
     std::shared_ptr<World> m_World;
     glm::uvec3 m_Pos;
     PlantDNA m_DNA;
+    int m_ID;
 
     std::vector<glm::uvec3> m_RootPositions;
     std::vector<glm::uvec3> m_LeafPositions;
