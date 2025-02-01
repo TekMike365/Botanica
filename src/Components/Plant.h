@@ -8,14 +8,17 @@
 struct PlantDNA
 {
     // one per grow action (Root, Leaf, Stem, Fruit)
+    static inline const int GROWTH_CHOICE_LEN = 4;
     std::array<int, 4> GrowthChoice;
     // one per cell in 3D (26 cells around a center one)
+    static inline const int ROOT_GROW_ACTION_LEN = 27;
     std::array<int, 27> RootGrowAction;
     // one per cell in 3D (26 cells around a center one)
-    std::array<int, 27> LeafGrowAction;
+    static inline const int LEAF_GROW_ACTION_LEN = 27;
+    std::array<int, ROOT_GROW_ACTION_LEN> LeafGrowAction;
 
-    static inline int MAX_VALUE = 100;
-    static inline int MIN_VALUE = 20;
+    static const int MAX_VALUE = 100;
+    static const int MIN_VALUE = 20;
 };
 
 class Plant
