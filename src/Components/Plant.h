@@ -63,11 +63,11 @@ public:
     inline static const int PLANT_PART_WATER_COST = 5;
     inline static const int PLANT_PART_LIGHT_COST = 5;
 
-    inline static constexpr float WATER_SURVIVE_COST_MPLR = 1.0f;
-    inline static constexpr float LIGHT_SURVIVE_COST_MPLR = 1.0f;
-    inline static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 0.5f;
-    inline static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 0.5f;
-    inline static constexpr float NITROGEN_SURVIVE_COST_MPLR = 0.5f;
+    inline static constexpr float WATER_SURVIVE_COST_MPLR = 0.9f;
+    inline static constexpr float LIGHT_SURVIVE_COST_MPLR = 0.9f;
+    inline static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 0.7f;
+    inline static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 0.7f;
+    inline static constexpr float NITROGEN_SURVIVE_COST_MPLR = 0.7f;
 
     inline static constexpr float START_RESOURCES_MPLR = 0.75f;
 

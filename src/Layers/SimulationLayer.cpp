@@ -1,13 +1,7 @@
+#include "pch.h"
 #include "SimulationLayer.h"
 
 #define BIND_EVENT_CALLBACK(x) std::bind(&SimulationLayer::x, this, std::placeholders::_1)
-
-uint32_t PCGHash(uint32_t seed)
-{
-    uint32_t state = seed * 747796405u + 2891336453u;
-    uint32_t word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
-    return (word >> 22u) ^ word;
-}
 
 SimulationLayer::SimulationLayer(std::shared_ptr<World> world)
     : m_World(world)
