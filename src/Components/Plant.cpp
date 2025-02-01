@@ -461,9 +461,12 @@ void Plant::GrowStem()
     m_SoilResources.Potassium -= STEM_POTASSIUM_COST;
 
     // Move leaves
+    
+    for (auto &p : m_LeafPositions)
+        m_World->SetVoxel(p, VoxelTypeAir);
+
     for (auto &p : m_LeafPositions)
     {
-        m_World->SetVoxel(p, VoxelTypeAir);
         p.y += 1;
         m_World->SetVoxel(p, VoxelTypeLeaf);
     }
