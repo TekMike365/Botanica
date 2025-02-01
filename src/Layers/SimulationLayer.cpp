@@ -73,7 +73,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
         plant++;
     }
 
-    Log::SimTrace("({}) Population: {}", m_TickCounter, m_Plants.size());
+    Log::SimInfo("({}) Population: {}", m_TickCounter, m_Plants.size());
 }
 
 void SimulationLayer::OnEvent(Event &e)
