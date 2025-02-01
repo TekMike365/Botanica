@@ -45,6 +45,30 @@ public:
         s_Logger->error(format, args...);
     }
 
+    template <typename... Args>
+    static inline void SimTrace(const std::string &format, Args &&...args)
+    {
+        s_SimLogger->trace(format, args...);
+    }
+
+    template <typename... Args>
+    static inline void SimInfo(const std::string &format, Args &&...args)
+    {
+        s_SimLogger->info(format, args...);
+    }
+
+    template <typename... Args>
+    static inline void SimWarn(const std::string &format, Args &&...args)
+    {
+        s_SimLogger->warn(format, args...);
+    }
+
+    template <typename... Args>
+    static inline void SimError(const std::string &format, Args &&...args)
+    {
+        s_SimLogger->error(format, args...);
+    }
+
 #ifdef BT_BUILD_DEBUG
     static inline PLogger &GetDebugLogger() { return s_DebugLogger; }
     static inline int GetDebugMask() { return s_DebugLogMask; }
@@ -53,6 +77,7 @@ public:
 
 private:
     static PLogger s_Logger;
+    static PLogger s_SimLogger;
 #ifdef BT_BUILD_DEBUG
     static PLogger s_DebugLogger;
     static int s_DebugLogMask;

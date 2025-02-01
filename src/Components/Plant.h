@@ -69,43 +69,43 @@ private:
 
     inline void LogDNA() const
     {
-        BT_DLOG_TRACE("[pid: {}] DNA:", m_ID);
-        BT_DLOG_TRACE("[pid: {}]    GrowChoice:", m_ID);
-        BT_DLOG_TRACE("[pid: {}]        RootGA: {}", m_ID, m_DNA.GrowthChoice[0]);
-        BT_DLOG_TRACE("[pid: {}]        StemGA: {}", m_ID, m_DNA.GrowthChoice[1]);
-        BT_DLOG_TRACE("[pid: {}]        LeafGA: {}", m_ID, m_DNA.GrowthChoice[2]);
-        BT_DLOG_TRACE("[pid: {}]        FruitGA: {}", m_ID, m_DNA.GrowthChoice[3]);
-        BT_DLOG_TRACE("[pid: {}]    RootGrowAction:", m_ID);
+        Log::SimTrace("[pid: {}] DNA:", m_ID);
+        Log::SimTrace("[pid: {}]    GrowChoice:", m_ID);
+        Log::SimTrace("[pid: {}]        RootGA: {}", m_ID, m_DNA.GrowthChoice[0]);
+        Log::SimTrace("[pid: {}]        StemGA: {}", m_ID, m_DNA.GrowthChoice[1]);
+        Log::SimTrace("[pid: {}]        LeafGA: {}", m_ID, m_DNA.GrowthChoice[2]);
+        Log::SimTrace("[pid: {}]        FruitGA: {}", m_ID, m_DNA.GrowthChoice[3]);
+        Log::SimTrace("[pid: {}]    RootGrowAction:", m_ID);
         for (int i = 0; i < m_DNA.ROOT_GROW_ACTION_LEN; i++)
-            BT_DLOG_TRACE("[pid: {}]        {}: {}", m_ID, i, m_DNA.RootGrowAction[i]);
-        BT_DLOG_TRACE("[pid: {}]    LeafGrowAction:", m_ID);
+            Log::SimTrace("[pid: {}]        {}: {}", m_ID, i, m_DNA.RootGrowAction[i]);
+        Log::SimTrace("[pid: {}]    LeafGrowAction:", m_ID);
         for (int i = 0; i < m_DNA.LEAF_GROW_ACTION_LEN; i++)
-            BT_DLOG_TRACE("[pid: {}]        {}: {}", m_ID, i, m_DNA.LeafGrowAction[i]);
+            Log::SimTrace("[pid: {}]        {}: {}", m_ID, i, m_DNA.LeafGrowAction[i]);
     }
 
     inline void LogPosVector(const std::vector<glm::uvec3> &vec, const std::string &msg) const
     {
-        BT_DLOG_TRACE("[pid: {}] {}:", m_ID, msg);
+        Log::SimTrace("[pid: {}] {}:", m_ID, msg);
         for (int i = 0; i < vec.size(); i++)
-            BT_DLOG_TRACE("[pid: {}]    {}: [{}, {}, {}]", m_ID, i, vec[i].x, vec[i].y, vec[i].z);
+            Log::SimTrace("[pid: {}]    {}: [{}, {}, {}]", m_ID, i, vec[i].x, vec[i].y, vec[i].z);
     }
 
     inline void LogPlantResources() const
     {
-        BT_DLOG_TRACE("[pid: {}] Resources:", m_ID);
-        BT_DLOG_TRACE("[pid: {}]    Water: {}", m_ID, m_Water);
-        BT_DLOG_TRACE("[pid: {}]    Light: {}", m_ID, m_Light);
-        BT_DLOG_TRACE("[pid: {}]    Soil Resources:", m_ID);
-        BT_DLOG_TRACE("[pid: {}]        Phosphorus: {}", m_ID, m_SoilResources.Phosphorus);
-        BT_DLOG_TRACE("[pid: {}]        Potassium: {}", m_ID, m_SoilResources.Potassium);
-        BT_DLOG_TRACE("[pid: {}]        Nitrogen: {}", m_ID, m_SoilResources.Nitrogen);
-        BT_DLOG_TRACE("[pid: {}] Survival Cost:", m_ID);
-        BT_DLOG_TRACE("[pid: {}]    Water: {}", m_ID, WATER_SURVIVE_COST_MPLR * GetSize());
-        BT_DLOG_TRACE("[pid: {}]    Light: {}", m_ID, LIGHT_SURVIVE_COST_MPLR * GetSize());
-        BT_DLOG_TRACE("[pid: {}]    Soil Resources:", m_ID);
-        BT_DLOG_TRACE("[pid: {}]        Phosphorus: {}", m_ID, NITROGEN_SURVIVE_COST_MPLR * GetSize());
-        BT_DLOG_TRACE("[pid: {}]        Potassium: {}", m_ID, PHOSPHORUS_SURVIVE_COST_MPLR * GetSize());
-        BT_DLOG_TRACE("[pid: {}]        Nitrogen: {}", m_ID, POTASSIUM_SURVIVE_COST_MPLR * GetSize());
+        Log::SimTrace("[pid: {}] Resources:", m_ID);
+        Log::SimTrace("[pid: {}]    Water: {}", m_ID, m_Water);
+        Log::SimTrace("[pid: {}]    Light: {}", m_ID, m_Light);
+        Log::SimTrace("[pid: {}]    Soil Resources:", m_ID);
+        Log::SimTrace("[pid: {}]        Phosphorus: {}", m_ID, m_SoilResources.Phosphorus);
+        Log::SimTrace("[pid: {}]        Potassium: {}", m_ID, m_SoilResources.Potassium);
+        Log::SimTrace("[pid: {}]        Nitrogen: {}", m_ID, m_SoilResources.Nitrogen);
+        Log::SimTrace("[pid: {}] Survival Cost:", m_ID);
+        Log::SimTrace("[pid: {}]    Water: {}", m_ID, WATER_SURVIVE_COST_MPLR * GetSize());
+        Log::SimTrace("[pid: {}]    Light: {}", m_ID, LIGHT_SURVIVE_COST_MPLR * GetSize());
+        Log::SimTrace("[pid: {}]    Soil Resources:", m_ID);
+        Log::SimTrace("[pid: {}]        Phosphorus: {}", m_ID, NITROGEN_SURVIVE_COST_MPLR * GetSize());
+        Log::SimTrace("[pid: {}]        Potassium: {}", m_ID, PHOSPHORUS_SURVIVE_COST_MPLR * GetSize());
+        Log::SimTrace("[pid: {}]        Nitrogen: {}", m_ID, POTASSIUM_SURVIVE_COST_MPLR * GetSize());
     }
 
 private:

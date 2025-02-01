@@ -27,7 +27,7 @@ void SimulationLayer::OnAttach()
         PlantAPlant(glm::uvec2(x, z));
     }
 
-    BT_DLOG_TRACE("Starting Population: {}", m_Plants.size());
+    Log::SimTrace("Starting Population: {}", m_Plants.size());
 
     Log::Warn("Paused (F3): {}", m_Paused);
 }
@@ -46,7 +46,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
     m_Timer = 0;
     m_Step = false;
     m_TickCounter++;
-    BT_DLOG_TRACE("Tick!");
+    Log::SimTrace("Tick!");
 
     // Simulation loop
     m_World->ResetResources();
@@ -71,7 +71,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
         plant++;
     }
 
-    BT_DLOG_TRACE("({}) Population: {}", m_TickCounter, m_Plants.size());
+    Log::SimTrace("({}) Population: {}", m_TickCounter, m_Plants.size());
 }
 
 void SimulationLayer::OnEvent(Event &e)
