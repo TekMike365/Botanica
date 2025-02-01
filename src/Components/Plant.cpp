@@ -98,7 +98,7 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
     }
 
     Log::SimInfo("[pid: {}] Plant has reproduced.", m_ID);
-    LogPosVector(m_FruitPositions, "Plant Fruit positions:");
+    LogPosVector(m_FruitPositions, "Plant Fruit positions");
     return newPlants;
 }
 
@@ -265,11 +265,15 @@ void Plant::Mutate()
 void Plant::MineSoil(glm::uvec3 pos)
 {
     glm::uvec3 area(3, 3, 3);
-    for (int x = -area.x / 2; x < area.x / 2; x++)
-        for (int y = -area.y / 2; y < area.y / 2; y++)
-            for (int z = -area.z / 2; z < area.z / 2; z++)
+    glm::ivec3 offset(-1, -1, -1);
+    for (int x = 0; x < area.x; x++)
+        for (int y = 0; y < area.y; y++)
+            for (int z = 0; z < area.z; z++)
             {
-                glm::uvec3 voxPos(x + pos.x, y + pos.x, z + pos.x);
+                glm::uvec3 voxPos(
+                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x),
+                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y),
+                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z));
 
                 switch (m_World->GetVoxel(voxPos))
                 {
@@ -313,12 +317,17 @@ void Plant::MineSoil(glm::uvec3 pos)
 
 void Plant::MineAir(glm::uvec3 pos)
 {
-    glm::uvec3 area(3, 3, 3);
-    for (int x = -area.x / 2; x < area.x / 2; x++)
-        for (int y = 1; y < area.y + 1; y++)
-            for (int z = -area.z / 2; z < area.z / 2; z++)
+    glm::uvec3 area(3, 1, 3);
+    glm::ivec3 offset(-1, 1, -1);
+    for (int x = 0; x < area.x; x++)
+        for (int y = 0; y < area.y; y++)
+            for (int z = 0; z < area.z; z++)
             {
-                glm::uvec3 voxPos(x + pos.x, y + pos.x, z + pos.x);
+                glm::uvec3 voxPos(
+                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x),
+                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y),
+                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z));
+
                 switch (m_World->GetVoxel(voxPos))
                 {
                 case VoxelTypeAir:
