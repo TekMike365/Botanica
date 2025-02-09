@@ -8,21 +8,21 @@
 struct PlantDNA
 {
     // one per grow action (Root, Leaf, Stem, Fruit)
-    inline static const int GROWTH_CHOICE_LEN = 4;
+    static const int GROWTH_CHOICE_LEN = 4;
     std::array<int, 4> GrowthChoice;
     // one per cell in 3D (26 cells around a center one)
-    inline static const int ROOT_GROW_ACTION_LEN = 27;
+    static const int ROOT_GROW_ACTION_LEN = 27;
     std::array<int, 27> RootGrowAction;
     // one per cell in 3D (26 cells around a center one)
-    inline static const int LEAF_GROW_ACTION_LEN = 27;
+    static const int LEAF_GROW_ACTION_LEN = 27;
     std::array<int, ROOT_GROW_ACTION_LEN> LeafGrowAction;
 
-    inline static const int MAX_VALUE = 100;
-    inline static const int MIN_GROW_ACTION_VALUE = 10;
-    inline static const int MIN_ROOT_GROW_CHOICE_VAL = 10;
-    inline static const int MIN_STEM_GROW_CHOICE_VAL = 10;
-    inline static const int MIN_LEAF_GROW_CHOICE_VAL = 10;
-    inline static const int MIN_FRUIT_GROW_CHOICE_VAL = 10;
+    static const int MAX_VALUE = 100;
+    static const int MIN_GROW_ACTION_VALUE = 10;
+    static const int MIN_ROOT_GROW_CHOICE_VAL = 10;
+    static const int MIN_STEM_GROW_CHOICE_VAL = 10;
+    static const int MIN_LEAF_GROW_CHOICE_VAL = 10;
+    static const int MIN_FRUIT_GROW_CHOICE_VAL = 10;
 };
 
 class Plant
@@ -44,45 +44,45 @@ public:
 
 public:
     static constexpr SoilResources SOIL_STORAGE_MPLR = {
-        .Potassium = 20,
-        .Phosphorus = 20,
-        .Nitrogen = 20,
+        20,
+        20,
+        20,
     };
-    inline static const int WATER_STORAGE_MPLR = 20;
-    inline static const int LIGHT_STORAGE_MPLR = 20;
+    static const int WATER_STORAGE_MPLR = 20;
+    static const int LIGHT_STORAGE_MPLR = 20;
 
-    inline static constexpr float WATER_MINE_MPLR = 0.8f;
-    inline static constexpr float LIGHT_MINE_MPLR = 0.9f;
-    inline static constexpr float SOIL_MINE_MPLR = 0.9f;
-    inline static constexpr float SOIL_WATER_MPLR = 0.2;
+    static constexpr float WATER_MINE_MPLR = 0.8f;
+    static constexpr float LIGHT_MINE_MPLR = 0.9f;
+    static constexpr float SOIL_MINE_MPLR = 0.9f;
+    static constexpr float SOIL_WATER_MPLR = 0.2;
 
-    inline static constexpr float POTASSIUM_BONUS_CONSTANT = 1.2f;
-    inline static constexpr float PHOSPHORUS_BONUS_CONSTANT = 1.3f;
-    inline static constexpr float NITROGEN_BONUS_CONSTANT = 1.3f;
+    static constexpr float POTASSIUM_BONUS_CONSTANT = 1.2f;
+    static constexpr float PHOSPHORUS_BONUS_CONSTANT = 1.3f;
+    static constexpr float NITROGEN_BONUS_CONSTANT = 1.3f;
 
-    inline static const int PLANT_PART_WATER_COST = 5;
-    inline static const int PLANT_PART_LIGHT_COST = 5;
+    static const int PLANT_PART_WATER_COST = 5;
+    static const int PLANT_PART_LIGHT_COST = 5;
 
-    inline static constexpr float WATER_SURVIVE_COST_MPLR = 0.8f;
-    inline static constexpr float LIGHT_SURVIVE_COST_MPLR = 0.9f;
-    inline static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 0.9f;
-    inline static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 0.9f;
-    inline static constexpr float NITROGEN_SURVIVE_COST_MPLR = 0.9f;
+    static constexpr float WATER_SURVIVE_COST_MPLR = 0.8f;
+    static constexpr float LIGHT_SURVIVE_COST_MPLR = 0.9f;
+    static constexpr float POTASSIUM_SURVIVE_COST_MPLR = 0.9f;
+    static constexpr float PHOSPHORUS_SURVIVE_COST_MPLR = 0.9f;
+    static constexpr float NITROGEN_SURVIVE_COST_MPLR = 0.9f;
 
-    inline static constexpr float START_RESOURCES_MPLR = 0.75f;
+    static constexpr float START_RESOURCES_MPLR = 0.75f;
 
-    inline static const int ROOT_POTASSIUM_COST = 7;
-    inline static const int ROOT_NITROGEN_COST = 7;
+    static const int ROOT_POTASSIUM_COST = 7;
+    static const int ROOT_NITROGEN_COST = 7;
 
-    inline static const int LEAF_PHOSPHORUS_COST = 7;
+    static const int LEAF_PHOSPHORUS_COST = 7;
 
-    inline static const int STEM_PHOSPHORUS_COST = 7;
-    inline static const int STEM_POTASSIUM_COST = 7;
-    inline static const int STEM_NITROGEN_COST = 7;
+    static const int STEM_PHOSPHORUS_COST = 7;
+    static const int STEM_POTASSIUM_COST = 7;
+    static const int STEM_NITROGEN_COST = 7;
 
-    inline static const int FRUIT_PHOSPHORUS_COST = 15;
-    inline static const int FRUIT_POTASSIUM_COST = 15;
-    inline static const int FRUIT_NITROGEN_COST = 15;
+    static const int FRUIT_PHOSPHORUS_COST = 15;
+    static const int FRUIT_POTASSIUM_COST = 15;
+    static const int FRUIT_NITROGEN_COST = 15;
 
 private:
     void Init();
@@ -101,9 +101,9 @@ private:
     inline int GetRemainingWaterCapacity() const { return WATER_STORAGE_MPLR * m_StemPositions.size() - m_Water; }
     inline int GetRemainingLightCapacity() const { return LIGHT_STORAGE_MPLR * m_StemPositions.size() - m_Light; }
     inline SoilResources GetRemainingSoilResourcesCapacity() const { return {
-        .Potassium = SOIL_STORAGE_MPLR.Potassium * (int)m_StemPositions.size() - m_SoilResources.Potassium,
-        .Phosphorus = SOIL_STORAGE_MPLR.Phosphorus * (int)m_StemPositions.size() - m_SoilResources.Phosphorus,
-        .Nitrogen = SOIL_STORAGE_MPLR.Nitrogen * (int)m_StemPositions.size() - m_SoilResources.Nitrogen}; }
+        SOIL_STORAGE_MPLR.Potassium * (int)m_StemPositions.size() - m_SoilResources.Potassium,
+        SOIL_STORAGE_MPLR.Phosphorus * (int)m_StemPositions.size() - m_SoilResources.Phosphorus,
+        SOIL_STORAGE_MPLR.Nitrogen * (int)m_StemPositions.size() - m_SoilResources.Nitrogen}; }
 
     inline int GetWaterBonus() const { return m_SoilResources.Potassium / GetSize() * POTASSIUM_BONUS_CONSTANT; }
     inline int GetLightBonus() const { return m_SoilResources.Phosphorus / GetSize() * PHOSPHORUS_BONUS_CONSTANT; }

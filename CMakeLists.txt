@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Botanica VERSION 0.1)
 set(CXX_STANDARD 17)
-set(CXX_STANDARD_REQUIRED 17)
+set(CXX_STANDARD_REQUIRED YES)
 set(CXX_EXTENSIONS OFF)
 
 add_subdirectory(vendor/glad)
@@ -98,6 +98,7 @@ add_custom_command(
 add_custom_target(EmbedShaders DEPENDS ${SHADERS_HEADER})
 
 add_executable(Application ${APPLICATION_SOURCES})
+# target_compile_features(Application PUBLIC "cxx_std_${CXX_STANDARD}")
 
 target_compile_definitions(Application PRIVATE PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
 

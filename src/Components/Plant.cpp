@@ -47,9 +47,9 @@ Plant::Plant(int id, std::shared_ptr<World> world, glm::uvec3 pos)
         i = int(PCGHash(i + 127 * m_ID * time(NULL)) % (m_DNA.MAX_VALUE - m_DNA.MIN_GROW_ACTION_VALUE)) + m_DNA.MIN_GROW_ACTION_VALUE;
 
     m_DNA = {
-        .GrowthChoice = growthChoice,
-        .RootGrowAction = rootGrowAction,
-        .LeafGrowAction = leafGrowAction,
+        growthChoice,
+        rootGrowAction,
+        leafGrowAction,
     };
 
     Log::SimInfo("[pid: {}] Created new plant.", m_ID);
@@ -91,8 +91,9 @@ std::vector<Plant> Plant::Reproduce(int &nextID)
 
             m_World->SetVoxel(*it, VoxelTypeLeaf);
             m_LeafPositions.emplace_back(*it);
-            m_FruitPositions.erase(it);
-            newPlants.emplace_back(plant).Mutate();
+            it = m_FruitPositions.erase(it);
+            newPlants.emplace_back(plant);
+            newPlants.back().Mutate();
             inc = 0;
             break;
         }
@@ -223,9 +224,9 @@ void Plant::Init()
     m_Light = START_RESOURCES_MPLR * GetRemainingLightCapacity();
     SoilResources soilCap = GetRemainingSoilResourcesCapacity();
     m_SoilResources = {
-        .Potassium = (int)(START_RESOURCES_MPLR * soilCap.Potassium),
-        .Phosphorus = (int)(START_RESOURCES_MPLR * soilCap.Phosphorus),
-        .Nitrogen = (int)(START_RESOURCES_MPLR * soilCap.Nitrogen),
+        (int)(START_RESOURCES_MPLR * soilCap.Potassium),
+        (int)(START_RESOURCES_MPLR * soilCap.Phosphorus),
+        (int)(START_RESOURCES_MPLR * soilCap.Nitrogen),
     };
 
     LogPlantResources();
@@ -283,9 +284,9 @@ void Plant::MineSoil(glm::uvec3 pos)
             for (int z = 0; z < area.z; z++)
             {
                 glm::uvec3 voxPos(
-                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x),
-                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y),
-                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z));
+                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x - 1),
+                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y - 1),
+                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z - 1));
 
                 switch (m_World->GetVoxel(voxPos))
                 {
@@ -306,14 +307,14 @@ void Plant::MineSoil(glm::uvec3 pos)
 
                     SoilResources capacity = GetRemainingSoilResourcesCapacity();
                     SoilResources max = {
-                        .Potassium = (int)(SOIL_MINE_MPLR * GetSoilBonus()),
-                        .Phosphorus = (int)(SOIL_MINE_MPLR * GetSoilBonus()),
-                        .Nitrogen = (int)(SOIL_MINE_MPLR * GetSoilBonus()),
+                        (int)(SOIL_MINE_MPLR * GetSoilBonus()),
+                        (int)(SOIL_MINE_MPLR * GetSoilBonus()),
+                        (int)(SOIL_MINE_MPLR * GetSoilBonus()),
                     };
                     SoilResources toMine = {
-                        .Potassium = max.Potassium <= capacity.Potassium ? max.Potassium : capacity.Potassium,
-                        .Phosphorus = max.Phosphorus <= capacity.Phosphorus ? max.Phosphorus : capacity.Phosphorus,
-                        .Nitrogen = max.Nitrogen <= capacity.Nitrogen ? max.Nitrogen : capacity.Nitrogen,
+                        max.Potassium <= capacity.Potassium ? max.Potassium : capacity.Potassium,
+                        max.Phosphorus <= capacity.Phosphorus ? max.Phosphorus : capacity.Phosphorus,
+                        max.Nitrogen <= capacity.Nitrogen ? max.Nitrogen : capacity.Nitrogen,
                     };
                     SoilResources mined = m_World->MineSoilResources(voxPos, toMine);
                     m_SoilResources.Potassium += mined.Potassium;
@@ -337,9 +338,9 @@ void Plant::MineAir(glm::uvec3 pos)
             for (int z = 0; z < area.z; z++)
             {
                 glm::uvec3 voxPos(
-                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x),
-                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y),
-                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z));
+                    Clamp(x + pos.x + offset.x, 0, m_World->GetSize().x - 1),
+                    Clamp(y + pos.y + offset.y, 0, m_World->GetSize().y - 1),
+                    Clamp(z + pos.z + offset.z, 0, m_World->GetSize().z - 1));
 
                 switch (m_World->GetVoxel(voxPos))
                 {
@@ -378,9 +379,9 @@ void Plant::GrowRoot()
     {
         int idx = WeightedChoice<std::array<int, m_DNA.ROOT_GROW_ACTION_LEN>::const_iterator>(m_DNA.RootGrowAction.begin(), m_DNA.RootGrowAction.end());
         glm::uvec3 voxPos(
-            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x),
-            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y),
-            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z));
+            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x - 1),
+            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y - 1),
+            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z) - 1);
 
         if (m_World->GetVoxel(voxPos) != VoxelTypeSoil)
             continue;
@@ -416,9 +417,9 @@ void Plant::GrowLeaf()
     {
         int idx = WeightedChoice<std::array<int, m_DNA.LEAF_GROW_ACTION_LEN>::const_iterator>(m_DNA.LeafGrowAction.begin(), m_DNA.LeafGrowAction.end());
         glm::uvec3 voxPos(
-            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x),
-            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y),
-            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z));
+            Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x - 1),
+            Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y - 1),
+            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z - 1));
 
         if (m_World->GetVoxel(voxPos) != VoxelTypeAir)
             continue;
