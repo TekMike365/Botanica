@@ -327,7 +327,7 @@ void Plant::GrowRoot()
         glm::uvec3 voxPos(
             Clamp(idx / (3 * 3) - 1 + p.x, 0, m_World->GetSize().x - 1),
             Clamp((idx / 3) % 3 - 1 + p.y, 0, m_World->GetSize().y - 1),
-            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z) - 1);
+            Clamp(idx % 3 - 1 + p.z, 0, m_World->GetSize().z - 1));
 
         if (m_World->GetVoxel(voxPos) != VoxelTypeSoil)
             continue;

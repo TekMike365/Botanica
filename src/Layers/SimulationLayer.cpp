@@ -41,17 +41,19 @@ void SimulationLayer::OnUpdate(Timestep dt)
 
     // Simulation loop
     m_World->ResetResources();
-    for (int i = 0; i < m_Plants.size();)
+
+    for (int i = 0; i < m_Plants.size(); i++)
     {
         auto plant = m_Plants.begin() + i;
 
-        {
-            auto plants = plant->Reproduce(m_NextID);
-            m_Plants.insert(m_Plants.end(), plants.begin(), plants.end());
-            // In case the iterator changes
-            plant = m_Plants.begin() + i;
-        }
+        auto plants = plant->Reproduce(m_NextID);
+        m_Plants.insert(m_Plants.end(), plants.begin(), plants.end());
+        // In case the iterator changes
+        plant = m_Plants.begin() + i;
+    }
 
+    for (auto plant = m_Plants.begin(); plant != m_Plants.end();)
+    {
         plant->Mine();
         plant->Grow();
         if (!plant->IsAlive())
@@ -68,7 +70,7 @@ void SimulationLayer::OnUpdate(Timestep dt)
             continue;
         }
         plant->Survive();
-        i++;
+        plant++;
     }
 }
 
