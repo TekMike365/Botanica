@@ -68,7 +68,7 @@ public:
 
     static constexpr float START_RESOURCES_MPLR = 0.75f;
 
-    static const int ROOT_POTASSIUM_COST = 7;
+    static const int ROOT_POTASSIUM_COST = 10;
     static const int ROOT_NITROGEN_COST = 7;
 
     static const int LEAF_PHOSPHORUS_COST = 7;
