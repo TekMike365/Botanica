@@ -12,6 +12,8 @@
 
 \linespread{1.5}   % 1.5 riadkovanie
 
+\AddToHook{cmd/section/before}{\clearpage}
+
 \def\nazovprace{Botanica - simulátor rastlín na báze celulárnych automatov}
 \def\autori{František Knapec, Michael Sklenka, Marek Beňo}
 
@@ -114,19 +116,19 @@ ak v~nej uvedené údaje nie sú pravdivé.
 % TODO: chceme?
 %
 
-\thispagestyle{empty}
-
-\null
-\vfill
-
-\noindent
-\textbf{Poďakovanie}
-
-\noindent
-Toto je poďakovanie
-
-\vspace{8cm}
-\newpage
+% \thispagestyle{empty}
+% 
+% \null
+% \vfill
+% 
+% \noindent
+% \textbf{Poďakovanie}
+% 
+% \noindent
+% Toto je poďakovanie
+% 
+% \vspace{8cm}
+% \newpage
 
 
 %
@@ -137,8 +139,6 @@ Toto je poďakovanie
 
 \thispagestyle{empty}
 \tableofcontents
-\newpage
-
 
 %
 % The work :)
@@ -146,8 +146,6 @@ Toto je poďakovanie
 
 \addcontentsline{toc}{section}{Úvod}
 \section*{Úvod}
-
-\newpage
 
 \section{Problematika a prehľad literatúry}
 
@@ -157,73 +155,104 @@ ako aj k iným rastlinám v ich okolí. Do tejto práce patrí aj vyobrazenie
 rastlín v trojdimenzionálnom priestore. Pôjde aj o schopnosť dlhodobého
 pozorovania ekosystému naprieč časom.
 
-Ľudia k problému vytvárania digitálnych rastlín postupovali rôznymi spôsobmi,
+Ľudia k problému tvorenia digitálnych rastlín postupovali rôznymi spôsobmi,
 avšak väčšina z nich len realistické rastliny vykresľovali, ako je napríklad
-známy príklad L-systémov, ktorý je založený na opisovaní štruktúry rastlín
-sériou pravidiel pre kód, ako je napr. rotácia, vytvorenie úsečky alebo
+známy príklad L-systémov,\footnote{
+	Lindenmayerov systém - https://en.wikipedia.org/wiki/L-system
+	}
+ktorý je založený na opisovaní štruktúry rastlín
+sériou pravidiel, ako je napr. otočenie, vytvorenie úsečky alebo
 vrátenie sa na určitú pozíciu. Ďalej sa štruktúra zdokonaľuje za pomoci
 algoritmu, ktorý nahrádza časti jej série pravidiel za iné, dopredu určené
-a detailnejšie série. Toto riešenie a jemu podobné avšak dané rastliny len
+a detailnejšie série. Tento postup dokáže vytvoriť celkom realistické rastliny
+ako je znázornené na obr. \ref{obr:priklad l-systemu}.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\textwidth]{res/Fractal_weeds.png}
+	\caption{Príklad trávy vygenerovanej s použitím L-systému v 3D}
+
+	\footnotesize (zdroj: https://en.wikipedia.org/wiki/L-system)
+
+	\label{obr:priklad l-systemu}
+\end{figure}
+
+Toto riešenie a jemu podobné avšak dané rastliny len
 vytvárajú, ale našim cieľom je ich aj simulovať. Na samotnú simuláciu
 s vytvorilo viacero algoritmov s vlastnými pozitívami, ale aj zápormi.
 
-\begin{itemize}
-	\item \textbf{Fyzikálne založené modelovanie}
 
-	Jedná sa o simuláciu za pomoci bodov, ktoré sú navzájom prepojené pružnými
-	štruktúrami, na ktoré konajú rôzne sily ako je gravitácia, vietor
-	a napätie. Toto simulovanie je populárne najmä vo filmoch a fyzikálnych
-	simuláciách, ako názov napovedá, no neposkytuje vytváranie týchto štruktúr,
-	ktoré musia byť napred vytvorené, tým pádom nemôžeme pozorovať dlhodobý
-	vývin ekosystému.
-	% Tu by sa hodili nejaké ukážky kódu alebo hotových rastlín,
-	% tiež citácie z literatúry.
+\subsection{Spôsoby simulovania rastlín}
 
-	\item \textbf{Simulácia pomocou strojového učenia}
+TODO: write
 
-	Strojové učenie je obrovský nástroj, čo sa týka nielen simulovania rastlín.
-	Je všestranný a dokáže si poradiť s rôznymi zadaniami, od simulácie
-	založenej na chemických procesoch, vonkajších činiteľoch alebo
-	procesovo % Čo je procesovo založené skúmanie? Všetky pojmy treba dobre
-	          % popísať, vysvetliť...
-	založenom skúmaní a pod.
-	Práca % Aká práca? Tá vaša? Toto by som sem ešte neplietla... skôr popíšte,
-	      % ako funguje strojové
-	sa môže teoreticky považovať za strojové
-	učenie, keďže fungujú na rovnakom princípe: máte niekoľko agentov, ktorý
-	zo začiatku konajú náhodné akcie a tí, ktorí boli najefektívnejší,
-	posielajú svoj kód ďalej, pre ďalšie generácie a z tých sa znova zoberú
-	tí najlepší atď.
-	Rozdiely % Rozdiely voči čomu???
-	sú v tom, že agenti v strojovom učení majú
-	neurálne štruktúry, ktoré im hovoria čo a ako. Rastliny v tomto projekte
-	tieto štruktúry neobsahujú, ale namiesto toho majú svoj genetický kód,
-	ktorý pracuje na podobnom princípe.
-	Taktiež % Tiež do inej časti... Tu sa spomína Botanica, no ešte ani nebolo
-	        % uvedené, čo to je. Pozor na súslednosť textov.
-	strojové učenie má dopredu
-	určený počet agentov, ktorý môžu testom prejsť. Botanica funguje na
-	princípe „survival of the good-enough“ alebo „prežitie dostatočných“.
+\subsubsection{Fyzikálne založené modelovanie}
 
-	\item \textbf{Celulárne automaty}
+Jedná sa o simuláciu využívajúcu bodoy, ktoré sú navzájom prepojené pružnými
+štruktúrami, na ktoré konajú rôzne sily, ako je gravitácia, vietor
+a napätie. Tento štýl simulovania je populárny najmä vo filmoch a fyzikálnych
+simuláciách, ako názov napovedá, no neposkytuje vytváranie týchto štruktúr,
+ktoré musia byť napred vytvorené. Tým pádom nemôžeme pozorovať dlhodobý
+vývin ekosystému.
+% TODO: ukážky, citácie, zdroj
+% Tu by sa hodili nejaké ukážky kódu alebo hotových rastlín,
+% tiež citácie z literatúry.
 
-	Celulárne automaty (CA) je názov pre matematický model a nástroj pre
-	simuláciu. Jedná sa o starší koncept, ktorý obsahuje
-	mriežku % Štvorcovú sieť?
-	so „zafarbenými“ políčkami. Každá farba je určitý stav, ktorý má špecifické
-	správanie, ktoré je prejavované postupom simulácie a v závislosti od
-	okolitých políčok.
+\subsubsection{Simulácia pomocou strojového učenia}
 
-\end{itemize}
+% TODO: fixni
 
+Strojové učenie\footnote{
+	Strojové učenie - https://en.wikipedia.org/wiki/Machine\_learning
+	}
+je obrovský nástroj, čo sa týka nielen simulovania rastlín.
+Je všestranný a dokáže si poradiť s rôznymi zadaniami, od simulácie
+založenej na chemických procesoch, vonkajších činiteľoch alebo
+procesovo založenom skúmaní a pod.
+% Čo je procesovo založené skúmanie? Všetky pojmy treba dobre popísať, vysvetliť...
+Práca
+	% Aká práca? Tá vaša? Toto by som sem ešte neplietla... skôr popíšte,
+	% ako funguje strojové
+sa môže teoreticky považovať za strojové
+učenie, keďže fungujú na rovnakom princípe: máte niekoľko agentov, ktorý
+zo začiatku konajú náhodné akcie a tí, ktorí boli najefektívnejší,
+posielajú svoj kód ďalej, pre ďalšie generácie a z tých sa znova zoberú
+tí najlepší atď.
+Rozdiely % Rozdiely voči čomu???
+sú v tom, že agenti v strojovom učení majú
+neurálne štruktúry, ktoré im hovoria čo a ako. Rastliny v tomto projekte
+tieto štruktúry neobsahujú, ale namiesto toho majú svoj genetický kód,
+ktorý pracuje na podobnom princípe.
+Taktiež % Tiež do inej časti... Tu sa spomína Botanica, no ešte ani nebolo
+		% uvedené, čo to je. Pozor na súslednosť textov.
+strojové učenie má dopredu
+určený počet agentov, ktorý môžu testom prejsť. Botanica funguje na
+princípe „survival of the good-enough“ alebo „prežitie dostatočných“.
+
+\subsubsection{Celulárne automaty}
+
+Celulárne automaty\footnote{
+	Celulárne automaty - https://en.wikipedia.org/wiki/Cellular\_automaton
+	}
+je názov pre matematický model a nástroj pre
+simuláciu. Jedná sa o starší koncept, ktorý obsahuje štvorcovú sieť
+so „zafarbenými“ políčkami. Každá farba je určitý stav, ktorý má špecifické
+správanie závisiace od okolitých políčok.
+
+% TODO: obkec, že sme vybrali CA a prečo
+
+\newpage %? move to a different part?
 \subsection{Celulárne automaty}
 
-CA môžeme charakterizovať štyrmi základnými pojmami: mriežka, stavy buniek,
-pravidlá a diskrétne časové zmeny. Tieto pojmy z CA robia záležitosť, ktorá je
-diskrétna ako v čase, tak aj v priestore a umožňuje nám dôkladné pozorovanie.
+CA môžeme charakterizovať štyrmi základnými pojmami: mriežka (štorcová sieť),
+stavy buniek, pravidlá a diskrétne časové zmeny.
+Tieto pojmy z CA robia záležitosť, ktorá je diskrétna ako v čase, tak aj v
+priestore a umožňuje nám dôkladné pozorovanie. % TODO: rewrite this sentence
 
 Mriežka môže byť v rôznych prípadoch jednorozmerná, dvojrozmerná alebo ako je
-to v našom prípade aj trojrozmerná, avšak najčastejšie využívanou mriežkou je
+to v našom prípade aj trojrozmerná,
+%? maybe remove the bottom one?
+avšak najčastejšie využívanou mriežkou je
 dvojrozmerná mriežka pozostávajúca zo štvorcových buniek.
 
 Každá bunka v mriežke nadobúda jeden z viacerých stavov ako napríklad „živá“
@@ -266,17 +295,20 @@ Plant Populations“ - zameriava sa na 2D simuláciu heterogénnej populácie
 rastlín, zameraná na konkurenciu medzi druhmi, rýchlosť rastu a interakcie
 s prostredím.
 
-\section{Ciele práce} % Každá veľká kapitola na samostatnej strane.
+\section{Ciele práce}
 
 Cieľom tejto práce je vytvorenie aplikácie schopnej vytvárania a simulácie
-rastlín v trojrozmernej mriežke a pomocou celulárnych automatov
-a implementovanej genetiky vytvoriť pseudo-realistické rastliny, ktoré reagujú
-na prostredie v reálnom čase a adaptujú svoje správanie, tvar a iné
-charakteristiky v závislosti od podmienok, v ktorých sa nachádzajú. Veríme,
-že tieto metódy sú využiteľné ako na vytváranie dynamického a nerepetetivného
-prostredia vo video-hrách, tak aj na viac vedecké účely ako pozorovanie
-správania rastlín vo virtuálne vytvorených podmienkach a ich ideálne
-charakteristiky za daných podmienok.
+pseudo-rea\-listických rastlín v trojrozmernej mriežke pomocou celulárnych
+automatov a implementovanej genetiky.
+Tieto rastliny by mali byť schopné reagovať na prostredie v reálnom čase
+a adaptujú svoje správanie, tvar a iné charakteristiky v závislosti
+od podmienok, v ktorých sa nachádzajú.
+
+Veríme, že tieto metódy sú využiteľné ako na vytváranie dynamického
+a nerepetetivného prostredia vo video-hrách, tak aj na viac vedecké účely
+ako pozorovanie správania rastlín vo virtuálne vytvorených podmienkach
+a ich ideálne charakteristiky za daných podmienok.
+% TODO:
 % Toto je výborne sformulované. Chcelo by to ešte rozmeniť na drobné.
 % Napr. takto Výstupom našej práce bude softvérové prostredie Botanica,
 % ktoré bude mať tieto vlastnosti: 1), …
@@ -324,7 +356,7 @@ hodnoty, sa vytvoria vektory smerujúce k týmto miestam (zelené). Z náhodnéh
 vektoru a vektoru smerujúceho z bodu sa vytvorí skalárny súčin a tým dosiahneme
 hodotu v danom bode.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{res/prelinov_sum.png}
 	\caption{...}
@@ -339,7 +371,7 @@ oktáva, avšak vplýva menej na výslednú hodnotu. Ak vyjadríme hodnoty bodov
 farebnou škálou kde vyššie hodnoty sú viac biele a nižšie viac čierne dostaneme
 nasledujúci obrázok:
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{res/perlinov_sum_textura.png}
 	\caption{... (https://en.wikipedia.org/wiki/Perlin\_noise)}
