@@ -224,19 +224,31 @@ v tejto práci založená na princípe celulárnych automatoch.
 \subsection{Celulárne automaty}
 % TODO: make it work
 
-CA môžeme charakterizovať štyrmi základnými pojmami: mriežka (štorcová sieť),
-stavy buniek, pravidlá a diskrétne časové zmeny.
-Tieto pojmy z CA robia záležitosť, ktorá je diskrétna ako v čase, tak aj v
-priestore a umožňuje nám dôkladné pozorovanie. % TODO: rewrite this sentence
+CA sa skladá z týchto základných časťí: mriežka (často štorcová sieť)
+a bunky tejto mriežky, ktoré majú vlastný stav, pričom každý stav obsahuje
+určité pravidlá, ktoré zapríčiňujú správanie buniek, a tým celého systému.
+Tieto časti z CA robia systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
+požiadavkám.
 
-Mriežka môže byť v rôznych prípadoch jednorozmerná, dvojrozmerná alebo ako je
-to v našom prípade aj trojrozmerná,
-%? maybe remove the bottom one?
-avšak najčastejšie využívanou mriežkou je
-dvojrozmerná mriežka pozostávajúca zo štvorcových buniek.
+Klasickým príkladom takéhoto systému je Conwayova hra života.\footnote
+{Conwayova hra života - https://en.wikipedia.org/wiki/Conway\%27s\_Game\_of\_Life}
+V tejto hre nadobúda každá bunka jednu z dvoch hodnôt: buď je bunka živá, alebo
+mŕtva.
 
-Každá bunka v mriežke nadobúda jeden z viacerých stavov ako napríklad „živá“
-alebo „mŕtva“ v najjednoduchšom systéme, teda binárnom.
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{0.48\textwidth}
+		\centering
+		\includesvg[width=0.5\textwidth]{res/alive_cell.svg}
+		\caption*{Živá bunka}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.48\textwidth}
+		\centering
+		\includesvg[width=0.5\textwidth]{res/dead_cell.svg}
+		\caption*{Mŕtva bunka}
+	\end{subfigure}
+	\caption{Príklad živej a mŕtvej bunky Conwayovej hry života.}
+\end{figure}
 
 Pravidlá definujú správanie bunky v závislosti jej stavu od susedov. Susedov
 môžeme taktiež definovať 2 spôsobmi v N+1 dimenziách, ak nerátame diagonálne
