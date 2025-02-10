@@ -181,14 +181,13 @@ ako je znázornené na obr. \ref{obr:priklad l-systemu}.
 \end{figure}
 
 Toto riešenie a jemu podobné však dané rastliny len vytvárajú, no našim cieľom
-je ich aj simulovať. Kôli samotnej simulácii vzniklo viacero algoritmov
-s vlastnými pozitívami, ale aj zápormi.
+je ich aj simulovať.
 
-\newpage
+
 \subsection{Spôsoby simulovania rastlín}
 
-% TODO:
-TODO: write introduction
+Kôli samotnej simulácii vzniklo viacero metód simulovania s vlastnými kladmi,
+ale aj zápormi. Medzi takéto metódy patria:
 
 % TODO: ukážky, citácie, zdroje
 \begin{itemize}
@@ -208,11 +207,22 @@ TODO: write introduction
 		závisiace od okolitých políčok.
 \end{itemize}
 
-% TODO:
-TODO: obkec, že sme vybrali CA a prečo
+Fyzikálne založené modelovanie, aj keď mocné, vyžaduje aby rastliny boli
+vygenerované pred tým, ako začne simulácia. Po spustení simulácie nie sú tieto
+rastliny schopné sa ďaľej vyvíjať. Navyše vyžaduje fyzikálne založenú
+simuláciu, ktorá je príliš komplikovaná pre túto prácu.
 
-\newpage %? move to a different part?
+Na druhú stranu, strojové učenie sa stáva čím ďaľej tým využívanejšie pre
+riešenie všetkých možných problémov. Avšak je tento spôsob náročný na čas
+a výpočtovú techniku.
+
+Nakoniec Celulárne automaty ponúkajú jednoduchosť a možnosť ich jednoducho
+modifikovať, čo otvára pole možných využití. Vďaka týmto výhodám je simulácia
+v tejto práci založená na princípe celulárnych automatoch.
+
+\newpage
 \subsection{Celulárne automaty}
+% TODO: make it work
 
 CA môžeme charakterizovať štyrmi základnými pojmami: mriežka (štorcová sieť),
 stavy buniek, pravidlá a diskrétne časové zmeny.
