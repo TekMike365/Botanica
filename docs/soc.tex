@@ -180,69 +180,36 @@ ako je znázornené na obr. \ref{obr:priklad l-systemu}.
 	\label{obr:priklad l-systemu}
 \end{figure}
 
-Toto riešenie a jemu podobné avšak dané rastliny len
-vytvárajú, ale našim cieľom je ich aj simulovať. Na samotnú simuláciu
-s vytvorilo viacero algoritmov s vlastnými pozitívami, ale aj zápormi.
+Toto riešenie a jemu podobné však dané rastliny len vytvárajú, no našim cieľom
+je ich aj simulovať. Kôli samotnej simulácii vzniklo viacero algoritmov
+s vlastnými pozitívami, ale aj zápormi.
 
-
+\newpage
 \subsection{Spôsoby simulovania rastlín}
 
-TODO: write
+% TODO:
+TODO: write introduction
 
-\subsubsection{Fyzikálne založené modelovanie}
+% TODO: ukážky, citácie, zdroje
+\begin{itemize}
+	\item \textbf{Fyzikálne založené modelovanie} využívajúce body prepojené
+		pružnými štruktúrami, na ktoré pôsobia rôzne sily. Aj keď realistické,
+		modelovanie neumožňuje rastliny tvoriť, iba simulovať.
+	\item \textbf{Simulácia pomocou strojového učenia}\footnote
+			{Strojové učenie - https://en.wikipedia.org/wiki/Machine\_learning}
+		využíva štatistické
+		algoritmy, pomocou ktorých sa dokáže počas tréningu učiť vzťahy medzi
+		vstupmi a výstupmi.
+	\item \textbf{Celulárne automaty}\footnote
+			{Celulárne automaty - https://en.wikipedia.org/wiki/Cellular\_automaton}
+		je názov pre matematický model a nástroj pre simuláciu. Jedná sa
+		o starší koncept, ktorý obsahuje štvorcovú sieť so „zafarbenými“
+		políčkami. Každá farba je určitý stav, ktorý má špecifické správanie
+		závisiace od okolitých políčok.
+\end{itemize}
 
-Jedná sa o simuláciu využívajúcu bodoy, ktoré sú navzájom prepojené pružnými
-štruktúrami, na ktoré konajú rôzne sily, ako je gravitácia, vietor
-a napätie. Tento štýl simulovania je populárny najmä vo filmoch a fyzikálnych
-simuláciách, ako názov napovedá, no neposkytuje vytváranie týchto štruktúr,
-ktoré musia byť napred vytvorené. Tým pádom nemôžeme pozorovať dlhodobý
-vývin ekosystému.
-% TODO: ukážky, citácie, zdroj
-% Tu by sa hodili nejaké ukážky kódu alebo hotových rastlín,
-% tiež citácie z literatúry.
-
-\subsubsection{Simulácia pomocou strojového učenia}
-
-% TODO: fixni
-
-Strojové učenie\footnote{
-	Strojové učenie - https://en.wikipedia.org/wiki/Machine\_learning
-	}
-je obrovský nástroj, čo sa týka nielen simulovania rastlín.
-Je všestranný a dokáže si poradiť s rôznymi zadaniami, od simulácie
-založenej na chemických procesoch, vonkajších činiteľoch alebo
-procesovo založenom skúmaní a pod.
-% Čo je procesovo založené skúmanie? Všetky pojmy treba dobre popísať, vysvetliť...
-Práca
-	% Aká práca? Tá vaša? Toto by som sem ešte neplietla... skôr popíšte,
-	% ako funguje strojové
-sa môže teoreticky považovať za strojové
-učenie, keďže fungujú na rovnakom princípe: máte niekoľko agentov, ktorý
-zo začiatku konajú náhodné akcie a tí, ktorí boli najefektívnejší,
-posielajú svoj kód ďalej, pre ďalšie generácie a z tých sa znova zoberú
-tí najlepší atď.
-Rozdiely % Rozdiely voči čomu???
-sú v tom, že agenti v strojovom učení majú
-neurálne štruktúry, ktoré im hovoria čo a ako. Rastliny v tomto projekte
-tieto štruktúry neobsahujú, ale namiesto toho majú svoj genetický kód,
-ktorý pracuje na podobnom princípe.
-Taktiež % Tiež do inej časti... Tu sa spomína Botanica, no ešte ani nebolo
-		% uvedené, čo to je. Pozor na súslednosť textov.
-strojové učenie má dopredu
-určený počet agentov, ktorý môžu testom prejsť. Botanica funguje na
-princípe „survival of the good-enough“ alebo „prežitie dostatočných“.
-
-\subsubsection{Celulárne automaty}
-
-Celulárne automaty\footnote{
-	Celulárne automaty - https://en.wikipedia.org/wiki/Cellular\_automaton
-	}
-je názov pre matematický model a nástroj pre
-simuláciu. Jedná sa o starší koncept, ktorý obsahuje štvorcovú sieť
-so „zafarbenými“ políčkami. Každá farba je určitý stav, ktorý má špecifické
-správanie závisiace od okolitých políčok.
-
-% TODO: obkec, že sme vybrali CA a prečo
+% TODO:
+TODO: obkec, že sme vybrali CA a prečo
 
 \newpage %? move to a different part?
 \subsection{Celulárne automaty}
