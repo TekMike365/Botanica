@@ -16,6 +16,7 @@
 \linespread{1.5}   % 1.5 riadkovanie
 
 \AddToHook{cmd/section/before}{\clearpage}
+\setcounter{section}{-1}
 
 \def\nazovprace{Botanica - simulátor rastlín na báze celulárnych automatov}
 \def\autori{František Knapec, Michael Sklenka, Marek Beňo}
@@ -147,8 +148,7 @@ ak v~nej uvedené údaje nie sú pravdivé.
 % The work :)
 %
 
-\addcontentsline{toc}{section}{Úvod}
-\section*{Úvod}
+\section{Úvod}
 
 \section{Problematika a prehľad literatúry}
 
@@ -197,7 +197,7 @@ ale aj zápormi. Medzi takéto metódy patria:
 	\item \textbf{Simulácia pomocou strojového učenia}\footnote
 			{Strojové učenie - https://en.wikipedia.org/wiki/Machine\_learning}
 		využíva štatistické
-		algoritmy, pomocou ktorých sa dokáže počas tréningu učiť vzťahy medzi
+		algoritmy, pomocou ktorých sa počítač dokáže počas tréningu učiť vzťahy medzi
 		vstupmi a výstupmi.
 	\item \textbf{Celulárne automaty}\footnote
 			{Celulárne automaty - https://en.wikipedia.org/wiki/Cellular\_automaton}
@@ -208,27 +208,25 @@ ale aj zápormi. Medzi takéto metódy patria:
 \end{itemize}
 
 Fyzikálne založené modelovanie, aj keď mocné, vyžaduje aby rastliny boli
-vygenerované pred tým, ako začne simulácia. Po spustení simulácie nie sú tieto
+vygenerované pred tým, ako sa simulácia začne. Po spustení simulácie nie sú tieto
 rastliny schopné sa ďaľej vyvíjať. Navyše vyžaduje fyzikálne založenú
 simuláciu, ktorá je príliš komplikovaná pre túto prácu.
 
 Na druhú stranu, strojové učenie sa stáva čím ďaľej tým využívanejšie pre
-riešenie všetkých možných problémov. Avšak je tento spôsob náročný na čas
+riešenie všetkých možných problémov. Avšak, tento spôsob je náročný na čas
 a výpočtovú techniku.
 
 Nakoniec Celulárne automaty ponúkajú jednoduchosť a možnosť ich jednoducho
 modifikovať, čo otvára pole možných využití. Vďaka týmto výhodám je simulácia
 v tejto práci založená na princípe celulárnych automatoch.
 
-\newpage
 \subsection{Celulárne automaty}
-% TODO: make it work
 
 CA sa skladá z týchto základných časťí: mriežka (často štorcová sieť)
 a bunky tejto mriežky, ktoré majú vlastný stav, pričom každý stav obsahuje
 určité pravidlá, ktoré zapríčiňujú správanie buniek, a tým celého systému.
 Tieto pravidlá sa aplikujú každú generáciu, každé simulačné kolo.
-Vďaka týmto častiam sú CA systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
+Vďaka týmto vlastnostiam sú CA systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
 požiadavkám.
 
 Klasickým príkladom takéhoto systému je Conwayova hra života.\footnote
@@ -252,7 +250,9 @@ simulovať hociaký počítač, čiže aj sama seba\footnote
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{res/Conways_game_of_life_breeder.png}
-	\caption{...}
+	\caption{Na obráyku je znázornená pohyblivá štruktúra (červená), ktorá
+		za sebou zaneháva továrne (zelená) produkujúce glidery (modrá),
+		jednoduché pohybujúce sa štruktúry.}
 	\label{obr:conwayova hra zivota}
 \end{figure}
 
@@ -272,39 +272,35 @@ rastlín, zameraná na konkurenciu medzi druhmi, rýchlosť rastu a interakcie
 s prostredím.
 
 \section{Ciele práce}
+% TODO:
+% Chcelo by to ešte rozmeniť na drobné.
+% Napr. takto Výstupom našej práce bude softvérové prostredie Botanica,
+% ktoré bude mať tieto vlastnosti: 1), …
 
 Cieľom tejto práce je vytvorenie aplikácie schopnej vytvárania a simulácie
 pseudo-rea\-listických rastlín v trojrozmernej mriežke pomocou celulárnych
 automatov a implementovanej genetiky.
 Tieto rastliny by mali byť schopné reagovať na prostredie v reálnom čase
-a adaptujú svoje správanie, tvar a iné charakteristiky v závislosti
+a adaptovať svoje správanie, tvar a iné charakteristiky v závislosti
 od podmienok, v ktorých sa nachádzajú.
 
-Veríme, že tieto metódy sú využiteľné ako na vytváranie dynamického
+Výsledkom tejto práce je softvér, Botanica, ktorý umožňuje pozorovanie
+správania a vývinu simulovaných rastlín vďaka schostiam:
+
+\begin{enumerate}
+	\item generovať časť 3D voxelového sveta za pomoci perlinovho šumu,
+	\item simulovať rastliny vo vytvorenom prostredí pomocou vlastného
+		algoritmu inšpirovaného celulárnymi automatmi,
+	\item vykresľovať túto simuláciu za pomoci grafického API OpenGL.
+\end{enumerate}
+
+Veríme, že metódy využité v Botanice sú využiteľné ako na vytváranie dynamického
 a nerepetetivného prostredia vo video-hrách, tak aj na viac vedecké účely
 ako pozorovanie správania rastlín vo virtuálne vytvorených podmienkach
 a ich ideálne charakteristiky za daných podmienok.
-% TODO:
-% Toto je výborne sformulované. Chcelo by to ešte rozmeniť na drobné.
-% Napr. takto Výstupom našej práce bude softvérové prostredie Botanica,
-% ktoré bude mať tieto vlastnosti: 1), …
 
 \section{Materiál a metodika}
 
-Simulátor % Toto je zase tak uprostred práce.
-		  % Treba popísať vývoj krok za krokom. Cieľom našej práce bola tvorba
-		  % prostredia Botanica. Jej vývoj zahŕňa kombináciu rôlznych
-		  % technológií: samotný simulátor bol...
-bol vytvorený vo Visual studio code za pomoci jazykov C++ a GLSL.
-Ďalej sme využili knižnicu GLFW, ktorá pomáha s vývojom aplikácií vďaka tomu,
-že poskytuje jednoduché API na vývoj aplikácií. Ďalej sme využili Glad,
-softvér, ktorý generuje multi-jazykové loadery, matematickú knižnicu GLM
-a logovaciu knižnicu spdlog. Na vykreslenie trojrozmerného prostredia sme
-využili OpenGL.
-% Tu by sa ešte hodilo niečo ako fázy práce, koľko čo trvalo
-% alebo ako ste si to rozdelili...
-
-%? Nova cast
 \section{Aplikácia}
 
 Na realizovanie algoritmu sme vyvinuli jednoduchú aplikáciu, ktorá má všetky
@@ -524,7 +520,7 @@ simulácie majú všetky rastliny bonusy rovné 1.
 \section{Diskusia}
 \section{Závery práce}
 \section{Zhrnutie}
-\section{Zoznam použitej literatúry}
+% \section{Zoznam použitej literatúry}
 % Prílohy (nepovinné)
 
 \end{document}
