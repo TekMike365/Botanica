@@ -1,6 +1,7 @@
 *.pdf
 !soc.pdf
 
+*.swp
 *.aux
 *.fdb_latexmk
 *.fls

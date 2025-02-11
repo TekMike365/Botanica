@@ -173,7 +173,7 @@ ako je znázornené na obr. \ref{obr:priklad l-systemu}.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\textwidth]{res/Fractal_weeds.png}
-	\caption{Príklad trávy vygenerovanej s použitím L-systému v 3D}
+	\caption{Príklad tráv vygenerovaných s použitím L-systému v 3D}
 
 	\footnotesize (zdroj: https://en.wikipedia.org/wiki/L-system)
 
@@ -227,50 +227,34 @@ v tejto práci založená na princípe celulárnych automatoch.
 CA sa skladá z týchto základných časťí: mriežka (často štorcová sieť)
 a bunky tejto mriežky, ktoré majú vlastný stav, pričom každý stav obsahuje
 určité pravidlá, ktoré zapríčiňujú správanie buniek, a tým celého systému.
-Tieto časti z CA robia systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
+Tieto pravidlá sa aplikujú každú generáciu, každé simulačné kolo.
+Vďaka týmto častiam sú CA systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
 požiadavkám.
 
 Klasickým príkladom takéhoto systému je Conwayova hra života.\footnote
 {Conwayova hra života - https://en.wikipedia.org/wiki/Conway\%27s\_Game\_of\_Life}
-V tejto hre nadobúda každá bunka jednu z dvoch hodnôt: buď je bunka živá, alebo
-mŕtva.
+V tejto hre nadobúda každá bunka štvorcovej siete jednu z dvoch hodnôt:
+buď je bunka živá, alebo mŕtva. Conwayova hra života má nasledovné pravidlá:
+
+\begin{enumerate}
+	\item Každá živá bunka s menej ako dvoma živými susedmi umrie.
+	\item Každá živá bunka s dvomi alebo tromi živými susedmi prežie.
+	\item Každá živá bunka s viac ako tromi živými susedmi umrie.
+	\item Každá mŕtva bunka s presne tromi živými susedmi ožije.
+\end{enumerate}
+
+V hre života sa nachádza veľa stabilných configurácií (glidery, továrne,
+oscilátory, atď.) ako je vidno na obr. \ref{obr:conwayova hra zivota}.
+Vďaka týmto štruktúram je Conwayova hra života turingovo kompletná (môže
+simulovať hociaký počítač, čiže aj sama seba\footnote
+{Life in life - https://www.youtube.com/watch?v=xP5-iIeKXE8}).
 
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[t]{0.48\textwidth}
-		\centering
-		\includesvg[width=0.5\textwidth]{res/alive_cell.svg}
-		\caption*{Živá bunka}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.48\textwidth}
-		\centering
-		\includesvg[width=0.5\textwidth]{res/dead_cell.svg}
-		\caption*{Mŕtva bunka}
-	\end{subfigure}
-	\caption{Príklad živej a mŕtvej bunky Conwayovej hry života.}
+	\includegraphics[width=0.9\textwidth]{res/Conways_game_of_life_breeder.png}
+	\caption{...}
+	\label{obr:conwayova hra zivota}
 \end{figure}
-
-Pravidlá definujú správanie bunky v závislosti jej stavu od susedov. Susedov
-môžeme taktiež definovať 2 spôsobmi v N+1 dimenziách, ak nerátame diagonálne
-bunky ako susedné, ide o von Neumannove susedstvo, ak rátame aj diagonály,
-ide o Moorove susedstvo. % Citácia z literatúry???
-
-Zmena času sa odohráva v diskrétnych časových odsekoch, toto má za príčinu
-našu schopnosť sledovať zmeny všetkých stavov buniek naraz.
-
-\subsubsection{Príklady na klasické CA}
-
-Conwayova hra života je pravdepodobne najznámejší príklad celulárnych
-automatov. Jedná sa o dvojrozmernú štvorcovú mriežku, kde bunky majú dva stavy:
-„živé“ alebo „mŕtve“, ich stav závisí od stavu okolitých buniek.
-
-Wolframove celulárne automaty kategorizujú správanie jednorozmerných CA.
-Sú schopné generovať komplexné a nepredpokladateľné vzorce, ak k ním pridáme
-druhú dimenziu reprezentujúcu čas z nekomplexných pravidiel.
-
-Viacrozmerné CA využívajú tri alebo viac dimenzií a sú prevažne využívané
-na modelovanie fyzikálnych javov, ako je tvorba kryštalických štruktúr
-alebo difúzia. % Citácia, ukážte nejaké príklady...
 
 \subsubsection{Príklady CA zamerané na simuláciu rastlín}
 
