@@ -299,18 +299,16 @@ a nerepetetivného prostredia vo video-hrách, tak aj na viac vedecké účely
 ako pozorovanie správania rastlín vo virtuálne vytvorených podmienkach
 a ich ideálne charakteristiky za daných podmienok.
 
-\section{Materiál a metodika}
 
-\section{Aplikácia}
+\section{Aplikácia (Materiál a metodika)}
 
-Na realizovanie algoritmu sme vyvinuli jednoduchú aplikáciu, ktorá má všetky
-potrebné Na realizovanie algoritmu sme vyvinuli jednoduchú aplikáciu, ktorá má
+Na realizovanie algoritmu sme vyvinuli jednoduchú aplikáciu, ktorá má
 všetky potrebné prostriedky na demonštráciu všetkých aspektov tohto algoritmu.
 Aplikácia umožňuje vizualizáciu rastu rastlín na základe celuárnych automatov
 a poskytuje možnosť meniť parametre simulácie na dosiahnutie idealného vzhľadu
 rastlín.
 
-\subsection{Svet}
+\subsection{Svet} \label{subsec:svet}
 
 Svet aplikácie pozostáva z mriežky buniek o rozmeroch 32x32x32 voxelov.
 Každý voxel nadobúda určitý stav. Môže sa jednať o časti rastlín (stonka, list,
@@ -322,7 +320,7 @@ Terén na určenie svojej výšky, aby nebol len rovina, využíva funkciu zvan�
 Perlin noise. Perlin noise, je spôsob generovania hodnôt, ktoré sú náhodné,
 pričom body, ktoré sú si susedné, sa v hodnotách moc nemenia. Toto vytvára
 hodnoty, ktoré sa dajú skvelo využiť na generovanie realistického terénu.
-Čo sa týka algoritmu na jeho generovanie, v určitých miestach sa vytvoria
+Čo sa týka algoritmu na jeho generovanie (obr. \ref{obr:perlinov sum}), v určitých miestach sa vytvoria
 vektory s náhodným smerom (modrý). Z bodov (červené), ku ktorým chceme pripísať
 hodnoty, sa vytvoria vektory smerujúce k týmto miestam (zelené). Z náhodného
 vektoru a vektoru smerujúceho z bodu sa vytvorí skalárny súčin a tým dosiahneme
@@ -332,9 +330,9 @@ Avšak väčšinu času sa hodnoty nepočítajú len pre jeden náhodný vektor,
 ale viacero, najčastejšie 4 najbližšie a hodnoty ich skalárnych súčtov
 sa spriemerujú. Často sa využíva aj viacero oktáv, pričom každá oktáva generuje
 viacej náhodných vektorov, ktoré ovplyvňujú menej buniek, ako predchádzajúca
-oktáva, avšak vplýva menej na výslednú hodnotu. Ak vyjadríme hodnoty bodov
-farebnou škálou kde vyššie hodnoty sú viac biele a nižšie viac čierne dostaneme
-nasledujúci obrázok:
+oktáva, avšak vplýva menej na výslednú hodnotu. Vyjadrenie hodnôt bodov
+farebnou škálou kde vyššie hodnoty sú viac biele a nižšie viac čierne popisuje
+obrázok \ref{obr:perlinov sum textura}:
 
 \begin{figure}[h]
 	\centering
@@ -342,14 +340,14 @@ nasledujúci obrázok:
 	\begin{subfigure}[t]{0.49\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{res/prelinov_sum.png}
-		\caption{...}
+		\caption{}
 		\label{obr:perlinov sum}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[t]{0.49\textwidth}
 		\centering
 		\includegraphics[width=0.6\textwidth]{res/perlinov_sum_textura.png}
-		\caption{...}
+		\caption{}
 		\footnotesize (zdroj: https://en.wikipedia.org/wiki/Perlin\_noise)
 		\label{obr:perlinov sum textura}
 	\end{subfigure}
@@ -515,6 +513,71 @@ nedostatok.
 Podobne ako smrť, sa odvíja od veľkosti rastliny a konštanty. Pre každý bonus
 sa ráta zvlášť a keďže tento krok je až na konci cyklu v úplne prvom cykle
 simulácie majú všetky rastliny bonusy rovné 1.
+
+
+\subsection{Renderovanie}
+
+Aby nebola simulácia len v podobe čísiel v súbore, sú tieto voxely aj
+vykresľované na obrazovku. Renderovanie je prevedené na grafickú kartu,
+processor má tak viac času venovať sa simulácii. Na renderovaie bolo vybrané
+grafické API OpenGL pre jeho jednoduchosť a kompatibilitu medzi operačnými
+systémamy.
+
+Ako už bolo spomínané v časti \ref{subsec:svet}, svet je zložený z malých
+kociek (voxelov) v sieti 32x32x32. Voxely môžu byť tovrené rôznymi materiálmi,
+čo je symbolizované číselnou hodnotou pre každú jednu bunku v sieti. Tieto
+hodnoty sú po každej zmene sveta nahrané na grafickú kartu pomocou grafického
+API OpenGL.
+
+Grafická karta následne vygeneruje sieť bodov (vertexov) s farebnými a
+polohovými hodnotami, ktoré následne každý snímok vykreslí na obrazovku.
+
+\subsubsection{Tvorenie vertexov z voxelových dát sveta}
+
+Na začiatok treba povedať, že grafické karty spracovávajú dáta paralelne
+(povedľa seba), čo im umožňuje sa "prehrýzť" obrovským množstvom dát za okamih,
+avšak je to niečo, na čo treba myslieť pri programovaní výpočtových programov,
+compute shaderov.
+
+Shader je spustený niekoľko krát, raz na každý voxel. Jeho výstupom je
+neprerušená pamäť vertexov ktoré sú následne zaslané na renderovanie.
+To je dosiahnuté globálnym atomickým počítadlom.\footnote
+{Atomické počítadlo je číslo, ktoré môže zvýšiť iba jeden program naraz. Táto
+vlastnosť zabraňuje prepisovanie už zapísaných dát.}
+Dáta sú shaderu poslané v jednom veľkom kuse pamäti, čiže shader potrebuje
+vedieť, kde sa jemu priradený voxel v tejto pamäti nachádza.
+
+Každá invokácia shaderu (každý spustený program) dostane poradové číslo, ktoré
+je použité ako index, poradník, voxelu v pamäti z ktorej je vytiahnutá nielen
+hodnota jemu priradenému voxelu, ale aj každého susedného voxelu. Tie sú
+následne využité na kontrolu stien
+(obr. \ref{obr:diagram algoritmu generujuceho vertexy}).
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[height=10cm]{res/diagram_generovanie_voxelov.png}
+	\caption{Znázornenie algoritmu generujúceho steny (4 vertexy) okolo priradeného voxelu.}
+	\label{obr:diagram algoritmu generujuceho vertexy}
+\end{figure}
+
+\newpage
+\subsubsection{Vykresľovanie vygenerovaných dát}
+
+Keď sú dáta vygenerované, nie je zložité ich vykresliť pomocov jednoduchého
+programu pozostávajúceho z dvoch častí:
+
+\begin{itemize}
+	\item \textbf{vertex shader}, počíta otáča a posúva body pomocou dát kamery,
+		premieta 3D body na 2D obrazovku,
+	\item \textbf{fragment shader}, vyfarbuje trojuholníky tvorené vertexmi.
+\end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{res/screenshot.png}
+	\caption{Vyrenderovaný snímok simulácie.}
+\end{figure}
+
 
 \section{Výsledky práce}
 \section{Diskusia}
