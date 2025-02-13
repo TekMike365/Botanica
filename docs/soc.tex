@@ -277,7 +277,7 @@ s prostredím.
 % Napr. takto Výstupom našej práce bude softvérové prostredie Botanica,
 % ktoré bude mať tieto vlastnosti: 1), …
 
-Cieľom tejto práce je vytvorenie aplikácie schopnej vytvárania a simulácie
+Cieľom tejto práce je vytvorenie aplikácie schopnej tvorenia a simulácie
 pseudo-rea\-listických rastlín v trojrozmernej mriežke pomocou celulárnych
 automatov a implementovanej genetiky.
 Tieto rastliny by mali byť schopné reagovať na prostredie v reálnom čase
@@ -294,7 +294,7 @@ správania a vývinu simulovaných rastlín vďaka schopnostiam:
 	\item vykresľovať túto simuláciu za pomoci grafického API OpenGL.
 \end{enumerate}
 
-Veríme, že metódy využité v Botanice sú využiteľné ako na vytváranie dynamického
+Veríme, že metódy využité v Botanice sú využiteľné ako na tvorenie dynamického
 a nerepetetivného prostredia vo video-hrách, tak aj na viac vedecké účely
 ako pozorovanie správania rastlín vo virtuálne vytvorených podmienkach
 a ich ideálne charakteristiky za daných podmienok.
@@ -397,7 +397,7 @@ na absorpciu živín.
 Rastliny sú v tomto simulátore objekty so spoločnou „triedou.“ Trieda je
 predloha premenných a špeciálnych funkcií zvaných metód, ktoré využívajú
 jednotlivé entity, taktiež známe ako objekty. Takáto šablóna nám umožňuje
-jednoducho a usporiadane vytvárať rastliny, pretože nemusíme písať samostatný
+jednoducho a usporiadane tvoriť rastliny, pretože nemusíme písať samostatný
 kód pre každú rastlinu.
 
 \subsubsection{Premenné v rastlinách}
@@ -412,46 +412,46 @@ taktiež máme aj bonusy pre živiny. Hovoria nám o nadbytku alebo nedostatku
 
 Fyzické zobrazenie rastlín sa skladá zo špecializovaných voxelov, ktoré
 v mriežke reprezentujú ich časti. Tieto voxely taktiež voláme aj bunky.
-Existujú 4: bunky koreňov, stonky, listov a ovocia. Každá skupina buniek plní
+Existujú 4: korene, stonky, listy a ovocie. Každá skupina buniek plní
 vlastnú úlohu. Koreň má za úlohu rastline získať živiny a vodu, to dosahuje
 odoberaním týchto živín z okolitých voxelov. Koreň môže vzniknúť iba na
 miestach, kde je pôda. Úlohou listu je fotosyntéza, tú dosiahne tým, že
 skontroluje, či políčka nad ním sú vzduch. Predpokladáme, že na voxeli vzduchu
 priamo svieti slnko. Môže nahradiť políčka kde je vzduch. Stonka uskladňuje
-živiny pre rastlinu.  Rastie iba zvislo. Ovocie vytvára nové rastliny
+živiny pre rastlinu.  Rastie iba zvislo. Ovocie tvorí nové rastliny
 s rovnakým genetickým kódom ktorý trochu zmutuje. Na pár kôl nahrádza 1 list,
 ktorý sa po premenení ovocia na novú rastliny znova zmení na list.
 
 \subsubsection{Genetika}
 
 Na základe genetiky rastliny rozhodujú, aké časti majú rásť (listy, stonka…)
-a v prípade listov a koreňov sú gény, ktoré hovoria, akým smerom majú rásť.
+a v prípade listov a koreňov, existujú gény určujúce akým smerom majú rásť.
 Takže existujú 3 gény: čo má rásť, kde majú rásť korene a kde majú rásť listy.
 Gén „čo má rásť“ je vo všetkých prípadoch list so 4 číslami. Sú 4, pretože sú 4
 typy buniek, ktoré môže rastlina rásť: korene, listy, stonku a ovocie. Čísla
 v týchto listoch označujú, ako moc chce daná rastlina danú časť rásť. Takže
 ak má rastlina v časti označujúcu stonku 2 a koreň 10, daná rastlina bude
-chcieť koreň rásť 5-krát viac, ako stonku. Ktorú časť bude rastlina naozaj
-rásť sa rozhoduje náhodne. Takže ak sa vrátime k nášmu príkladu dokopy 2+10=12,
+chcieť rásť koreň 5-krát viac, ako stonku. Ktorú časť bude rastlina naozaj
+rásť sa rozhoduje náhodne. Ak sa vrátime k nášmu príkladu dokopy $2+10=12$,
 takže to je ako keby naša rastlina hádzala s 12-stenou kockou. Ak padne číslo,
 ktoré je väčšie ako 2, rastie koreň, inak stonka. Gény „kde majú rásť korene“
 a „kde majú rásť listy“ sú rovnaké, len ako ich názov hovorí, jeden sa zaoberá
 koreňmi a druhý listami. Sú to listy s 26 číslami. Je ich 26 pretože bunka má
 v trojrozmernom priestore 26 susedov, ak rátame aj diagonály. Zvyšok funguje
 rovnako ako gén „čo má rásť“. Takže sú tam čísla, ktoré označujú
-pravdepodobnosť rastu do toho smeru. Ak sa tieto 2 gény zavolajú vyberie
-sa náhodná bunka (list alebo koreň, podla toho, ktorý gén sa zavolá) a ak
+pravdepodobnosť rastu do toho smeru. Ak sa tieto 2 gény zavolajú, vyberie
+sa náhodná bunka (list alebo koreň, podla toho, ktorý gén sa zavolá), a ak
 nemôže rásť do toho smeru, tak sa vyberie iná bunka, ak žiadna nemôže rásť,
 vyberie sa iný smer.
 
 \newpage
 \subsection{Algoritmus}
 
-Ako bolo spomínané, simulácie nebeží súvisle, ale v časových „krokoch“.
+Ako bolo spomínané, simulácia nebeží súvisle, ale v časových krokoch.
 Za každý krok sa vykonajú určité akcie, tzv. cyklus. Tieto akcie slúžia na beh
 simulácie a starajú sa o veci ako je rast rastlín, ich vzniknutie, smrť atď.
 Algoritmus za týmto môžeme rozdeliť do nasledujúcich častí, ktoré sú spísané
-chronologicky, čiže postupne, ako ich simulácia vykonáva.
+chronologicky, tak ako ich simulácia vykonáva.
 
 \subsubsection{Vznik rastlín}
 
@@ -467,8 +467,7 @@ neexistujú.
 Je prvá akcia, ktorá sa vykonáva v cykle, každý krok simulácie. Živiny sú totiž
 ukladané v dvoch listoch, jeden permanentný, ktorý drží informácie o počte
 živín a vody zo začiatku simulácie a druhý dočasný, z ktorého rastliny čerpajú.
-V tomto bode sú odobrané všetky živiny, ktoré sa udržiavajú v rastlinách a list
-dočasných živín je znovunastavený na hodnoty rovné permanentnému listu.
+V tomto bode je list dočasných živín obnovený na hodnoty rovné permanentnému listu.
 Toto umožňuje rastlinám znovu brať živiny v novom cykle.
 
 \subsubsection{Zasadenie rastlín}
@@ -480,7 +479,7 @@ pričom v každej časti genetiky jednu hodnotu náhodne zmení, teda „zmutuje
 
 \subsubsection{Produkcia}
 
-V tejto fázy rastlina získava živiny vďaka svojím bunkám, konkrétne listom
+V tejto fáze rastlina získava živiny vďaka svojím bunkám, konkrétne listom
 a koreňom. Listy sa pozrú na bunky horizontálne nad nimi a podla toho, koľko
 z nich sú vzduch, „produkujú“ svetlo. Korene zase pozrú bunky v ich susedstve
 a podla toho generujú živiny a vodu. Koľko z okolitých buniek dokážu listy
