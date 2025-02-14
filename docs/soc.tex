@@ -78,8 +78,8 @@
 	\begin{minipage}{0.75\textwidth}
 		Riešitelia: \autori \par
 		Ročník štúdia: 4. \par
-		Školiteľ: PaedDr. Jana Pekárová, PhD.\par
-		Konzultant: Ing. Tomáš Milet, PhD.
+		Školiteľ: Ing. Tomáš Milet, PhD.\par
+		
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.23\textwidth}
@@ -154,12 +154,12 @@ ak v~nej uvedené údaje nie sú pravdivé.
 
 Táto práca sa zaoberá implementovaním rastlín do digitálnej podoby a následným
 simulovaním ich správania relatívne k podmienkam, v ktorých sa nachádzajú,
-ako aj k iným rastlinám v ich okolí. Do tejto práce patrí aj vyobrazenie
-rastlín v trojdimenzionálnom priestore. Pôjde aj o schopnosť dlhodobého
+ako aj k iným rastlinám v ich okolí. Jej súčasťou je aj vyobrazenie
+rastlín v trojrozmernom priestore. Pôjde aj o schopnosť dlhodobého
 pozorovania ekosystému naprieč časom.
 
-Ľudia k problému tvorenia digitálnych rastlín postupovali rôznymi spôsobmi,
-avšak väčšina z nich len realistické rastliny vykresľovali, ako je napríklad
+Ľudia k problému tvorenia digitálnych rastlín pristupovali rôznymi spôsobmi,
+avšak väčšina z nich len realistické rastliny vykresľovala, pozri napríklad
 známy príklad L-systémov,\footnote{
 	Lindenmayerov systém - https://en.wikipedia.org/wiki/L-system
 	}
@@ -181,12 +181,12 @@ ako je znázornené na obr. \ref{obr:priklad l-systemu}.
 \end{figure}
 
 Toto riešenie a jemu podobné však dané rastliny len vytvárajú, no našim cieľom
-je ich aj simulovať.
+je aj simulovať ich život.
 
 
 \subsection{Spôsoby simulovania rastlín}
 
-Kôli samotnej simulácii vzniklo viacero metód simulovania s vlastnými kladmi,
+Kvôli samotnej simulácii vzniklo viacero metód simulovania s vlastnými kladmi,
 ale aj zápormi. Medzi takéto metódy patria:
 
 % TODO: ukážky, citácie, zdroje
@@ -207,22 +207,22 @@ ale aj zápormi. Medzi takéto metódy patria:
 		závisiace od okolitých políčok.
 \end{itemize}
 
-Fyzikálne založené modelovanie, aj keď mocné, vyžaduje aby rastliny boli
+Fyzikálne založené modelovanie, aj keď mocné, vyžaduje, aby rastliny boli
 vygenerované dopredu, pred začatím simulácie, a po jej spustení nie sú tieto
-rastliny schopné sa ďaľej vyvíjať. Navyše spôsob vyžaduje fyzikálne založenú
+rastliny schopné sa ďalej vyvíjať. Navyše spôsob vyžaduje fyzikálne založenú
 simuláciu, ktorá je príliš komplikovaná pre túto prácu.
 
-Na druhú stranu, strojové učenie sa stáva čím ďaľej tým využívanejšie pre
-riešenie všetkých možných problémov. Avšak, tento spôsob je náročný na čas
+Na druhej strane, strojové učenie sa stáva čím ďalej tým využívanejšie pre
+riešenie všetkých možných problémov. Avšak tento spôsob je náročný na čas
 a výpočtovú techniku.
 
-Nakoniec Celulárne automaty ponúkajú jednoduchosť a možnosť ich jednoducho
-modifikovať, čo otvára pole možných využití. Vďaka týmto výhodám je simulácia
-v tejto práci založená na princípe celulárnych automatoch.
+A napokon, celulárne automaty ponúkajú jednoduchosť a možnosť ich jednoducho
+modifikovať, čo otvára pole rôznorodých využití. Vďaka týmto výhodám je simulácia
+v našej práci založená na princípe celulárnych automatoch.
 
 \subsection{Celulárne automaty}
 
-CA sa skladá z týchto základných časťí: mriežka (často štorcová sieť)
+CA sa skladá z týchto základných častí: mriežka (často štorcová sieť)
 a bunky tejto mriežky, ktoré majú vlastný stav, pričom každý stav obsahuje
 určité pravidlá, ktoré zapríčiňujú správanie buniek, a tým celého systému.
 Tieto pravidlá sa aplikujú každú generáciu, každé simulačné kolo.
@@ -236,22 +236,22 @@ buď je bunka živá, alebo mŕtva. Conwayova hra života má nasledovné pravid
 
 \begin{enumerate}
 	\item Každá živá bunka s menej ako dvoma živými susedmi umrie.
-	\item Každá živá bunka s dvomi alebo tromi živými susedmi prežie.
+	\item Každá živá bunka s dvomi alebo tromi živými susedmi prežije.
 	\item Každá živá bunka s viac ako tromi živými susedmi umrie.
 	\item Každá mŕtva bunka s presne tromi živými susedmi ožije.
 \end{enumerate}
 
-V hre života sa nachádza veľa stabilných configurácií (glidery, továrne,
+V hre života sa nachádza veľa stabilných konfigurácií (glidery, továrne,
 oscilátory, atď.) ako je vidno na obr. \ref{obr:conwayova hra zivota}.
-Vďaka týmto štruktúram je Conwayova hra života turingovo kompletná (môže
-simulovať hociaký počítač, čiže aj sama seba\footnote
+Vďaka týmto štruktúram je Conwayova hra života Turingovo kompletná (môže
+simulovať hocijaký počítač, čiže aj sama seba\footnote
 {Life in life - https://www.youtube.com/watch?v=xP5-iIeKXE8}).
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{res/Conways_game_of_life_breeder.png}
 	\caption{Na obrázku je znázornená pohyblivá štruktúra (červená), ktorá
-		za sebou zaneháva továrne (zelená) produkujúce glidery (modrá),
+		za sebou zanecháva továrne (zelená) produkujúce glidery (modrá),
 		jednoduché pohybujúce sa štruktúry.}
 	\label{obr:conwayova hra zivota}
 \end{figure}
@@ -295,7 +295,7 @@ správania a vývinu simulovaných rastlín vďaka schopnostiam:
 \end{enumerate}
 
 Veríme, že metódy využité v Botanice sú využiteľné ako na tvorenie dynamického
-a nerepetetivného prostredia vo video-hrách, tak aj na viac vedecké účely
+a nerepetetivného prostredia vo videohrách, tak aj na viac vedecké účely
 ako pozorovanie správania rastlín vo virtuálne vytvorených podmienkach
 a ich ideálne charakteristiky za daných podmienok.
 
@@ -305,7 +305,7 @@ a ich ideálne charakteristiky za daných podmienok.
 Na realizovanie algoritmu sme vyvinuli jednoduchú aplikáciu, ktorá má
 všetky potrebné prostriedky na demonštráciu všetkých aspektov tohto algoritmu.
 Aplikácia umožňuje vizualizáciu rastu rastlín na základe celuárnych automatov
-a poskytuje možnosť meniť parametre simulácie na dosiahnutie idealného vzhľadu
+a poskytuje možnosť meniť parametre simulácie na dosiahnutie ideálneho vzhľadu
 rastlín.
 
 \subsection{Svet} \label{subsec:svet}
@@ -318,13 +318,13 @@ koreň alebo ovocie), ale aj o časti terénu (vzduch, voda, pôda).
 
 Terén na určenie svojej výšky, aby nebol len rovina, využíva funkciu zvanú
 Perlin noise. Perlin noise je spôsob generovania plynule sa meniacich náhodných
-hodnôt, ktoré sa dajú skvelo využiť na generovanie realistického terénu.
+hodnôt, ktoré sa dajú skvele využiť na generovanie realistického terénu.
 Čo sa týka algoritmu na jeho generovanie (obr. \ref{obr:perlinov sum}),
 v určitých miestach sa vytvoria
 vektory s náhodným smerom (modrý). Z bodov (červené), ku ktorým chceme pripísať
 hodnoty, sa vytvoria vektory smerujúce k týmto miestam (zelené). Z náhodného
 vektoru a vektoru smerujúceho z bodu sa vytvorí skalárny súčin a tým dosiahneme
-hodotu v danom bode.
+hodnotu v danom bode.
 
 \begin{figure}[h]
 	\centering
@@ -335,13 +335,13 @@ hodotu v danom bode.
 \end{figure}
 
 Avšak väčšinu času sa hodnoty nepočítajú len pre jeden náhodný vektor,
-ale viacero, najčastejšie 4 najbližšie, a hodnoty ich skalárnych súčtov
+ale viacero, najčastejšie 4 najbližšie, a hodnoty ich skalárnych súčinov
 sa spriemerujú. Často sa využíva aj viacero oktáv\footnote{
-	Oktáva je v tomto prípade mapa vytvorená Perlinovím šumom.
+	Oktáva je v tomto prípade mapa vytvorená Perlinovym šumom.
 }, pričom každá oktáva využíva
-viacej náhodných vektorov, ktoré ovplyvňujú menej buniek, ako predchádzajúca
+viacej náhodných vektorov, ktoré ovplyvňujú menej buniek ako predchádzajúca
 oktáva. Avšak tieto oktávy vplývajú menej na výslednú hodnotu. Vyjadrenie hodnôt bodov
-farebnou škálou kde vyššie hodnoty sú viac biele a nižšie viac čierne popisuje
+farebnou škálou, kde vyššie hodnoty sú viac biele a nižšie viac čierne, popisuje
 obrázok \ref{obr:perlinov sum textura}.
 
 \begin{figure}[h]
@@ -352,39 +352,39 @@ obrázok \ref{obr:perlinov sum textura}.
 		\label{obr:perlinov sum textura}
 \end{figure}
 
-Naša aplikácia, vďaka jej obmedzenej veľkosti, využíva 4 vektory umiestnené
+Naša aplikácia vďaka jej obmedzenej veľkosti využíva 4 vektory umiestnené
 na rohoch simulácie a iba 1 oktávu.
 
 \subsubsection{Tvorenie terénu}
 
-Tvorenie terénu sa začne vytvorením Perlin noisu, poďla ktorého sa určí jeho výška.
-Pre každú dvojicu súradníc X a Z sa vytvorí hodnota Perlin noisu. Táto hodnota
+Tvorenie terénu sa začne vytvorením Perlinovho šumu, poďla ktorého sa určí výška terénu.
+Pre každú dvojicu súradníc X a Z sa vytvorí hodnota Perlinovho šumu. Táto hodnota
 bude ovplyvňovať os Y. Každý voxel, ktorého hodnota súradnice Y je nižšia alebo
-rovná hodnote noisu v X,Z bude voxel terénu. Inak sa bude jednať o voxel
+rovná hodnote šumu v X, Z bude voxel terénu. Inak sa bude jednať o voxel
 vzduchu. Na vytvorenie voxelov vody sa nastaví hodnota, ktorá bude označovať
 hladinu vody a ak hocaký voxel vzduchu má hodnotu Y menšiu alebo rovnú ako táto
-hodnota, zmení sa na vodu. Táto hodnota nie je spojená s noisom, ide o jedno
+hodnota, zmení sa na vodu. Táto hodnota nie je spojená so šumom, ide o jedno
 číslo univerzálne pre celú simuláciu. Zoberme si príklad: máme zmenšenú
-simuláciu a pre každú dvoju X,Z pripadajú len 4 voxely [0,1,2,3]. Tieto voxely
-majú rovnaké súradnice X,Z ale odlišné Y, ktorá korešponduje s ich číslom.
-Vytvoríme Perlin noise, ktorý bude mať pre danú dvoju X,Z hodnotu 1. To
+simuláciu a pre každú dvojicu X,Z pripadajú len 4 voxely [0,1,2,3]. Tieto voxely
+majú rovnaké súradnice X, Z, ale odlišné Y, ktorá korešponduje s ich číslom.
+Vytvoríme Perlinov šum, ktorý bude mať pre danú dvojicu X,Z hodnotu 1. To
 znamená, že voxely s hodnotou Y 0 a 1 sa premenia na voxely pôdy a voxely 2,3
 na voxely vzduchu. Ďalej hladina vody má hodnotu 2, takže voxel 2, ktorý bol
-pred tým vzduch sa premení na vodu.
+predtým vzduch, sa premení na vodu.
 
 \subsubsection{Živiny}
 
 Simulácia obsahuje rôzne živiny, vodu a vzduch, tieto veci rastlina potrebuje
-získavať aby rástla a prežila. Voda a vzduch majú zastúpenie v podobe ich
+získavať, aby rástla a prežila. Voda a vzduch majú zastúpenie v podobe ich
 voxelov. Pôda obsahuje vodu a živiny. Každá živina napomáha rôznym procesom
-rastliny, ako napríklad fotosyntézovať, čerpať vodu alebo získavať viac živín.
+rastliny, ako napríklad fotosyntetizovať, čerpať vodu alebo získavať viac živín.
 Ich nadbytok má kladný vplyv na rastliny, avšak ich nedostatok má zase
 negatívny. Toto pridáva na komplexnosti, realizme a dovoľuje nám získať rôzne
 typy rastlín, podľa toho, ku ktorým živinám majú alebo nemajú prístup.
 Napríklad ak rastlina nemá dostatok dusíka, ktorý je v simulátore dôležitý
 na fotosyntézu, rastlina to musí kompenzovať viacerými listami, inak zanikne.
 Živiny sú 3, dusík, draslík a fosfor, pričom bola snaha o to, aby napomáhali
-realistickým precesom, ktoré tieto prvky vyžadujú. Draslík je nápomocný pri
+realistickým procesom, ktoré tieto prvky vyžadujú. Draslík je nápomocný pri
 absorpcii vody, takže ak má rastlina nadbytok draslíka, efektívnejšie získava
 vodu. Využitie dusíka je široké, ale v simulátore je jeho funkcia obmedzená
 len na zlepšenie fotosyntézy, keďže je hlavnou zložkou chlorofylu. Fosfor je
@@ -406,7 +406,7 @@ Rastliny majú viacero premenných. Ich hlavnou úlohou je opísať stav rastlin
 Medzi ne paria údaje o skonzumovaných živinách za toto kolo, zoznam všetkých
 voxelov, v ktorých sa nachádzajú časti rastliny a ich gény. V premenných
 taktiež máme aj bonusy pre živiny. Hovoria nám o nadbytku alebo nedostatku
-živín. Čo tieto bonusy robia je rozbrané v kapitole „Živiny“.
+živín. Čo tieto bonusy robia, je rozobrané v kapitole „Živiny“.
 
 \subsubsection{Rastlinné voxely}
 
@@ -416,31 +416,31 @@ Existujú 4: korene, stonky, listy a ovocie. Každá skupina buniek plní
 vlastnú úlohu. Koreň má za úlohu rastline získať živiny a vodu, to dosahuje
 odoberaním týchto živín z okolitých voxelov. Koreň môže vzniknúť iba na
 miestach, kde je pôda. Úlohou listu je fotosyntéza, tú dosiahne tým, že
-skontroluje, či políčka nad ním sú vzduch. Predpokladáme, že na voxeli vzduchu
-priamo svieti slnko. Môže nahradiť políčka kde je vzduch. Stonka uskladňuje
+skontroluje, či políčka nad ním sú vzduch. Predpokladáme, že na voxel vzduchu
+priamo svieti slnko. Môže nahradiť políčka, kde je vzduch. Stonka uskladňuje
 živiny pre rastlinu.  Rastie iba zvislo. Ovocie tvorí nové rastliny
-s rovnakým genetickým kódom ktorý trochu zmutuje. Na pár kôl nahrádza 1 list,
+s pôvodným genetickým kódom, ktorý trochu zmutuje. Na pár kôl nahrádza 1 list,
 ktorý sa po premenení ovocia na novú rastliny znova zmení na list.
 
 \subsubsection{Genetika}
 
 Na základe genetiky rastliny rozhodujú, aké časti majú rásť (listy, stonka…)
-a v prípade listov a koreňov, existujú gény určujúce akým smerom majú rásť.
+a v prípade listov a koreňov, existujú gény určujúce, akým smerom majú rásť.
 Takže existujú 3 gény: čo má rásť, kde majú rásť korene a kde majú rásť listy.
 Gén „čo má rásť“ je vo všetkých prípadoch list so 4 číslami. Sú 4, pretože sú 4
 typy buniek, ktoré môže rastlina rásť: korene, listy, stonku a ovocie. Čísla
-v týchto listoch označujú, ako moc chce daná rastlina danú časť rásť. Takže
-ak má rastlina v časti označujúcu stonku 2 a koreň 10, daná rastlina bude
-chcieť rásť koreň 5-krát viac, ako stonku. Ktorú časť bude rastlina naozaj
-rásť sa rozhoduje náhodne. Ak sa vrátime k nášmu príkladu dokopy $2+10=12$,
-takže to je ako keby naša rastlina hádzala s 12-stenou kockou. Ak padne číslo,
+v týchto listoch označujú, ako veľmi chce daná rastlina v danej časti rásť. Takže
+ak má rastlina časti označujúce stonku 2 a koreň 10, daná rastlina bude
+chcieť rásť v koreni 5-krát viac, ako stonku. V ktorej časti bude rastlina naozaj
+rásť, sa rozhoduje náhodne. Ak sa vrátime k nášmu príkladu, dokopy $2+10=12$,
+takže to je ako keby naša rastlina hádzala s 12-stennou kockou. Ak padne číslo,
 ktoré je väčšie ako 2, rastie koreň, inak stonka. Gény „kde majú rásť korene“
 a „kde majú rásť listy“ sú rovnaké, len ako ich názov hovorí, jeden sa zaoberá
-koreňmi a druhý listami. Sú to listy s 26 číslami. Je ich 26 pretože bunka má
+koreňmi a druhý listami. Sú to listy s 26 číslami. Je ich 26, pretože bunka má
 v trojrozmernom priestore 26 susedov, ak rátame aj diagonály. Zvyšok funguje
 rovnako ako gén „čo má rásť“. Takže sú tam čísla, ktoré označujú
-pravdepodobnosť rastu do toho smeru. Ak sa tieto 2 gény zavolajú, vyberie
-sa náhodná bunka (list alebo koreň, podla toho, ktorý gén sa zavolá), a ak
+pravdepodobnosť rastu do daného smeru. Ak sa tieto 2 gény zavolajú, vyberie
+sa náhodná bunka (list alebo koreň podľa toho, ktorý gén sa zavolá), a ak
 nemôže rásť do toho smeru, tak sa vyberie iná bunka, ak žiadna nemôže rásť,
 vyberie sa iný smer.
 
@@ -449,7 +449,7 @@ vyberie sa iný smer.
 
 Ako bolo spomínané, simulácia nebeží súvisle, ale v časových krokoch.
 Za každý krok sa vykonajú určité akcie, tzv. cyklus. Tieto akcie slúžia na beh
-simulácie a starajú sa o veci ako je rast rastlín, ich vzniknutie, smrť atď.
+simulácie a starajú sa o udalosti ako rast rastlín, ich vzniknutie, smrť atď.
 Algoritmus za týmto môžeme rozdeliť do nasledujúcich častí, ktoré sú spísané
 chronologicky, tak ako ich simulácia vykonáva.
 
@@ -459,7 +459,7 @@ Je jediná časť algoritmu, ktorá nebeží v krokoch, ale iba raz, a to na za�
 simulácie. Po vytvorení terénu sa vyberie náhodné miesto na jeho povrchu, kde
 je pôda, a tam vznikne rastlina. Toto sa dá opakovať viackrát, na vytvorenie
 viacerých rastlín. Takéto rastliny sa skladajú z 1 koreňa, 1 stonky a 1 listu.
-Ich genetika je náhodná, keďže ju nemôžu dediť z materínskych rastlín, ktoré
+Ich genetika je náhodná, keďže ju nemôžu dediť z materských rastlín, ktoré
 neexistujú.
 
 \subsubsection{Redistribúcia živín}
@@ -474,24 +474,24 @@ Toto umožňuje rastlinám znovu brať živiny v novom cykle.
 
 Ak má rastlina ovocie, ktoré existuje po určitú dobu, tak sa z neho stane nová
 rastlina. Rozdiel vo vzniku a zasadení je, že tentokrát genetický kód nie je
-vygenerovaný náhodne, ale ho rastlina zdedí zo svojej materinskej rastliny,
+vygenerovaný náhodne, ale ho rastlina zdedí zo svojej materskej rastliny,
 pričom v každej časti genetiky jednu hodnotu náhodne zmení, teda „zmutuje“.
 
 \subsubsection{Produkcia}
 
 V tejto fáze rastlina získava živiny vďaka svojím bunkám, konkrétne listom
-a koreňom. Listy sa pozrú na bunky horizontálne nad nimi a podla toho, koľko
-z nich sú vzduch, „produkujú“ svetlo. Korene zase pozrú bunky v ich susedstve
-a podla toho generujú živiny a vodu. Koľko z okolitých buniek dokážu listy
-a korene dostať je určený samozrejme, počtom živín v bunkách terénu, z ktorého
+a koreňom. Listy sa pozrú na bunky horizontálne nad nimi a podľa toho, koľko
+z nich je vzduch, „produkujú“ svetlo. Korene zase pozrú bunky v ich susedstve
+a podľa toho generujú živiny a vodu. Koľko z okolitých buniek dokážu listy
+a korene dostať, je určené samozrejme počtom živín v bunkách terénu, z ktorého
 rastlina čerpá, ale rastlina nezoberie jednoducho všetky živiny v okolitom
 teréne. Maximálny počet živín, ktoré dokáže bunka získať je stanovený
 konštantou a jej bonusom zo živín. V stonkách sa uskladňujú živiny, čiže
 rastlina nemôže skonzumovať viac, ako jej to limit odvodený z počtu buniek
-stoniek dovoľuje. Na príklad: chceme fosfor, je koreň s 5 okolitými bunkami,
+stoniek dovoľuje. Napríklad: chceme fosfor, je koreň s 5 okolitými bunkami,
 pričom každá obsahuje 15 jednotiek fosforu. Konštantu produkcie máme 10,
 povedzme že máme bonus pre fosfor krát 1.2, čiže z každej dokážeme brať až 12
-jednotiek. To máme do kopy 60 jednotiek, ktoré dokáže daný koreň získať,
+jednotiek. To predstavuje dokopy 60 jednotiek, ktoré dokáže daný koreň získať,
 ale povedzme, že kapacita stoniek je len 50, takže náš koreň nakoniec
 vyprodukuje len 50 jednotiek fosforu.
 
@@ -500,7 +500,7 @@ vyprodukuje len 50 jednotiek fosforu.
 Ak rastlina má nedostatok jednej zo živín, zomrie. Koľko živín rastlina
 potrebuje na prežitie je odvodené od jej veľkosti, čiže počtu jej voxelov
 a premennej určenej na začiatku simulácie zvanej „obtiažnosť“. Ako príklad
-dajme rastlinu s 10 bunkami, obtiažnosťou 5 a 45 jednotkami živiny, ktorú
+dajme rastlinu s 10 bunkami, obtiažnosťou 5 a 45 jednotkami živín, ktorú
 pozorujeme ako napr. fosfor. Vynásobíme počet buniek a obtiažnosť, takže
 10*5=50. To znamená, že rastlina potrebuje najmenej 50 jednotiek zo všetkých
 živín, aby prežila. Keďže má len 45 jednotiek fosforu, zomrie na jeho
@@ -508,8 +508,8 @@ nedostatok.
 
 \subsubsection{Kalkulácia bonusov zo živín}
 
-Podobne ako smrť, sa odvíja od veľkosti rastliny a konštanty. Pre každý bonus
-sa ráta zvlášť a keďže tento krok je až na konci cyklu v úplne prvom cykle
+Podobne ako smrť sa odvíja od veľkosti rastliny a konštanty. Pre každý bonus
+sa ráta zvlášť a keďže tento krok je až na konci cyklu, v úplne prvom cykle
 simulácie majú všetky rastliny bonusy rovné 1.
 
 \newpage
@@ -517,20 +517,20 @@ simulácie majú všetky rastliny bonusy rovné 1.
 
 Aby nebola simulácia len v podobe čísiel v súbore, je simulovaný svet
 vykresľovaný na obrazovku. Renderovanie je prevedené na grafickú kartu,
-processor má tak viac času venovať sa simulácii. Na renderovaie bolo vybrané
+procesor má tak viac času venovať sa simulácii. Na renderovaie bolo vybrané
 grafické API OpenGL pre jeho jednoduchosť a kompatibilitu medzi operačnými
-systémamy.
+systémami.
 
 Ako už bolo spomenuté v časti \ref{subsec:svet}, svet je zložený z malých
-kociek (voxelov) v sieti 32x32x32. Voxely môžu byť tovrené rôznymi materiálmi,
+kociek (voxelov) v sieti 32x32x32. Voxely môžu byť tvorené rôznymi materiálmi,
 čo je symbolizované číselnou hodnotou pre každý jeden voxel. Tieto
 hodnoty sú po každej zmene sveta nahrané na grafickú kartu pomocou grafického
 API OpenGL.
 
-Grafická karta následne vygeneruje sieť bodov (vertexov) s farebnými a
-polohovými hodnotami, ktoré sú následne každý snímok vykreslené na obrazovku.
+Grafická karta následne vygeneruje sieť vrcholov (vertex) s farebnými a
+polohovými hodnotami, ktoré sú následne každú snímku vykreslené na obrazovku.
 
-\subsubsection{Tvorenie vertexov z voxelových dát sveta}
+\subsubsection{Tvorenie vrcholov z voxelových dát sveta}
 
 Na začiatok treba povedať, že grafické karty spracovávajú dáta paralelne,
 čo im umožňuje "prehrýzť" sa obrovským množstvom dát za okamih.
@@ -538,10 +538,10 @@ Je to niečo, na čo treba myslieť pri programovaní výpočtových programov
 (compute shaderov).
 
 Shader je spustený niekoľkokrát, raz na každý voxel. Jeho výstupom je
-neprerušená sieť vertexov, ktoré sú následne zaslané na renderovanie.
+neprerušená sieť vrcholov, ktoré sú následne zaslané na renderovanie.
 To je dosiahnuté globálnym atomickým počítadlom.\footnote
 {Atomické počítadlo je číslo, ktoré môže zvýšiť iba jeden program naraz. Táto
-vlastnosť zabraňuje prepisovanie už zapísaných dát.}
+vlastnosť zabraňuje prepisovaniu už zapísaných dát.}
 
 Dáta sú shaderu poslané v jednom veľkom bloku pamäti, čiže shader potrebuje
 vedieť, kde sa jemu priradený voxel v tejto pamäti nachádza. Preto má každá
@@ -554,26 +554,26 @@ následne využité na tvorenie stien
 \begin{figure}[h]
 	\centering
 	\includegraphics[height=10cm]{res/diagram_generovanie_voxelov.png}
-	\caption{Znázornenie algoritmu generujúceho steny (4 vertexy) okolo priradeného voxelu.}
+	\caption{Znázornenie algoritmu generujúceho steny (4 vrcholy) okolo priradeného voxelu.}
 	\label{obr:diagram algoritmu generujuceho vertexy}
 \end{figure}
 
 \newpage
 \subsubsection{Vykresľovanie vygenerovaných dát}
 
-Keď sú dáta vygenerované, nie je zložité ich vykresliť pomocov jednoduchého
+Keď sú dáta vygenerované, nie je zložité ich vykresliť pomocou jednoduchého
 programu pozostávajúceho z dvoch častí:
 
 \begin{itemize}
-	\item \textbf{vertex shader}, počíta otáča a posúva body pomocou dát kamery,
+	\item \textbf{vertex shader}, počíta, otáča a posúva body pomocou dát kamery,
 		premieta 3D body na 2D obrazovku,
-	\item \textbf{fragment shader}, vyfarbuje trojuholníky tvorené vertexmi.
+	\item \textbf{fragment shader}, vyfarbuje trojuholníky tvorené vrcholmi.
 \end{itemize}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{res/screenshot.png}
-	\caption{Vyrenderovaný snímok simulácie.}
+	\caption{Vyrenderovaná snímka simulácie.}
 \end{figure}
 
 
