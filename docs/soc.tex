@@ -19,7 +19,6 @@
 \linespread{1.5}   % 1.5 riadkovanie
 
 \AddToHook{cmd/section/before}{\clearpage}
-\setcounter{section}{-1}
 
 \def\nazovprace{Botanica - simulátor rastlín na báze celulárnych automatov}
 \def\autori{František Knapec, Michael Sklenka, Marek Beňo}
@@ -154,7 +153,8 @@ ak v~nej uvedené údaje nie sú pravdivé.
 % The work :)
 %
 
-\section{Úvod}
+\section*{Úvod}
+\addcontentsline{toc}{section}{Úvod}
 
 \section{Problematika a prehľad literatúry}
 
@@ -583,5 +583,6 @@ programu pozostávajúceho z dvoch častí:
 % \section{Zoznam použitej literatúry}
 \renewcommand{\refname}{Zoznam použitej literatúry}
 \bibliography{soc}
+\addcontentsline{toc}{section}{Zoznam použitej literatúry}
 
 \end{document}
