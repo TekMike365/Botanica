@@ -6,6 +6,9 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+\usepackage[numbers]{natbib}
+\bibliographystyle{rusnat}
+
 \usepackage[width=\textwidth]{svg}
 
 \usepackage[a4paper,left=35mm,
@@ -79,7 +82,7 @@
 		Riešitelia: \autori \par
 		Ročník štúdia: 4. \par
 		Školiteľ: Ing. Tomáš Milet, PhD.\par
-		
+
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.23\textwidth}
@@ -160,9 +163,7 @@ pozorovania ekosystému naprieč časom.
 
 Ľudia k problému tvorenia digitálnych rastlín pristupovali rôznymi spôsobmi,
 avšak väčšina z nich len realistické rastliny vykresľovala, pozri napríklad
-známy príklad L-systémov,\footnote{
-	Lindenmayerov systém - https://en.wikipedia.org/wiki/L-system
-	}
+známy príklad L-systémov, \cite{wiki:L-system}
 ktorý je založený na opisovaní štruktúry rastlín
 sériou pravidiel, ako je napr. otočenie, vytvorenie úsečky alebo
 vrátenie sa na určitú pozíciu. Ďalej sa štruktúra zdokonaľuje za pomoci
@@ -192,19 +193,17 @@ ale aj zápormi. Medzi takéto metódy patria:
 % TODO: ukážky, citácie, zdroje
 \begin{itemize}
 	\item \textbf{Fyzikálne založené modelovanie} využívajúce body prepojené
-		pružnými štruktúrami, na ktoré pôsobia rôzne sily. Aj keď realistické,
-		modelovanie neumožňuje rastliny tvoriť, iba simulovať.
-	\item \textbf{Simulácia pomocou strojového učenia}\footnote
-			{Strojové učenie - https://en.wikipedia.org/wiki/Machine\_learning}
-		využíva štatistické
-		algoritmy, pomocou ktorých sa počítač dokáže počas tréningu učiť vzťahy medzi
-		vstupmi a výstupmi.
-	\item \textbf{Celulárne automaty}\footnote
-			{Celulárne automaty - https://en.wikipedia.org/wiki/Cellular\_automaton}
-		je názov pre matematický model a nástroj pre simuláciu. Jedná sa
-		o starší koncept, ktorý obsahuje štvorcovú sieť so „zafarbenými“
-		políčkami. Každá farba je určitý stav, ktorý má špecifické správanie
-		závisiace od okolitých políčok.
+	      pružnými štruktúrami, na ktoré pôsobia rôzne sily. Aj keď realistické,
+	      modelovanie neumožňuje rastliny tvoriť, iba simulovať.
+	\item \textbf{Simulácia pomocou strojového učenia} \cite{wiki:Machine_learning}
+	      využíva štatistické
+	      algoritmy, pomocou ktorých sa počítač dokáže počas tréningu učiť vzťahy medzi
+	      vstupmi a výstupmi.
+	\item \textbf{Celulárne automaty} \cite{wiki:Cellular_automaton}
+	      je názov pre matematický model a nástroj pre simuláciu. Jedná sa
+	      o starší koncept, ktorý obsahuje štvorcovú sieť so „zafarbenými“
+	      políčkami. Každá farba je určitý stav, ktorý má špecifické správanie
+	      závisiace od okolitých políčok.
 \end{itemize}
 
 Fyzikálne založené modelovanie, aj keď mocné, vyžaduje, aby rastliny boli
@@ -229,8 +228,7 @@ Tieto pravidlá sa aplikujú každú generáciu, každé simulačné kolo.
 Vďaka týmto vlastnostiam sú CA systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
 požiadavkám.
 
-Klasickým príkladom takéhoto systému je Conwayova hra života.\footnote
-{Conwayova hra života - https://en.wikipedia.org/wiki/Conway\%27s\_Game\_of\_Life}
+Klasickým príkladom takéhoto systému je Conwayova hra života. \cite{wiki:Conway's_Game_of_Life}
 V tejto hre nadobúda každá bunka štvorcovej siete jednu z dvoch hodnôt:
 buď je bunka živá, alebo mŕtva. Conwayova hra života má nasledovné pravidlá:
 
@@ -247,7 +245,7 @@ Vďaka týmto štruktúram je Conwayova hra života Turingovo kompletná (môže
 simulovať hocijaký počítač, čiže aj sama seba\footnote
 {Life in life - https://www.youtube.com/watch?v=xP5-iIeKXE8}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\textwidth]{res/Conways_game_of_life_breeder.png}
 	\caption{Na obrázku je znázornená pohyblivá štruktúra (červená), ktorá
@@ -272,10 +270,6 @@ rastlín, zameraná na konkurenciu medzi druhmi, rýchlosť rastu a interakcie
 s prostredím.
 
 \section{Ciele práce}
-% TODO:
-% Chcelo by to ešte rozmeniť na drobné.
-% Napr. takto Výstupom našej práce bude softvérové prostredie Botanica,
-% ktoré bude mať tieto vlastnosti: 1), …
 
 Cieľom tejto práce je vytvorenie aplikácie schopnej tvorenia a simulácie
 pseudo-rea\-listických rastlín v trojrozmernej mriežke pomocou celulárnych
@@ -290,7 +284,7 @@ správania a vývinu simulovaných rastlín vďaka schopnostiam:
 \begin{enumerate}
 	\item generovať časť 3D voxelového sveta za pomoci Perlinovho šumu,
 	\item simulovať rastliny vo vytvorenom prostredí pomocou vlastného
-		algoritmu inšpirovaného celulárnymi automatmi,
+	      algoritmu inšpirovaného celulárnymi automatmi,
 	\item vykresľovať túto simuláciu za pomoci grafického API OpenGL.
 \end{enumerate}
 
@@ -326,7 +320,7 @@ hodnoty, sa vytvoria vektory smerujúce k týmto miestam (zelené). Z náhodnéh
 vektoru a vektoru smerujúceho z bodu sa vytvorí skalárny súčin a tým dosiahneme
 hodnotu v danom bode.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\textwidth]{res/prelinov_sum.png}
 	\caption{Znázornenie generovania Perlinovho šumu za pomoci 1 náhodného
@@ -344,12 +338,12 @@ oktáva. Avšak tieto oktávy vplývajú menej na výslednú hodnotu. Vyjadrenie
 farebnou škálou, kde vyššie hodnoty sú viac biele a nižšie viac čierne, popisuje
 obrázok \ref{obr:perlinov sum textura}.
 
-\begin{figure}[h]
-		\centering
-		\includegraphics[width=0.4\textwidth]{res/perlinov_sum_textura.png}
-		\caption{Textúra Perlinovho šumu.}
-		\footnotesize (zdroj: https://en.wikipedia.org/wiki/Perlin\_noise)
-		\label{obr:perlinov sum textura}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.4\textwidth]{res/perlinov_sum_textura.png}
+	\caption{Textúra Perlinovho šumu.}
+	\footnotesize (zdroj: https://en.wikipedia.org/wiki/Perlin\_noise)
+	\label{obr:perlinov sum textura}
 \end{figure}
 
 Naša aplikácia vďaka jej obmedzenej veľkosti využíva 4 vektory umiestnené
@@ -541,7 +535,7 @@ Shader je spustený niekoľkokrát, raz na každý voxel. Jeho výstupom je
 neprerušená sieť vrcholov, ktoré sú následne zaslané na renderovanie.
 To je dosiahnuté globálnym atomickým počítadlom.\footnote
 {Atomické počítadlo je číslo, ktoré môže zvýšiť iba jeden program naraz. Táto
-vlastnosť zabraňuje prepisovaniu už zapísaných dát.}
+	vlastnosť zabraňuje prepisovaniu už zapísaných dát.}
 
 Dáta sú shaderu poslané v jednom veľkom bloku pamäti, čiže shader potrebuje
 vedieť, kde sa jemu priradený voxel v tejto pamäti nachádza. Preto má každá
@@ -551,7 +545,7 @@ hodnota jemu priradenému voxelu, ale aj každého susedného voxelu. Tie sú
 následne využité na tvorenie stien
 (obr. \ref{obr:diagram algoritmu generujuceho vertexy}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[height=10cm]{res/diagram_generovanie_voxelov.png}
 	\caption{Znázornenie algoritmu generujúceho steny (4 vrcholy) okolo priradeného voxelu.}
@@ -566,11 +560,11 @@ programu pozostávajúceho z dvoch častí:
 
 \begin{itemize}
 	\item \textbf{vertex shader}, počíta, otáča a posúva body pomocou dát kamery,
-		premieta 3D body na 2D obrazovku,
+	      premieta 3D body na 2D obrazovku,
 	\item \textbf{fragment shader}, vyfarbuje trojuholníky tvorené vrcholmi.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{res/screenshot.png}
 	\caption{Vyrenderovaná snímka simulácie.}
@@ -581,7 +575,10 @@ programu pozostávajúceho z dvoch častí:
 \section{Diskusia}
 \section{Závery práce}
 \section{Zhrnutie}
-% \section{Zoznam použitej literatúry}
 % Prílohy (nepovinné)
+
+% \section{Zoznam použitej literatúry}
+\renewcommand{\refname}{Zoznam použitej literatúry}
+\bibliography{soc}
 
 \end{document}
