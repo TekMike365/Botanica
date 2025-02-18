@@ -146,6 +146,30 @@ ak v~nej uvedené údaje nie sú pravdivé.
 \section*{Úvod}
 \addcontentsline{toc}{section}{Úvod}
 
+Väčšina hier s~otvoreným procedurálne generovaným svetom vníma rastliny iba ako
+jednoduché assety pre skrášlenie sveta. Pre veľa hier je tento prístup ideálny,
+avšak ním prichádzajú o pestrosť a zaujímavosť ktorú ponúkajú simulácie.
+Simulovanými rastlinami môžu benefitovať hlavne survival hry (hráč sa snaží
+prežiť, zväčša v nepriateľskom prostredí) a sandbox hry (svet je upravovateľný
+hráčom).
+
+Mimo vizuálne pekného prostredia ponúkajú simulované rastliny aj možnosti
+mnohých unikátnyh mechaník ako napríklad možnosť rastliny geneticky
+modifikovať, čím by hráč mohol napríklad zvíšiť produkciu svojej záhrady
+v survival hrách.
+
+Táto práca sa zaoberá aplikáciou demonštrujúcou jednoduchý algoritmus
+pridávajúci rastlinám možnosť reagovať na okolité prostredie. Aplikácia
+simuluje a vykresľuje rastliny v procedurálne generovanej časti sveta.
+Rastliny reagujú na množstvo látok (dusík, draslík a fosfor) v zemine,
+množstva vody a svetla pomocou ich genómu.
+
+Najprv sú vysvetlené základné pojmy, algoritmy a praktiky používané pri tvorení
+herného sveta. Následne je predstavená aplikácia, ktorá demonštruje algoritmus
+pre jednoduché spestrenie rastlín vo svete. Záver práce sa venuje možným
+zlepšeniam aplikácie a ďalším využitiam simulovania rastlín v hrách
+s otvoreným svetom.
+
 
 \section{Problematika a prehľad literatúry}
 
@@ -644,7 +668,18 @@ možnosti konfigurácie a experimentovania s parametrami rastu. Táto práca mô
 slúžiť ako základ pre ďalší výskum a aplikácie v oblastiach, hlavne v simuláciách
 rastlinných systémov v počítačových hrách.
 
+
 \section{Zhrnutie}
+
+Cieľom tejto práce je navrhnutie možnej alternatívy, alebo rozšírenia,
+ku procedurálnemu generovaniu rastlín, ktorá umožňuje rastlinám reagovať na
+prostredie v~ktorom sa nachádzajú, čím sa spestrí svet pre hráča. Táto práca
+predstaví ako demonštráciu Aplikáciu, ktorá pre oživenie procedurálne
+generovaného sveta využíva algoritmus simulujúci základné procesy rastlín.
+Aplikácia sa skladá z troch častí: generovanie malej časti trojrozmerného
+voxelového sveta pomocou perlinovho šumu, algoritmus na simalujúciu rastlín
+inšpirovaným celulárnymi automatmi a~renderovanie tejto časti sveta s
+využitím grafického API OpenGL.
 
 
 \nocite{*} % print the whole bibliography
