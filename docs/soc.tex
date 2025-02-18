@@ -97,9 +97,6 @@
 % zapocitaj strany
 \setcounter{page}{3}
 
-%
-% Čestné vyhlásenie
-%
 
 \thispagestyle{empty}
 
@@ -122,7 +119,6 @@ ak v~nej uvedené údaje nie sú pravdivé.
 
 %
 % Poďakovanie (nepovinné)
-% TODO: chceme?
 %
 
 % \thispagestyle{empty}
@@ -140,12 +136,6 @@ ak v~nej uvedené údaje nie sú pravdivé.
 % \newpage
 
 
-%
-% [x] Obsah
-% [ ] Zoznam skratiek, značiek a symbolov (nepovinné)
-% [ ] Zoznam tabuliek, grafov a ilustrácií (nepovinné)
-%
-
 \thispagestyle{empty}
 \tableofcontents
 
@@ -155,6 +145,7 @@ ak v~nej uvedené údaje nie sú pravdivé.
 
 \section*{Úvod}
 \addcontentsline{toc}{section}{Úvod}
+
 
 \section{Problematika a prehľad literatúry}
 
@@ -585,17 +576,76 @@ programu pozostávajúceho z dvoch častí:
 	\item \textbf{fragment shader}, vyfarbuje trojuholníky tvorené vrcholmi.
 \end{itemize}
 
+
+\section{Výsledky práce a diskusia}
+
+Vytvorená aplikácia Botanica demonštruje možnosť simulácie rastu rastlín
+v trojrozmernom prostredí pomocou celulárnych automatov a genetického kódu.
+Implementácia zahŕňa: generovanie terénu pomocou Perlinovho šumu, ktorý vytvára
+realisticky vyzerajúce prostredie s variabilnou výškou a rozložením živín;
+dynamické rastliny, ktoré reagujú na podmienky prostredia a menia svoj rast
+na základe genetického kódu a dostupnosti živín; algoritmus rastu, ktorý
+zabezpečuje prirodzenú redistribúciu živín, fotosyntézu a rozmnožovanie;
+grafickú reprezentáciu založenú na voxelovom engine s renderovaním cez OpenGL,
+čo umožňuje vizuálne sledovanie simulovaných procesov. Aplikácia splnila
+stanovené ciele. Simulované rastliny vykazujú rôzne formy rastu na základe
+ich genetického kódu a podmienok prostredia.
+
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{res/screenshot.png}
-	\caption{Vyrenderovaná snímka simulácie.}
+	\caption{Snímka simulácie.}
 \end{figure}
 
+Preukázali sme, že celulárne
+automaty s genetickým mechanizmom sú vhodné na modelovanie dynamického rastu
+rastlín. Výsledky ukazujú, že použitie celulárnych automatov na simuláciu
+rastlín poskytuje flexibilný a efektívny model. Rastliny sa dokážu adaptovať
+na prostredie a meniť svoj rast podľa dostupnosti živín, čo pridáva prvok
+prirodzenej selekcie.
 
-\section{Výsledky práce a diskusia}
+Medzi silné stránky riešenia patrí modularita a
+flexibilita - model možno rozšíriť o nové pravidlá rastu alebo iné prvky
+simulácie (napr. vplyv podnebia); efektívne využitie zdrojov - využitie OpenGL
+pre renderovanie ušetrilo CPU čas, čo umožnilo detailnejšiu simuláciu;
+pozorovanie evolučných zmien - rastliny sa menia generáciami vďaka mutáciám
+v genetickom kóde, čo demonštruje potenciál modelovania evolúcie.
+
+Medzi slabiny riešenia a možnosti zlepšenia patrí obmedzená komplexnosť
+genetiky - aj keď genetický kód ovplyvňuje rast, model zatiaľ neobsahuje
+komplexnejšie mechanizmy; statické podmienky prostredia - simulácia zatiaľ
+nezahŕňa dynamické faktory ako meniace sa počasie alebo sezónne zmeny.
+
+Napriek týmto obmedzeniam je Botanica silným východiskovým bodom pre ďalší
+výskum v oblasti simulácie rastlín a evolučných procesov v digitálnych
+ekosystémoch.
+
 \section{Závery práce}
+
+Táto práca sa zamerala na návrh a realizáciu simulácie rastu rastlín pomocou
+bunkových automatov. Tento prístup sa ukázal ako efektívny pri modelovaní
+dynamických procesov rastu, avšak počas vývoja sa vyskytlo viacero výziev,
+ktoré ovplyvnili priebeh implementácie. Medzi najvýznamnejšie patrila
+implementácia algoritmu do jazyka C++, keďže pre 2 členov týmu tento jazyk
+bol pred začatím práce neznámi a mali celkovo limitované poznatky
+z programovania. Niektoré technické aspekty, najmä správa pamäte a efektívne
+vykresľovanie voxelového priestoru, si vyžadovali dodatočné úpravy
+a optimalizáciu. Tieto poznatky priniesli cenné skúsenosti, ktoré môžu byť
+využité v budúcnosti.
+
+Jedným z hlavných zistení bolo, že aj jednoduché pravidlá bunkových automatov
+môžu viesť k vzniku komplexných a realistických štruktúr. Tento výsledok
+potvrdzuje vhodnosť zvoleného prístupu a naznačuje možnosti ďalšieho rozšírenia
+modelu o sofistikovanejšie faktory, ako je implementácia zvierat do systému,
+zrážky alebo ročné obdobia.
+
+Napriek uvedeným výzvam sa podarilo vytvoriť funkčný model, ktorý ponúka rôzne
+možnosti konfigurácie a experimentovania s parametrami rastu. Táto práca môže
+slúžiť ako základ pre ďalší výskum a aplikácie v oblastiach, hlavne v simuláciách
+rastlinných systémov v počítačových hrách.
+
 \section{Zhrnutie}
-% Prílohy (nepovinné)
+
 
 \nocite{*} % print the whole bibliography
 \renewcommand{\refname}{Zoznam použitej literatúry}
