@@ -369,6 +369,12 @@ znamená, že voxely s hodnotou Y 0 a 1 sa premenia na voxely pôdy a voxely 2,3
 na voxely vzduchu. Ďalej hladina vody má hodnotu 2, takže voxel 2, ktorý bol
 predtým vzduch, sa premení na vodu.
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{res/terrain.png}
+	\caption{Terén vygenerovaný touto technikou. (voda - zelená, pôda - modrá)}
+\end{figure}
+
 \subsubsection{Živiny}
 
 Simulácia obsahuje rôzne živiny, vodu a vzduch, tieto veci rastlina potrebuje
@@ -397,6 +403,12 @@ jednotlivé entity, taktiež známe ako objekty. Takáto šablóna nám umožňu
 jednoducho a usporiadane tvoriť rastliny, pretože nemusíme písať samostatný
 kód pre každú rastlinu.
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\textwidth]{res/plant.png}
+	\caption{Foto rastliny z našej simulácie.}
+\end{figure}
+
 \subsubsection{Premenné v rastlinách}
 
 Rastliny majú viacero premenných. Ich hlavnou úlohou je opísať stav rastliny.
@@ -419,7 +431,7 @@ priamo svieti slnko. Môže nahradiť políčka, kde je vzduch. Stonka uskladňu
 s pôvodným genetickým kódom, ktorý trochu zmutuje. Na pár kôl nahrádza 1 list,
 ktorý sa po premenení ovocia na novú rastliny znova zmení na list.
 
-\subsubsection{Genetika}
+\subsubsection{Genetika a rast}
 
 Na základe genetiky rastliny rozhodujú, aké časti majú rásť (listy, stonka…)
 a v prípade listov a koreňov, existujú gény určujúce, akým smerom majú rásť.
@@ -450,6 +462,12 @@ simulácie a starajú sa o udalosti ako rast rastlín, ich vzniknutie, smrť at�
 Algoritmus za týmto môžeme rozdeliť do nasledujúcich častí, ktoré sú spísané
 chronologicky, tak ako ich simulácia vykonáva.
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{res/diagram_algoritmu.png}
+	\caption{Diagram algoritmu.}
+\end{figure}
+
 \subsubsection{Vznik rastlín}
 
 Je jediná časť algoritmu, ktorá nebeží v krokoch, ale iba raz, a to na začiatku
@@ -474,7 +492,7 @@ rastlina. Rozdiel vo vzniku a zasadení je, že tentokrát genetický kód nie j
 vygenerovaný náhodne, ale ho rastlina zdedí zo svojej materskej rastliny,
 pričom v každej časti genetiky jednu hodnotu náhodne zmení, teda „zmutuje“.
 
-\subsubsection{Produkcia}
+\subsubsection{Produkcia živín}
 
 V tejto fáze rastlina získava živiny vďaka svojím bunkám, konkrétne listom
 a koreňom. Listy sa pozrú na bunky horizontálne nad nimi a podľa toho, koľko
@@ -503,7 +521,7 @@ pozorujeme ako napr. fosfor. Vynásobíme počet buniek a obtiažnosť, takže
 živín, aby prežila. Keďže má len 45 jednotiek fosforu, zomrie na jeho
 nedostatok.
 
-\subsubsection{Kalkulácia bonusov zo živín}
+\subsubsection{Výpočet bonusov zo živín}
 
 Podobne ako smrť sa odvíja od veľkosti rastliny a konštanty. Pre každý bonus
 sa ráta zvlášť a keďže tento krok je až na konci cyklu, v úplne prvom cykle
@@ -574,13 +592,12 @@ programu pozostávajúceho z dvoch častí:
 \end{figure}
 
 
-\section{Výsledky práce}
-\section{Diskusia}
+\section{Výsledky práce a diskusia}
 \section{Závery práce}
 \section{Zhrnutie}
 % Prílohy (nepovinné)
 
-% \section{Zoznam použitej literatúry}
+\nocite{*} % print the whole bibliography
 \renewcommand{\refname}{Zoznam použitej literatúry}
 \bibliography{soc}
 \addcontentsline{toc}{section}{Zoznam použitej literatúry}
