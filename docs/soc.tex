@@ -7,8 +7,6 @@
 \usepackage{subcaption}
 \usepackage{indentfirst}
 
-\usepackage[numbers]{natbib}
-\bibliographystyle{rusnat}
 
 \usepackage[width=\textwidth]{svg}
 
@@ -114,7 +112,7 @@ Zároveň prehlasujeme, že sme predloženú písomnú prácu neprihlásili a an
 v žiadnej inej súťaži, ktorá je pod gestorstvom MŠMVVaŠ SR. Sme si vedomí zákonných dôsledkov,
 ak v~nej uvedené údaje nie sú pravdivé.
 
-\vspace{4cm}
+\vspace{5cm}
 
 \newpage
 
@@ -183,13 +181,13 @@ pozorovania ekosystému naprieč časom.
 
 Ľudia k problému tvorenia digitálnych rastlín pristupovali rôznymi spôsobmi,
 avšak väčšina z nich len realistické rastliny vykresľovala, pozri napríklad
-známy príklad L-systémov, \cite{wiki:L-system}
+známy príklad L-systémov, %\cite{wiki:L-system}
 ktorý je založený na opisovaní štruktúry rastlín
 sériou pravidiel, ako je napr. otočenie, vytvorenie úsečky alebo
 vrátenie sa na určitú pozíciu. Ďalej sa štruktúra zdokonaľuje za pomoci
 algoritmu, ktorý nahrádza časti jej série pravidiel za iné, dopredu určené
 a detailnejšie série. Tento postup dokáže vytvoriť celkom realistické rastliny
-ako je znázornené na obr. \ref{obr:priklad l-systemu}.
+ako je znázornené na obr. %\ref{obr:priklad l-systemu}.
 
 \begin{figure}[ht]
 	\centering
@@ -215,11 +213,11 @@ ale aj zápormi. Medzi takéto metódy patria:
 	\item \textbf{Fyzikálne založené modelovanie} využívajúce body prepojené
 	      pružnými štruktúrami, na ktoré pôsobia rôzne sily. Aj keď realistické,
 	      modelovanie neumožňuje rastliny tvoriť, iba simulovať.
-	\item \textbf{Simulácia pomocou strojového učenia} \cite{wiki:Machine_learning}
+	\item \textbf{Simulácia pomocou strojového učenia} %\cite{wiki:Machine_learning}
 	      využíva štatistické
 	      algoritmy, pomocou ktorých sa počítač dokáže počas tréningu učiť vzťahy medzi
 	      vstupmi a výstupmi.
-	\item \textbf{Celulárne automaty} \cite{wiki:Cellular_automaton}
+	\item \textbf{Celulárne automaty} %\cite{wiki:Cellular_automaton}
 	      je názov pre matematický model a nástroj pre simuláciu. Jedná sa
 	      o starší koncept, ktorý obsahuje štvorcovú sieť so „zafarbenými“
 	      políčkami. Každá farba je určitý stav, ktorý má špecifické správanie
@@ -248,7 +246,7 @@ Tieto pravidlá sa aplikujú každú generáciu, každé simulačné kolo.
 Vďaka týmto vlastnostiam sú CA systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
 požiadavkám.
 
-Klasickým príkladom takéhoto systému je Conwayova hra života. \cite{wiki:Conway's_Game_of_Life}
+Klasickým príkladom takéhoto systému je Conwayova hra života. %\cite{wiki:Conway's_Game_of_Life}
 V tejto hre nadobúda každá bunka štvorcovej siete jednu z dvoch hodnôt:
 Buď je bunka živá alebo mŕtva. Conwayova hra života má nasledovné pravidlá:
 
@@ -686,9 +684,15 @@ inšpirovaným celulárnymi automatmi a~renderovanie tejto časti sveta s
 využitím grafického API OpenGL.
 
 
-\nocite{*} % print the whole bibliography
-\renewcommand{\refname}{Zoznam použitej literatúry}
-\bibliography{soc}
-\addcontentsline{toc}{section}{Zoznam použitej literatúry}
+\renewcommand\refname{Zoznam použitej literatúry}
+\begin{thebibliography}{99}
+	\addcontentsline{toc}{section}{\refname}
+
+	\bibitem{idk}
+	Bandini, Stefania and Pavesi, Giulio,
+	``A Model Based on Cellular Automata for the Simulation of the Dynamics of Plant Populations''
+	(2004). International Congress on Environmental Modelling and Software. 160.
+
+\end{thebibliography}
 
 \end{document}
