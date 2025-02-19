@@ -39,9 +39,9 @@ public:
     {
         for (auto &res : m_SoilResources.GetData())
             res = {
-                .Potassium = MAX_POTASSIUM,
-                .Phosphorus = MAX_PHOSPHORUS,
-                .Nitrogen = MAX_NITROGEN};
+                MAX_POTASSIUM,
+                MAX_PHOSPHORUS,
+                MAX_NITROGEN};
     }
 
     inline glm::uvec3 GetSize() const { return m_Size; }
@@ -52,9 +52,9 @@ public:
     SoilResources MineSoilResources(glm::uvec3 pos, SoilResources resources)
     {
         SoilResources mine = {
-            .Potassium = resources.Potassium <= m_SoilResources[pos].Potassium ? resources.Potassium : m_SoilResources[pos].Potassium,
-            .Phosphorus = resources.Phosphorus <= m_SoilResources[pos].Phosphorus ? resources.Phosphorus : m_SoilResources[pos].Phosphorus,
-            .Nitrogen = resources.Nitrogen <= m_SoilResources[pos].Nitrogen ? resources.Nitrogen : m_SoilResources[pos].Nitrogen,
+            resources.Potassium <= m_SoilResources[pos].Potassium ? resources.Potassium : m_SoilResources[pos].Potassium,
+            resources.Phosphorus <= m_SoilResources[pos].Phosphorus ? resources.Phosphorus : m_SoilResources[pos].Phosphorus,
+            resources.Nitrogen <= m_SoilResources[pos].Nitrogen ? resources.Nitrogen : m_SoilResources[pos].Nitrogen,
         };
 
         m_SoilResources[pos].Potassium -= mine.Potassium;

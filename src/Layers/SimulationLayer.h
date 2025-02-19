@@ -21,8 +21,6 @@ private:
     void PlantAPlant(glm::uvec2 xzPos);
     void GenerateTerrain();
 
-    void LogConfig() const;
-
 private:
     std::shared_ptr<World> m_World;
     std::vector<Plant> m_Plants;
