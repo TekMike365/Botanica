@@ -147,11 +147,10 @@ ak v~nej uvedené údaje nie sú pravdivé.
 \addcontentsline{toc}{section}{Úvod}
 
 Väčšina hier s~otvoreným procedurálne generovaným svetom vníma rastliny iba ako
-jednoduché assety pre skrášlenie sveta. Pre veľa hier je tento prístup ideálny,
+jednoduché prvky pre skrášlenie sveta. Pre veľa hier je tento prístup ideálny,
 avšak ním prichádzajú o pestrosť a zaujímavosť, ktorú ponúkajú simulácie.
-Simulovanými rastlinami môžu benefitovať hlavne survival hry (hráč sa snaží
-prežiť, zväčša v nepriateľskom prostredí) a sandbox hry (svet je upravovateľný
-hráčom).
+Simulovanými rastlinami môžu benefitovať hlavne hry o prežitie a hry, v ktorých
+môže hráč upravovať svet.
 
 Mimo vizuálne pekného prostredia ponúkajú simulované rastliny aj možnosti
 mnohých unikátnych mechaník ako napríklad možnosť geneticky
@@ -181,13 +180,13 @@ pozorovania ekosystému naprieč časom.
 
 Ľudia k problému tvorenia digitálnych rastlín pristupovali rôznymi spôsobmi,
 avšak väčšina z nich len realistické rastliny vykresľovala, pozri napríklad
-známy príklad L-systémov, %\cite{wiki:L-system}
-ktorý je založený na opisovaní štruktúry rastlín
+známy príklad\break L-systémov (Prusinkiewicz, Hanan, 2013). % cite
+Tento systém je založený na opisovaní štruktúry rastlín
 sériou pravidiel, ako je napr. otočenie, vytvorenie úsečky alebo
 vrátenie sa na určitú pozíciu. Ďalej sa štruktúra zdokonaľuje za pomoci
 algoritmu, ktorý nahrádza časti jej série pravidiel za iné, dopredu určené
 a detailnejšie série. Tento postup dokáže vytvoriť celkom realistické rastliny
-ako je znázornené na obr. %\ref{obr:priklad l-systemu}.
+ako je znázornené na obr. \ref{obr:priklad l-systemu}.
 
 \begin{figure}[ht]
 	\centering
@@ -208,16 +207,15 @@ je aj simulovať ich život.
 Kvôli samotnej simulácii vzniklo viacero metód simulovania s vlastnými kladmi,
 ale aj zápormi. Medzi takéto metódy patria:
 
-% TODO: ukážky, citácie, zdroje
 \begin{itemize}
 	\item \textbf{Fyzikálne založené modelovanie} využívajúce body prepojené
 	      pružnými štruktúrami, na ktoré pôsobia rôzne sily. Aj keď realistické,
 	      modelovanie neumožňuje rastliny tvoriť, iba simulovať.
-	\item \textbf{Simulácia pomocou strojového učenia} %\cite{wiki:Machine_learning}
+	\item \textbf{Simulácia pomocou strojového učenia}
 	      využíva štatistické
 	      algoritmy, pomocou ktorých sa počítač dokáže počas tréningu učiť vzťahy medzi
 	      vstupmi a výstupmi.
-	\item \textbf{Celulárne automaty} %\cite{wiki:Cellular_automaton}
+	\item \textbf{Celulárne automaty} (ďalej CA)
 	      je názov pre matematický model a nástroj pre simuláciu. Jedná sa
 	      o starší koncept, ktorý obsahuje štvorcovú sieť so „zafarbenými“
 	      políčkami. Každá farba je určitý stav, ktorý má špecifické správanie
@@ -234,7 +232,8 @@ riešenie všetkých možných problémov. Avšak tento spôsob je náročný na
 a výpočtovú techniku.
 
 A napokon celulárne automaty ponúkajú jednoduchosť a možnosť ich jednoducho
-modifikovať, čo otvára pole rôznorodých využití. Vďaka týmto výhodám je simulácia
+modifikovať, čo otvára pole rôznorodých využití. (Gutowitz, 1991)
+Vďaka týmto výhodám je simulácia
 v našej práci založená na princípe celulárnych automatoch.
 
 \subsection{Celulárne automaty}
@@ -246,7 +245,7 @@ Tieto pravidlá sa aplikujú každú generáciu, každé simulačné kolo.
 Vďaka týmto vlastnostiam sú CA systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
 požiadavkám.
 
-Klasickým príkladom takéhoto systému je Conwayova hra života. %\cite{wiki:Conway's_Game_of_Life}
+Klasickým príkladom takéhoto systému je Conwayova hra života (Adamatzky, 2010).
 V tejto hre nadobúda každá bunka štvorcovej siete jednu z dvoch hodnôt:
 Buď je bunka živá alebo mŕtva. Conwayova hra života má nasledovné pravidlá:
 
@@ -258,7 +257,10 @@ Buď je bunka živá alebo mŕtva. Conwayova hra života má nasledovné pravidl
 \end{enumerate}
 
 V hre života sa nachádza veľa stabilných konfigurácií (glidery, továrne,
-oscilátory, atď.) ako je vidno na obr. \ref{obr:conwayova hra zivota}.
+oscilátory, atď.). Na obr. \ref{obr:conwayova hra zivota} je znázornená
+pohyblivá štruktúra (červená), ktorá
+za sebou zanecháva továrne (zelená) produkujúce glidery (modrá),
+jednoduché pohybujúce sa štruktúry.
 Vďaka týmto štruktúram je Conwayova hra života Turingovo kompletná (môže
 simulovať hocijaký počítač, čiže aj sama seba\footnote
 {Life in life - https://www.youtube.com/watch?v=xP5-iIeKXE8}).
@@ -266,24 +268,18 @@ simulovať hocijaký počítač, čiže aj sama seba\footnote
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\textwidth]{res/Conways_game_of_life_breeder.png}
-	\caption{Na obrázku je znázornená pohyblivá štruktúra (červená), ktorá
-		za sebou zanecháva továrne (zelená) produkujúce glidery (modrá),
-		jednoduché pohybujúce sa štruktúry.}
+	\caption{Rôzne typy štruktúr v CA.}
 	\label{obr:conwayova hra zivota}
 \end{figure}
 
 \subsubsection{Príklady CA zamerané na simuláciu rastlín}
 
-„Simulation of root forms using cellular automata model“ - zameriava sa na
+Práca (Winarno, Prima, Afifah, 2016) sa zameriava na
 korene rastlín a dopad premenných ako napr. živiny v pôde, voda a prekážky
 v raste. Jedná sa o prácu, ktorá je viac zameraná na matematický rast koreňov,
 avšak my sme rast koreňov simulovali genetikou.
-% Trošku to rozveďte. Pri návrhu vlastného systému generovania rastlín sme
-% sa inšpirovali rôznymi jestvujúcimi softvérovými riešeniami. Na korene
-% rastlín a dopad rôznych faktorov sa zameriava...
 
-„A Model Based on Cellular Automata for the Simulation of the Dynamics of
-Plant Populations“ - zameriava sa na 2D simuláciu heterogénnej populácie
+Práca (Bandini, Pavesi, 2004) sa zameriava na 2D simuláciu heterogénnej populácie
 rastlín, zameraná na konkurenciu medzi druhmi, rýchlosť rastu a interakcie
 s prostredím.
 
@@ -323,13 +319,15 @@ rastlín.
 \subsection{Svet} \label{subsec:svet}
 
 Svet aplikácie pozostáva z mriežky buniek o rozmeroch 32x32x32 voxelov.
+Voxel predstavuje základnú jednotku, kocku veľkosti 1x1x1, pri zobrazovaní v priestore.
 Každý voxel nadobúda určitý stav. Môže sa jednať o časti rastlín (stonka, list,
 koreň alebo ovocie), ale aj o časti terénu (vzduch, voda, pôda).
 
-\subsubsection{Perlin noise}
+\subsubsection{Perlinov šum}
 
-Terén na určenie svojej výšky, aby nebol len rovina, využíva funkciu zvanú
-Perlin noise. Perlin noise je spôsob generovania plynule sa meniacich náhodných
+Na tvorbu terénu, ktorý nie je len rovina, ale obsahuje aj kopce a údolia,
+sa využíva funkcia zvaná Perlinov šum.
+Perlinov šum je spôsob generovania plynule sa meniacich náhodných
 hodnôt, ktoré sa dajú skvele využiť na generovanie realistického terénu.
 Čo sa týka algoritmu na jeho generovanie (obr. \ref{obr:perlinov sum}),
 v určitých miestach sa vytvoria
@@ -340,6 +338,7 @@ hodnotu v danom bode.
 
 \begin{figure}[ht]
 	\centering
+	\captionsetup{justification=centering}
 	\includegraphics[width=0.5\textwidth]{res/prelinov_sum.png}
 	\caption{Znázornenie generovania Perlinovho šumu za pomoci 1 náhodného
 		vektoru pre 6 buniek.}
@@ -360,7 +359,7 @@ obrázok \ref{obr:perlinov sum textura}.
 	\centering
 	\includegraphics[width=0.4\textwidth]{res/perlinov_sum_textura.png}
 	\caption{Textúra Perlinovho šumu.}
-	\footnotesize (zdroj: https://en.wikipedia.org/wiki/Perlin\_noise)
+	\footnotesize (zdroj: https://en.wikipedia.org/wiki/Perlin\_noise)zameriava 
 	\label{obr:perlinov sum textura}
 \end{figure}
 
@@ -510,9 +509,12 @@ pričom v každej časti genetiky jednu hodnotu náhodne zmení, teda „zmutuje
 \subsubsection{Produkcia živín}
 
 V tejto fáze rastlina získava živiny vďaka svojim bunkám, konkrétne listom
-a koreňom. Listy sa pozrú na bunky horizontálne nad nimi a podľa toho, koľko
-z nich je vzduch, „produkujú“ svetlo. Korene zase pozrú bunky v ich susedstve
-a podľa toho generujú živiny a vodu. Koľko z okolitých buniek dokážu listy
+a koreňom. Pre každý list sa skontroľujú bunky horizontálne nad listom.
+Podľa počtu tých buniek, ktoré predstavujú vzduch, list produkuje svetlo.
+Korene zase skontroľujú bunky v ich susedstve
+a podľa toho generujú živiny a vodu.
+% TODO
+Koľko živín z okolitých buniek dokážu listy
 a korene dostať, je určené samozrejme počtom živín v bunkách terénu, z ktorého
 rastlina čerpá, ale rastlina nezoberie jednoducho všetky živiny v okolitom
 teréne. Maximálny počet živín, ktoré dokáže bunka získať je stanovený
@@ -706,6 +708,11 @@ využitím grafického API OpenGL.
 
 	\bibitem{Cellular Automata: Theory and Experiment}
 	Gutowitz, Howard, ed. (1991). Cellular Automata: Theory and Experiment. MIT Press
+
+	\bibitem{Simulation of root forms using cellular automata model}
+	Winarno, Prima, Afifah;
+	Simulation of root forms using cellular automata model.
+	AIP Conf. Proc. 8 February 2016; 1708 (1): 070013.
 
 \end{thebibliography}
 
