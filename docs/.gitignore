@@ -1,5 +1,6 @@
 *.pdf
 !soc.pdf
+!C\ -\ manuál.pdf
 
 *.swp
 *.aux
