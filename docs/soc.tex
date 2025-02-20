@@ -106,7 +106,7 @@
 \textbf{Čestné vyhlásenie:}
 
 Prehlasujeme, že sme prácu na tému
-,,\nazovprace''
+\nazovprace \space
 vypracovali samostatne s~použitím literatúry uvedenej v~zozname použitej literatúry.
 Zároveň prehlasujeme, že sme predloženú písomnú prácu neprihlásili a ani neprezentovali
 v žiadnej inej súťaži, ktorá je pod gestorstvom MŠMVVaŠ SR. Sme si vedomí zákonných dôsledkov,
@@ -155,7 +155,7 @@ môže hráč upravovať svet.
 Mimo vizuálne pekného prostredia ponúkajú simulované rastliny aj možnosti
 mnohých unikátnych mechaník ako napríklad možnosť geneticky
 modifikovať rastliny, čím by hráč mohol napríklad zvýšiť produkciu svojej záhrady
-v survival hrách.
+v hrách o prežitie.
 
 Táto práca sa zaoberá aplikáciou demonštrujúcou jednoduchý algoritmus
 pridávajúci rastlinám možnosť reagovať na okolité prostredie. Aplikácia
@@ -198,7 +198,7 @@ ako je znázornené na obr. \ref{obr:priklad l-systemu}.
 	\label{obr:priklad l-systemu}
 \end{figure}
 
-Toto riešenie a jemu podobné však dané rastliny len vytvárajú, no našim cieľom
+Toto riešenie a jemu podobné dané rastliny len vytvárajú, no našim cieľom
 je aj simulovať ich život.
 
 
@@ -218,7 +218,7 @@ ale aj zápormi. Medzi takéto metódy patria:
 	\item \textbf{Celulárne automaty} (ďalej CA)
 	      je názov pre matematický model a nástroj pre simuláciu. Jedná sa
 	      o starší koncept, ktorý obsahuje štvorcovú sieť so „zafarbenými“
-	      políčkami. Každá farba je určitý stav, ktorý má špecifické správanie
+	      políčkami. Každá farba predstavuje určitý stav, ktorý má špecifické správanie
 	      závisiace od okolitých políčok.
 \end{itemize}
 
@@ -231,15 +231,15 @@ Na druhej strane, strojové učenie sa stáva čím ďalej tým využívanejšie
 riešenie všetkých možných problémov. Avšak tento spôsob je náročný na čas
 a výpočtovú techniku.
 
-A napokon celulárne automaty ponúkajú jednoduchosť a možnosť ich jednoducho
+A napokon celulárne automaty ponúkajú jednoduchosť a možnosť ich ľahko
 modifikovať, čo otvára pole rôznorodých využití. (Gutowitz, 1991)
-Vďaka týmto výhodám je simulácia
-v našej práci založená na princípe celulárnych automatoch.
+Práve tieto výhody nás presvedčili a simulácia
+v tejto práci sa zakladá na princípe celulárnych automatoch.
 
 \subsection{Celulárne automaty}
 
 CA sa skladá z týchto základných častí: mriežka (často štvorcová sieť)
-a bunky tejto mriežky, ktoré majú vlastný stav, pričom každý stav obsahuje
+a bunky tejto mriežky, ktoré majú vlastný stav. Každý stav obsahuje
 určité pravidlá, ktoré zapríčiňujú správanie buniek, a tým celého systému.
 Tieto pravidlá sa aplikujú každú generáciu, každé simulačné kolo.
 Vďaka týmto vlastnostiam sú CA systém, ktorý je jednoduché prispôsobiť ktorýmkoľvek
@@ -250,7 +250,7 @@ V tejto hre nadobúda každá bunka štvorcovej siete jednu z dvoch hodnôt:
 Buď je bunka živá alebo mŕtva. Conwayova hra života má nasledovné pravidlá:
 
 \begin{enumerate}
-	\item Každá živá bunka s menej ako dvoma živými susedmi umrie.
+	\item Každá živá bunka s menej ako dvomi živými susedmi umrie.
 	\item Každá živá bunka s dvomi alebo tromi živými susedmi prežije.
 	\item Každá živá bunka s viac ako tromi živými susedmi umrie.
 	\item Každá mŕtva bunka s presne tromi živými susedmi ožije.
@@ -276,11 +276,11 @@ simulovať hocijaký počítač, čiže aj sama seba\footnote
 
 Práca (Winarno, Prima, Afifah, 2016) sa zameriava na
 korene rastlín a dopad premenných ako napr. živiny v pôde, voda a prekážky
-v raste. Jedná sa o prácu, ktorá je viac zameraná na matematický rast koreňov,
+v raste. Jedná sa o prácu, ktorá je viac zameraná na matematický popis rastu koreňov,
 avšak my sme rast koreňov simulovali genetikou.
 
 Práca (Bandini, Pavesi, 2004) sa zameriava na 2D simuláciu heterogénnej populácie
-rastlín, zameraná na konkurenciu medzi druhmi, rýchlosť rastu a interakcie
+rastlín, orientuje sa na konkurenciu medzi druhmi, rýchlosť rastu a interakcie
 s prostredím.
 
 \section{Ciele práce}
@@ -310,8 +310,9 @@ a ich ideálne charakteristiky za daných podmienok.
 
 \section{Aplikácia (Materiál a metodika)}
 
-Pre demonštráciu všetkých častí algoritmu sme vyvinuli jednoduchú aplikáciu.
-Táto aplikácia umožňuje vizualizáciu a simulovanie rastu rastlín
+Na realizovanie algoritmu sme vyvinuli jednoduchú aplikáciu, ktorá má
+potrebné prostriedky na demonštráciu všetkých aspektov tohto algoritmu.
+Aplikácia umožňuje vizualizáciu rastu rastlín na základe celulárnych automatov
 a poskytuje možnosť meniť parametre simulácie na dosiahnutie ideálneho vzhľadu
 rastlín.
 
@@ -324,7 +325,7 @@ koreň alebo ovocie), ale aj o časti terénu (vzduch, voda, pôda).
 
 \subsubsection{Perlinov šum}
 
-Na tvorbu terénu, ktorý nie je len rovina, ale obsahuje aj kopce a údolia,
+Na tvorbu terénu, ktorý nie je len plochá rovina, ale obsahuje aj kopce a údolia,
 sa využíva funkcia zvaná Perlinov šum.
 Perlinov šum je spôsob generovania plynule sa meniacich náhodných
 hodnôt, ktoré sa dajú skvele využiť na generovanie realistického terénu.
@@ -346,8 +347,8 @@ pripíše prislúchajúcemu červenému bodu.
 \end{figure}
 
 Väčšinou sa hodnoty nepočítajú len pre jeden náhodný vektor,
-ale pre viacero (najčastejšie 4 najbližšie), pričom sa hodnoty ich skalárnych
-súčinov priemerujú. Využíva sa aj viacero oktáv, iterácií algoritmu.
+ale pre viacero (najčastejšie 4 najbližšie) a hodnoty ich skalárnych
+súčinov sa priemerujú. Využíva sa aj viacero oktáv, iterácií algoritmu.
 Každá oktáva využíva viac náhodných vektorov ako predchádzajúca,
 vďaka ktorým ovplyvňuje bunky menej ako predchádzajúca oktáva.
 Často sa hodnoty týchto bodov znázorňujú v dvojfarebnej škále,
@@ -392,7 +393,7 @@ tak na realizme a dovoľuje nám získať rôzne typy rastlín, podľa toho,
 ku ktorým živinám majú alebo nemajú prístup. Napríklad, ak rastlina nemá dostatok dusíka
 potrebného na fotosyntézu, musí tento nedostatok kompenzovať viacerými listami, inak zhynie.
 
-Živiny sú 3: dusík, draslík a fosfor; pričom bola snaha o to, aby napomáhali
+Živiny sú 3: dusík, draslík a fosfor; pričom sme sa snažili o to, aby napomáhali
 realistickým procesom, ktoré tieto prvky vyžadujú.
 Draslík je nápomocný pri absorpcii vody, takže ak má rastlina nadbytok draslíka,
 efektívnejšie získava vodu. Využitie dusíka je široké, ale v simulátore
@@ -513,7 +514,7 @@ je určené ich počtom v pôde. Maximálny počet živín, ktoré dokáže bunk
 konštantou a bonusom vypočítaným zo živín. Naďalej stonka uskladňuje živiny, takže
 rastlina nemôže skonzumovať viac ako jej stonka dovoľuje.
 
-Napríklad chce rastlina fosfor a má koreň s 5 okolitými bunkami,
+Napríklad rastlina potrebuje fosfor a má koreň s 5 okolitými bunkami,
 pričom každá obsahuje 15 jednotiek fosforu. Konštanta produkcie je 10,
 a bonus pre fosfor je 1.2, čo koreňu povolí zobrať z každej okolitej bunky až 12
 jednotiek fosforu. To predstavuje dokopy 60 jednotiek, ktoré dokáže daný koreň získať.
@@ -531,15 +532,16 @@ Cenu za prežitie dostaneme vynásobením počtu buniek rastliny a ceny za voxel
 ($10 * 5 = 50$). Keďže pozorovaná rastlina vyžaduje na prežitie 50 jednotiek živín, ale má
 len 45, zomrie na ich nedostatok.
 
-\subsubsection{Výpočet bonusov zo živín}
+\subsubsection{Bonusy živín}
 
-Bonusy sa, podobne ako smrť, odvíjajú od veľkosti rastliny a konštanty, inej pre
-každý bonus.
+Bonusy sa odvíjajú od veľkosti rastliny a špeciálnej konštanty. Ovplyvňujú, koľko
+živín dokáže rastlina získať.
 
 \subsection{Vykresľovanie}
 
-Aby nebola simulácia len v podobe čísiel v súbore, je simulovaný svet
-vykresľovaný na obrazovku. Vykresľovanie je prevedené na grafickú kartu.
+Aby simulácia života rastlín bola viac než čísla uložené v súbore, je simulovaný svet
+vykresľovaný na obrazovku. Vykresľovanie, v počítačovej grafike bežne označované
+ako renderovanie, je prevedené na grafickú kartu.
 Procesor má tak viac času venovať sa simulácii. Na renderovaie bolo vybrané
 grafické API OpenGL pre jeho jednoduchosť a kompatibilitu medzi operačnými
 systémami.
@@ -554,7 +556,7 @@ polohovými hodnotami, ktoré sú následne každú snímku vykreslené na obraz
 
 \subsubsection{Tvorenie vrcholov z voxelových dát sveta}
 
-Na začiatok treba povedať, že grafické karty spracovávajú dáta paralelne,
+Grafické karty spracovávajú dáta paralelne,
 čo im umožňuje ,,prehrýzť'' sa obrovským množstvom dát za okamih.
 Je to niečo, na čo treba myslieť pri programovaní compute shaderov
 (výpočtových programov). Program na grafickej karte sa nazýva shader.
@@ -614,7 +616,7 @@ ich genetického kódu a podmienok prostredia.
 
 Preukázali sme, že celulárne
 automaty s genetickým mechanizmom sú vhodné na modelovanie dynamického rastu
-rastlín. Výsledky ukazujú, že použitie celulárnych automatov na simuláciu
+rastlín. Naše výsledky ukazujú, že použitie celulárnych automatov na simuláciu
 rastlín poskytuje flexibilný a efektívny model. Rastliny sa dokážu adaptovať
 na prostredie a meniť svoj rast podľa dostupnosti živín, čo pridáva prvok
 prirodzenej selekcie.
@@ -638,17 +640,17 @@ ekosystémoch.
 \section{Závery práce}
 
 Táto práca sa zamerala na návrh a realizáciu simulácie rastu rastlín pomocou
-bunkových automatov. Tento prístup sa ukázal ako efektívny pri modelovaní
+bunkových automatov. Náš prístup sa ukázal ako efektívny pri modelovaní
 dynamických procesov rastu, avšak počas vývoja sa vyskytlo viacero výziev,
 ktoré ovplyvnili priebeh implementácie. Medzi najvýznamnejšie patrila
-implementácia algoritmu do jazyka C++, keďže pre 2 členov týmu tento jazyk
-bol pred začatím práce neznámi a mali celkovo limitované poznatky
+implementácia algoritmu do jazyka C++, keďže pre 2 členov tímu tento jazyk
+bol pred začatím práce neznámy a mali celkovo limitované poznatky
 z programovania. Niektoré technické aspekty, najmä správa pamäte a efektívne
 vykresľovanie voxelového priestoru, si vyžadovali dodatočné úpravy
-a optimalizáciu. Tieto poznatky priniesli cenné skúsenosti, ktoré môžu byť
-využité v budúcnosti.
+a optimalizáciu. Tieto poznatky nám priniesli cenné skúsenosti, ktoré môžeme
+využiť v budúcnosti.
 
-Jedným z hlavných zistení bolo, že aj jednoduché pravidlá bunkových automatov
+Jedným z hlavných zistení nášho tímu bolo, že aj jednoduché pravidlá bunkových automatov
 môžu viesť k vzniku komplexných a realistických štruktúr. Tento výsledok
 potvrdzuje vhodnosť zvoleného prístupu a naznačuje možnosti ďalšieho rozšírenia
 modelu o sofistikovanejšie faktory, ako je implementácia zvierat do systému,
@@ -662,13 +664,13 @@ rastlinných systémov v počítačových hrách.
 
 \section{Zhrnutie}
 
-Cieľom tejto práce je navrhnutie možnej alternatívy, alebo rozšírenia,
+Cieľom tejto práce je navrhnutie možnej alternatívy alebo rozšírenia
 ku procedurálnemu generovaniu rastlín, ktorá umožňuje rastlinám reagovať na
-prostredie v~ktorom sa nachádzajú, čím sa spestrí svet pre hráča. Táto práca
-predstaví ako demonštráciu Aplikáciu, ktorá pre oživenie procedurálne
+prostredie, v~ktorom sa nachádzajú, čím sa spestrí svet pre hráča. Táto práca
+demonštruje aplikáciu, ktorá pre oživenie procedurálne
 generovaného sveta využíva algoritmus simulujúci základné procesy rastlín.
 Aplikácia sa skladá z troch častí: generovanie malej časti trojrozmerného
-voxelového sveta pomocou perlinovho šumu, algoritmus na simuláciu rastlín
+voxelového sveta pomocou Perlinovho šumu, algoritmus na simuláciu rastlín
 inšpirovaným celulárnymi automatmi a~renderovanie tejto časti sveta s
 využitím grafického API OpenGL.
 
