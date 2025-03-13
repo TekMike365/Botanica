@@ -41,12 +41,12 @@ public:
 
 public:
     static constexpr SoilResources SOIL_STORAGE_MPLR = {
-        20,
-        20,
-        20,
+        200,
+        200,
+        200,
     };
-    static const int WATER_STORAGE_MPLR = 20;
-    static const int LIGHT_STORAGE_MPLR = 20;
+    static const int WATER_STORAGE_MPLR = 200;
+    static const int LIGHT_STORAGE_MPLR = 200;
 
     static constexpr float WATER_MINE_MPLR = 0.8f;
     static constexpr float LIGHT_MINE_MPLR = 0.9f;
@@ -58,7 +58,7 @@ public:
     static constexpr float NITROGEN_BONUS_CONSTANT = 1.3f;
 
     static const int PLANT_PART_WATER_COST = 5;
-    static const int PLANT_PART_LIGHT_COST = 5;
+    static const int PLANT_PART_LIGHT_COST = 50;
 
     static constexpr float WATER_SURVIVE_COST_MPLR = 0.8f;
     static constexpr float LIGHT_SURVIVE_COST_MPLR = 0.9f;
