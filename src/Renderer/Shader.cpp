@@ -157,12 +157,12 @@ namespace Renderer
         }
     }
 
-    void Shader::UploadBuffer(BufferType type, const std::string &name, Buffer *buffer)
+    void Shader::UploadBuffer(const std::string &name, Buffer *buffer, BufferType type)
     {
         int location = m_LocationMap.at(name);
 
         GLenum target = 0;
-        switch (type)
+        switch (type == BufferType::None ? buffer->GetType() : type)
         {
         case BufferType::Uniform:
             target = GL_UNIFORM_BUFFER;
@@ -174,7 +174,7 @@ namespace Renderer
             BT_ASSERT(false, "Unsupported Buffer Type;");
         }
 
-        glBindBufferBase(target, location, buffer->m_ID);
+        glBindBufferBase(target, location, buffer->GetID());
     }
 
     void Shader::StashUniformLocations()

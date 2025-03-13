@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Botanica VERSION 0.1)
 set(CXX_STANDARD 17)
-set(CXX_STANDARD_REQUIRED 17)
+set(CXX_STANDARD_REQUIRED YES)
 set(CXX_EXTENSIONS OFF)
 
 add_subdirectory(vendor/glad)
@@ -44,6 +44,8 @@ set(
     src/Layers/CameraController.cpp
     src/Layers/RenderingLayer.cpp
     src/Layers/SimulationLayer.cpp
+
+    src/Components/Plant.cpp
 )
 
 set(
@@ -93,8 +95,10 @@ add_custom_command(
     DEPENDS ${SHADER_SOURCES}
     COMMAND cd ${PROJECT_SOURCE_DIR} && ${Python3_EXECUTABLE} scripts/embed_shaders.py
 )
+add_custom_target(EmbedShaders DEPENDS ${SHADERS_HEADER})
 
-add_executable(Application ${APPLICATION_SOURCES} ${SHADERS_HEADER})
+add_executable(Application ${APPLICATION_SOURCES})
+# target_compile_features(Application PUBLIC "cxx_std_${CXX_STANDARD}")
 
 target_compile_definitions(Application PRIVATE PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}/")
 

@@ -35,3 +35,10 @@ Log::Warn("Asserts are not supported on this platform.");
 #endif // BT_ENABLE_ASSERTS
 
 #define BIT(x) (1 << x)
+
+inline uint32_t PCGHash(uint32_t seed)
+{
+    uint32_t state = seed * 747796405u + 2891336453u;
+    uint32_t word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+    return (word >> 22u) ^ word;
+}

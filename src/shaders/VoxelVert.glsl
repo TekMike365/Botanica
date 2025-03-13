@@ -36,5 +36,5 @@ vec4 g_Colors[] = {
 void main()
 {
     gl_Position = uVP * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
-    vColor = g_Colors[uint(aPos.w) % 18];
+    vColor = g_Colors[uint(aPos.w) % (6 * 3)];
 }

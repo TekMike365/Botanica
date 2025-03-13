@@ -1,6 +1,7 @@
 #pragma once
 
 #include <spdlog/spdlog.h>
+#include <spdlog/async.h>
 
 #include "Utils.h"
 
@@ -53,7 +54,6 @@ public:
 
 private:
     static PLogger s_Logger;
-    static int s_LogMask;
 #ifdef BT_BUILD_DEBUG
     static PLogger s_DebugLogger;
     static int s_DebugLogMask;
