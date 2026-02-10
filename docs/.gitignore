@@ -1,0 +1,13 @@
+*.pdf
+!soc.pdf
+!C\ -\ manuál.pdf
+
+*.swp
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.gz
+*.toc
+*.bbl
+*.blg
